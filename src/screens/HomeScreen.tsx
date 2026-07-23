@@ -1,19 +1,27 @@
-import { AppScreen, Disclaimer, ModuleCard, SectionCard, ToolCard } from '../components';
+import { Disclaimer, ModuleCard, NavRow, Screen, Section } from '../components';
 import { radiologyModules } from '../core/moduleRegistry';
 
 export function HomeScreen() {
   return (
-    <AppScreen titleKey="app.name" subtitleKey="app.tagline" showBack={false} testID="home-screen">
-      <SectionCard titleKey="home.availableModules" descriptionKey="home.availableModulesDescription">
-        {radiologyModules.map((module) => <ModuleCard key={module.id} module={module} />)}
-      </SectionCard>
+    <Screen titleKey="app.name" subtitleKey="app.tagline" large testID="home-screen">
+      <Section
+        headerKey="home.availableModules"
+        footerKey="home.availableModulesDescription"
+        plain
+      >
+        {radiologyModules.map((module) => (
+          <ModuleCard key={module.id} module={module} />
+        ))}
+      </Section>
+      <Section footerKey="about.cardMeta" separatorInset={58}>
+        <NavRow
+          titleKey="about.title"
+          subtitleKey="about.cardDescription"
+          route="/about"
+          icon="info.circle.fill"
+        />
+      </Section>
       <Disclaimer />
-      <ToolCard
-        titleKey="about.title"
-        descriptionKey="about.cardDescription"
-        route="/about"
-        metaKey="about.cardMeta"
-      />
-    </AppScreen>
+    </Screen>
   );
 }

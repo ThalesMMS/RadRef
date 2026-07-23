@@ -1,69 +1,78 @@
 import type { Href } from 'expo-router';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import type { RadiologyModule } from '../core/moduleRegistry';
 import { useI18n } from '../core/i18n';
-import { colors, radii, spacing } from '../theme';
+import type { RadiologyModule } from '../core/moduleRegistry';
+import { accentColor, radii, spacing, font, useTheme } from '../theme';
+import { Icon, type IconName } from './Icon';
+
+const moduleIcons: Readonly<Record<RadiologyModule['id'], IconName>> = {
+  lung: 'lungs.fill',
+  renal: 'drop.fill',
+};
 
 type ModuleCardProps = Readonly<{ module: RadiologyModule }>;
 
+/** Hero card for a clinical module on the home screen. */
 export function ModuleCard({ module }: ModuleCardProps) {
   const router = useRouter();
   const { t } = useI18n();
-  const accent = module.accent === 'lung' ? colors.lung : colors.renal;
-  const soft = module.accent === 'lung' ? colors.lungSoft : colors.renalSoft;
+  const { colors } = useTheme();
+  const tint = accentColor(colors, module.accent);
 
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={t(module.titleKey)}
       onPress={() => router.push(module.route as Href)}
-      style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.card,
+        { backgroundColor: colors.card },
+        pressed && styles.pressed,
+      ]}
     >
       <View style={styles.topRow}>
-        <View style={[styles.mark, { backgroundColor: soft, borderColor: accent }]}>
-          <Text style={[styles.markText, { color: accent }]}>{t(module.shortLabelKey)}</Text>
+        <View style={[styles.iconBox, { backgroundColor: tint }]}>
+          <Icon name={moduleIcons[module.id]} size={24} color="#FFFFFF" weight="medium" />
         </View>
-        <View style={[styles.count, { backgroundColor: soft }]}>
-          <Text style={[styles.countText, { color: accent }]}>
-            {t('home.toolCount', { count: module.tools.length })}
-          </Text>
+        <View style={styles.titleWrap}>
+          <Text style={[styles.title, { color: colors.text }]}>{t(module.titleKey)}</Text>
+          <Text style={[styles.guideline, { color: tint }]}>{t(module.guidelineKey)}</Text>
         </View>
+        <Icon name="chevron.right" size={14} color={colors.textTertiary} weight="semibold" />
       </View>
-      <Text style={styles.title}>{t(module.titleKey)}</Text>
-      <Text style={styles.description}>{t(module.descriptionKey)}</Text>
-      <View style={styles.bottomRow}>
-        <Text style={[styles.guideline, { color: accent }]}>{t(module.guidelineKey)}</Text>
-        <Text style={styles.chevron}>{t('common.chevron')}</Text>
-      </View>
+      <Text style={[styles.description, { color: colors.textSecondary }]}>{t(module.descriptionKey)}</Text>
+      <Text style={[styles.count, { color: colors.textTertiary }]}>
+        {t('home.toolCount', { count: module.tools.length })}
+      </Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-    padding: spacing.lg,
+    borderRadius: radii.xl,
+    borderCurve: 'continuous',
+    padding: spacing.md,
+    gap: spacing.xs,
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: spacing.sm,
   },
-  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  mark: {
-    width: 48,
-    height: 48,
-    borderRadius: radii.md,
-    borderWidth: 1,
+  iconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.md - 2,
+    borderCurve: 'continuous',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  markText: { fontSize: 16, fontWeight: '900', letterSpacing: -0.2 },
-  count: { borderRadius: radii.pill, paddingHorizontal: spacing.sm, paddingVertical: 6 },
-  countText: { fontSize: 11, fontWeight: '800' },
-  title: { color: colors.text, fontSize: 22, lineHeight: 27, fontWeight: '800', letterSpacing: -0.5 },
-  description: { color: colors.textMuted, fontSize: 14, lineHeight: 21 },
-  bottomRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
-  guideline: { flex: 1, fontSize: 12, lineHeight: 17, fontWeight: '700' },
-  chevron: { color: colors.textSubtle, fontSize: 20 },
-  pressed: { opacity: 0.72, transform: [{ scale: 0.995 }] },
+  titleWrap: { flex: 1, gap: 2 },
+  title: { ...font.headline },
+  guideline: { ...font.footnoteBold },
+  description: { ...font.subhead, marginTop: 2 },
+  count: { ...font.caption },
+  pressed: { opacity: 0.75 },
 });

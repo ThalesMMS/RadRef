@@ -1,18 +1,18 @@
 import { useMemo, useState } from 'react';
 import {
-  ActionButton,
-  AppScreen,
-  ChoiceChips,
+  Banner,
+  Button,
+  ChoiceRow,
   Disclaimer,
-  InfoBanner,
-  NumberField,
+  InputRow,
   ResultCard,
-  SectionCard,
-  ToggleRow,
+  Screen,
+  Section,
+  SwitchRow,
   type ChoiceOption,
 } from '../../../components';
-import { parseLocalizedNumber } from '../../../core/numbers';
 import { useI18n } from '../../../core/i18n';
+import { parseLocalizedNumber } from '../../../core/numbers';
 import {
   calculateFleischner,
   type FleischnerNoduleType,
@@ -70,18 +70,45 @@ export function FleischnerScreen() {
   ];
 
   return (
-    <AppScreen titleKey="lung.tools.fleischner.title" subtitleKey="lung.tools.fleischner.meta">
-      <Disclaimer />
-      <InfoBanner titleKey="lung.fleischner.scopeTitle" textKey="lung.fleischner.scopeText" />
-      <SectionCard titleKey="common.inputs" descriptionKey="lung.fleischner.inputDescription">
-        <ChoiceChips labelKey="lung.form.noduleType" options={noduleTypes} value={noduleType} onChange={setNoduleType} columns={3} />
-        <NumberField labelKey="lung.form.totalDiameter" value={size} onChangeText={setSize} unitKey="units.mm" helperKey="lung.form.diameterHelper" />
+    <Screen titleKey="lung.tools.fleischner.title" subtitleKey="lung.tools.fleischner.meta">
+      <Banner titleKey="lung.fleischner.scopeTitle" textKey="lung.fleischner.scopeText" />
+      <Section headerKey="common.inputs" footerKey="lung.fleischner.inputDescription">
+        <ChoiceRow
+          labelKey="lung.form.noduleType"
+          options={noduleTypes}
+          value={noduleType}
+          onChange={setNoduleType}
+          variant="chips"
+        />
+        <InputRow
+          labelKey="lung.form.totalDiameter"
+          value={size}
+          onChangeText={setSize}
+          unitKey="units.mm"
+          helperKey="lung.form.diameterHelper"
+        />
         {noduleType === 'partSolid' ? (
-          <NumberField labelKey="lung.form.solidComponent" value={solidComponent} onChangeText={setSolidComponent} unitKey="units.mm" />
+          <InputRow
+            labelKey="lung.form.solidComponent"
+            value={solidComponent}
+            onChangeText={setSolidComponent}
+            unitKey="units.mm"
+          />
         ) : null}
-        <ChoiceChips labelKey="lung.form.clinicalRisk" options={riskOptions} value={risk} onChange={setRisk} columns={1} />
-        <ToggleRow labelKey="lung.form.multipleNodules" descriptionKey="lung.form.multipleNodulesDescription" value={multiple} onValueChange={setMultiple} />
-      </SectionCard>
+        <ChoiceRow
+          labelKey="lung.form.clinicalRisk"
+          options={riskOptions}
+          value={risk}
+          onChange={setRisk}
+          variant="list"
+        />
+        <SwitchRow
+          labelKey="lung.form.multipleNodules"
+          descriptionKey="lung.form.multipleNodulesDescription"
+          value={multiple}
+          onValueChange={setMultiple}
+        />
+      </Section>
       <ResultCard
         badge={result.code}
         title={result.title}
@@ -90,8 +117,9 @@ export function FleischnerScreen() {
         notes={result.notes}
         metadata={metadata}
       />
-      <ActionButton labelKey="common.resetForm" onPress={reset} tone="lung" />
-      <InfoBanner textKey="lung.fleischner.measurementReminder" tone="warning" />
-    </AppScreen>
+      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
+      <Banner textKey="lung.fleischner.measurementReminder" tone="warning" />
+      <Disclaimer />
+    </Screen>
   );
 }

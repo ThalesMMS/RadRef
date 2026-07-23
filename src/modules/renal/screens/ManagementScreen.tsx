@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import {
-  ActionButton,
-  AppScreen,
-  ChoiceChips,
+  Banner,
+  Button,
+  ChoiceRow,
   Disclaimer,
-  InfoBanner,
-  NumberField,
+  InputRow,
   ResultCard,
-  SectionCard,
-  ToggleRow,
+  Screen,
+  Section,
+  SwitchRow,
   type ChoiceOption,
 } from '../../../components';
 import { msg } from '../../../core/domain';
@@ -27,14 +27,14 @@ const categoryOptions: readonly ChoiceOption<BosniakCategory>[] = [
 
 export function ManagementScreen() {
   const [category, setCategory] = useState<BosniakCategory>('IIF');
-  const [lesionSize, setLesionSize] = useState('20');
+  const [lesionSize, setLesionSize] = useState('30');
   const [symptomatic, setSymptomatic] = useState(false);
   const [comorbidity, setComorbidity] = useState(false);
   const [targetableSolidComponent, setTargetableSolidComponent] = useState(false);
 
   const reset = () => {
     setCategory('IIF');
-    setLesionSize('20');
+    setLesionSize('30');
     setSymptomatic(false);
     setComorbidity(false);
     setTargetableSolidComponent(false);
@@ -62,32 +62,37 @@ export function ManagementScreen() {
           : 'neutral';
 
   return (
-    <AppScreen titleKey="renal.tools.management.title" subtitleKey="renal.tools.management.meta">
-      <Disclaimer />
-      <InfoBanner titleKey="renal.management.scopeTitle" textKey="renal.management.scopeText" />
-      <SectionCard titleKey="common.inputs">
-        <ChoiceChips labelKey="renal.management.category" options={categoryOptions} value={category} onChange={setCategory} columns={2} />
+    <Screen titleKey="renal.tools.management.title" subtitleKey="renal.tools.management.meta">
+      <Banner titleKey="renal.management.scopeTitle" textKey="renal.management.scopeText" />
+      <Section headerKey="common.inputs">
+        <ChoiceRow
+          labelKey="renal.management.category"
+          options={categoryOptions}
+          value={category}
+          onChange={setCategory}
+          variant="list"
+        />
         {category === 'III' || category === 'IV' ? (
-          <NumberField labelKey="renal.management.lesionSize" value={lesionSize} onChangeText={setLesionSize} unitKey="units.mm" />
+          <InputRow labelKey="renal.management.lesionSize" value={lesionSize} onChangeText={setLesionSize} unitKey="units.mm" />
         ) : null}
-        <ToggleRow labelKey="renal.management.symptomatic" value={symptomatic} onValueChange={setSymptomatic} />
-        {(category === 'III' || category === 'IV') ? (
-          <>
-            <ToggleRow
-              labelKey="renal.management.comorbidity"
-              descriptionKey="renal.management.comorbidityDescription"
-              value={comorbidity}
-              onValueChange={setComorbidity}
-            />
-            <ToggleRow
-              labelKey="renal.management.targetableComponent"
-              descriptionKey="renal.management.targetableComponentDescription"
-              value={targetableSolidComponent}
-              onValueChange={setTargetableSolidComponent}
-            />
-          </>
+        <SwitchRow labelKey="renal.management.symptomatic" value={symptomatic} onValueChange={setSymptomatic} />
+        {category === 'III' || category === 'IV' ? (
+          <SwitchRow
+            labelKey="renal.management.comorbidity"
+            descriptionKey="renal.management.comorbidityDescription"
+            value={comorbidity}
+            onValueChange={setComorbidity}
+          />
         ) : null}
-      </SectionCard>
+        {category === 'III' || category === 'IV' ? (
+          <SwitchRow
+            labelKey="renal.management.targetableComponent"
+            descriptionKey="renal.management.targetableComponentDescription"
+            value={targetableSolidComponent}
+            onValueChange={setTargetableSolidComponent}
+          />
+        ) : null}
+      </Section>
       <ResultCard
         badge={category === 'notApplicable' ? 'N/A' : category === 'incomplete' ? '—' : category}
         title={msg('renal.management.resultTitle')}
@@ -96,8 +101,9 @@ export function ManagementScreen() {
         severity={severity}
         notes={[...result.notes, result.evidence]}
       />
-      <ActionButton labelKey="common.resetForm" onPress={reset} tone="renal" />
-      <InfoBanner textKey="renal.management.sharedDecisionReminder" tone="warning" />
-    </AppScreen>
+      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
+      <Banner textKey="renal.management.sharedDecisionReminder" tone="warning" />
+      <Disclaimer />
+    </Screen>
   );
 }

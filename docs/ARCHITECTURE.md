@@ -25,13 +25,15 @@ Isso evita colocar regra clínica ou estado de formulário na infraestrutura de 
 
 Os componentes reutilizáveis incluem:
 
-- `AppScreen`: área segura, cabeçalho, rolagem, retorno e seletor de idioma;
-- `SectionCard`: agrupamento semântico de entradas;
-- `ChoiceChips`, `ToggleRow` e `NumberField`: entradas consistentes;
-- `ResultCard`: representação comum de resultado, notas e alertas;
-- `InfoBanner` e `Disclaimer`: contexto e segurança;
-- `ModuleCard` e `ToolCard`: navegação dirigida pelo registro;
-- `ReferenceList` e `KeyPointList`: conteúdo de referência.
+- `Screen`: rolagem com cabeçalho nativo da pilha (large title no iOS), teclado e área segura;
+- `Section`: lista agrupada estilo iOS (inset grouped) com cabeçalho, separadores e rodapé;
+- `ChoiceRow` (segmentado, chips ou lista com marca de seleção), `SwitchRow` e `InputRow`: entradas consistentes;
+- `ResultCard`: representação comum de resultado, notas e alertas com cor de severidade;
+- `Banner` e `Disclaimer`: contexto e segurança;
+- `ModuleCard` e `NavRow`: navegação dirigida pelo registro;
+- `ReferenceList` e `KeyPointList`: conteúdo de referência;
+- `Icon`: SF Symbols no iOS (via `expo-symbols`) com glifo de texto nas demais plataformas;
+- o tema em `src/theme.ts` segue o esquema claro/escuro do sistema.
 
 Esses componentes recebem chaves de tradução, não texto clínico literal.
 

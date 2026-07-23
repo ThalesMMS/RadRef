@@ -1,32 +1,46 @@
-import { AppScreen, Disclaimer, InfoBanner, KeyPointList, SectionCard, ToolCard } from '../../../components';
+import { Banner, Disclaimer, KeyPointList, NavRow, Screen, Section, type IconName } from '../../../components';
 import { moduleById } from '../../../core/moduleRegistry';
 
 const moduleDefinition = moduleById('lung');
 
+const toolIcons: Readonly<Record<string, IconName>> = {
+  fleischner: 'calendar.badge.clock',
+  lungRads: 'chart.bar.doc.horizontal',
+  brock: 'percent',
+  lungReferences: 'books.vertical.fill',
+};
+
 export function LungHomeScreen() {
   return (
-    <AppScreen titleKey="module.lung.title" subtitleKey="module.lung.guidelines">
-      <Disclaimer />
-      <InfoBanner titleKey="lung.scope.title" textKey="lung.scope.text" />
-      <SectionCard titleKey="lung.home.toolsTitle" descriptionKey="lung.home.toolsDescription">
+    <Screen titleKey="module.lung.title" subtitleKey="module.lung.guidelines" large>
+      <Banner titleKey="lung.scope.title" textKey="lung.scope.text" />
+      <Section
+        headerKey="lung.home.toolsTitle"
+        footerKey="lung.home.toolsDescription"
+        separatorInset={58}
+      >
         {moduleDefinition.tools.map((tool) => (
-          <ToolCard
+          <NavRow
             key={tool.id}
             titleKey={tool.titleKey}
-            descriptionKey={tool.descriptionKey}
+            subtitleKey={tool.descriptionKey}
             route={tool.route}
-            {...(tool.metaKey === undefined ? {} : { metaKey: tool.metaKey })}
+            icon={toolIcons[tool.id] ?? 'chart.bar.doc.horizontal'}
             accent="lung"
           />
         ))}
-      </SectionCard>
-      <SectionCard titleKey="lung.home.keyPointsTitle">
-        <KeyPointList itemKeys={[
-          'lung.home.keyPoint.incidentalVsScreening',
-          'lung.home.keyPoint.measurement',
-          'lung.home.keyPoint.local',
-        ]} />
-      </SectionCard>
-    </AppScreen>
+      </Section>
+      <Section headerKey="lung.home.keyPointsTitle">
+        <KeyPointList
+          accent="lung"
+          itemKeys={[
+            'lung.home.keyPoint.incidentalVsScreening',
+            'lung.home.keyPoint.measurement',
+            'lung.home.keyPoint.local',
+          ]}
+        />
+      </Section>
+      <Disclaimer />
+    </Screen>
   );
 }

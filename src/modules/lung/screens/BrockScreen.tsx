@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import {
-  ActionButton,
-  AppScreen,
-  ChoiceChips,
+  Banner,
+  Button,
+  ChoiceRow,
   Disclaimer,
-  InfoBanner,
-  NumberField,
+  InputRow,
   ResultCard,
-  SectionCard,
-  ToggleRow,
+  Screen,
+  Section,
+  SwitchRow,
   type ChoiceOption,
 } from '../../../components';
 import { useI18n } from '../../../core/i18n';
@@ -92,23 +92,28 @@ export function BrockScreen() {
   }] : [];
 
   return (
-    <AppScreen titleKey="lung.tools.brock.title" subtitleKey="lung.tools.brock.meta">
-      <Disclaimer />
-      <InfoBanner titleKey="lung.brock.scopeTitle" textKey="lung.brock.scopeText" />
-      {fromLungRads ? <InfoBanner textKey="lung.brock.prefillNotice" /> : null}
-      <SectionCard titleKey="lung.brock.patientSection">
-        <NumberField labelKey="lung.brock.age" value={age} onChangeText={setAge} unitKey="units.years" integer />
-        <ChoiceChips labelKey="lung.brock.sex" options={sexOptions} value={sex} onChange={setSex} />
-        <ToggleRow labelKey="lung.brock.familyHistory" value={familyHistory} onValueChange={setFamilyHistory} />
-        <ToggleRow labelKey="lung.brock.emphysema" value={emphysema} onValueChange={setEmphysema} />
-      </SectionCard>
-      <SectionCard titleKey="lung.brock.noduleSection">
-        <NumberField labelKey="lung.form.totalDiameter" value={diameter} onChangeText={setDiameter} unitKey="units.mm" helperKey="lung.brock.sizeRange" />
-        <ChoiceChips labelKey="lung.form.noduleType" options={typeOptions} value={noduleType} onChange={setNoduleType} columns={3} />
-        <NumberField labelKey="lung.brock.noduleCount" value={noduleCount} onChangeText={setNoduleCount} integer />
-        <ToggleRow labelKey="lung.brock.upperLobe" value={upperLobe} onValueChange={setUpperLobe} />
-        <ToggleRow labelKey="lung.brock.spiculation" value={spiculation} onValueChange={setSpiculation} />
-      </SectionCard>
+    <Screen titleKey="lung.tools.brock.title" subtitleKey="lung.tools.brock.meta">
+      <Banner titleKey="lung.brock.scopeTitle" textKey="lung.brock.scopeText" />
+      {fromLungRads ? <Banner textKey="lung.brock.prefillNotice" /> : null}
+      <Section headerKey="lung.brock.patientSection">
+        <InputRow labelKey="lung.brock.age" value={age} onChangeText={setAge} unitKey="units.years" integer />
+        <ChoiceRow labelKey="lung.brock.sex" options={sexOptions} value={sex} onChange={setSex} variant="segmented" />
+        <SwitchRow labelKey="lung.brock.familyHistory" value={familyHistory} onValueChange={setFamilyHistory} />
+        <SwitchRow labelKey="lung.brock.emphysema" value={emphysema} onValueChange={setEmphysema} />
+      </Section>
+      <Section headerKey="lung.brock.noduleSection">
+        <InputRow
+          labelKey="lung.form.totalDiameter"
+          value={diameter}
+          onChangeText={setDiameter}
+          unitKey="units.mm"
+          helperKey="lung.brock.sizeRange"
+        />
+        <ChoiceRow labelKey="lung.form.noduleType" options={typeOptions} value={noduleType} onChange={setNoduleType} variant="chips" />
+        <InputRow labelKey="lung.brock.noduleCount" value={noduleCount} onChangeText={setNoduleCount} integer />
+        <SwitchRow labelKey="lung.brock.upperLobe" value={upperLobe} onValueChange={setUpperLobe} />
+        <SwitchRow labelKey="lung.brock.spiculation" value={spiculation} onValueChange={setSpiculation} />
+      </Section>
       <ResultCard
         {...(badge === undefined ? {} : { badge })}
         title={result.title}
@@ -117,8 +122,9 @@ export function BrockScreen() {
         notes={result.notes}
         metadata={metadata}
       />
-      <ActionButton labelKey="common.resetForm" onPress={reset} tone="lung" />
-      <InfoBanner textKey="lung.brock.notStandaloneManagement" tone="warning" />
-    </AppScreen>
+      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
+      <Banner textKey="lung.brock.notStandaloneManagement" tone="warning" />
+      <Disclaimer />
+    </Screen>
   );
 }

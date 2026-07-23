@@ -1,32 +1,46 @@
-import { AppScreen, Disclaimer, InfoBanner, KeyPointList, SectionCard, ToolCard } from '../../../components';
+import { Banner, Disclaimer, KeyPointList, NavRow, Screen, Section, type IconName } from '../../../components';
 import { moduleById } from '../../../core/moduleRegistry';
 
 const moduleDefinition = moduleById('renal');
 
+const toolIcons: Readonly<Record<string, IconName>> = {
+  bosniak: 'list.number',
+  enhancement: 'circle.lefthalf.filled',
+  management: 'arrow.triangle.branch',
+  renalReferences: 'books.vertical.fill',
+};
+
 export function RenalHomeScreen() {
   return (
-    <AppScreen titleKey="module.renal.title" subtitleKey="module.renal.guidelines">
-      <Disclaimer />
-      <InfoBanner titleKey="renal.scope.title" textKey="renal.scope.text" />
-      <SectionCard titleKey="renal.home.toolsTitle" descriptionKey="renal.home.toolsDescription">
+    <Screen titleKey="module.renal.title" subtitleKey="module.renal.guidelines" large>
+      <Banner titleKey="renal.scope.title" textKey="renal.scope.text" />
+      <Section
+        headerKey="renal.home.toolsTitle"
+        footerKey="renal.home.toolsDescription"
+        separatorInset={58}
+      >
         {moduleDefinition.tools.map((tool) => (
-          <ToolCard
+          <NavRow
             key={tool.id}
             titleKey={tool.titleKey}
-            descriptionKey={tool.descriptionKey}
+            subtitleKey={tool.descriptionKey}
             route={tool.route}
-            {...(tool.metaKey === undefined ? {} : { metaKey: tool.metaKey })}
+            icon={toolIcons[tool.id] ?? 'list.number'}
             accent="renal"
           />
         ))}
-      </SectionCard>
-      <SectionCard titleKey="renal.home.keyPointsTitle">
-        <KeyPointList itemKeys={[
-          'renal.home.keyPoint.enhancement',
-          'renal.home.keyPoint.cysticDefinition',
-          'renal.home.keyPoint.management',
-        ]} />
-      </SectionCard>
-    </AppScreen>
+      </Section>
+      <Section headerKey="renal.home.keyPointsTitle">
+        <KeyPointList
+          accent="renal"
+          itemKeys={[
+            'renal.home.keyPoint.enhancement',
+            'renal.home.keyPoint.cysticDefinition',
+            'renal.home.keyPoint.management',
+          ]}
+        />
+      </Section>
+      <Disclaimer />
+    </Screen>
   );
 }

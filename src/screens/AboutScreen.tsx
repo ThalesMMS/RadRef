@@ -1,17 +1,13 @@
 import Constants from 'expo-constants';
-import { AppScreen, Disclaimer, InfoBanner, KeyPointList, SectionCard } from '../components';
-import { useI18n } from '../core/i18n';
-import { StyleSheet, Text, View } from 'react-native';
-import { colors, radii, spacing } from '../theme';
+import { Banner, Disclaimer, KeyPointList, Screen, Section, ValueRow } from '../components';
 
 export function AboutScreen() {
-  const { t } = useI18n();
   const version = Constants.expoConfig?.version ?? '1.0.0';
 
   return (
-    <AppScreen titleKey="about.title" subtitleKey="about.subtitle">
+    <Screen titleKey="about.title" subtitleKey="about.subtitle" large>
       <Disclaimer />
-      <SectionCard titleKey="about.guidelinesTitle" descriptionKey="about.guidelinesDescription">
+      <Section headerKey="about.guidelinesTitle" footerKey="about.guidelinesDescription">
         <KeyPointList itemKeys={[
           'about.guideline.fleischner',
           'about.guideline.lungRads',
@@ -19,42 +15,26 @@ export function AboutScreen() {
           'about.guideline.bosniak',
           'about.guideline.cua',
         ]} />
-      </SectionCard>
-      <SectionCard titleKey="about.offlineTitle" descriptionKey="about.offlineDescription">
+      </Section>
+      <Section headerKey="about.offlineTitle" footerKey="about.offlineDescription">
         <KeyPointList itemKeys={[
           'about.offline.localRules',
           'about.offline.noAccount',
           'about.offline.externalReferences',
         ]} />
-      </SectionCard>
-      <SectionCard titleKey="about.architectureTitle" descriptionKey="about.architectureDescription">
+      </Section>
+      <Section headerKey="about.architectureTitle" footerKey="about.architectureDescription">
         <KeyPointList itemKeys={[
           'about.architecture.modules',
           'about.architecture.domain',
           'about.architecture.i18n',
           'about.architecture.tests',
         ]} />
-      </SectionCard>
-      <InfoBanner titleKey="about.assumptionsTitle" textKey="about.assumptionsText" tone="info" />
-      <View style={styles.versionBox}>
-        <Text style={styles.versionLabel}>{t('about.versionLabel')}</Text>
-        <Text style={styles.versionValue}>{version}</Text>
-      </View>
-    </AppScreen>
+      </Section>
+      <Banner titleKey="about.assumptionsTitle" textKey="about.assumptionsText" tone="info" />
+      <Section>
+        <ValueRow labelKey="about.versionLabel" value={version} />
+      </Section>
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  versionBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.backgroundElevated,
-    padding: spacing.sm,
-  },
-  versionLabel: { color: colors.textMuted, fontSize: 13, fontWeight: '600' },
-  versionValue: { color: colors.text, fontSize: 13, fontWeight: '800' },
-});

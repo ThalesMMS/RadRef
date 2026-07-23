@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import {
-  ActionButton,
-  AppScreen,
-  ChoiceChips,
+  Banner,
+  Button,
+  ChoiceRow,
   Disclaimer,
-  InfoBanner,
-  NumberField,
+  InputRow,
   ResultCard,
-  SectionCard,
-  ToggleRow,
+  Screen,
+  Section,
+  SwitchRow,
   type ChoiceOption,
 } from '../../../components';
 import { parseLocalizedNumber } from '../../../core/numbers';
@@ -44,42 +44,48 @@ export function EnhancementScreen() {
   }, [modality, postContrast, preContrast, visuallyUnequivocal]);
 
   return (
-    <AppScreen titleKey="renal.tools.enhancement.title" subtitleKey="renal.tools.enhancement.meta">
-      <Disclaimer />
-      <InfoBanner titleKey="renal.enhancement.scopeTitle" textKey="renal.enhancement.scopeText" />
-      <SectionCard titleKey="common.inputs">
-        <ChoiceChips labelKey="renal.enhancement.modality" options={modalityOptions} value={modality} onChange={setModality} />
-        <ToggleRow
+    <Screen titleKey="renal.tools.enhancement.title" subtitleKey="renal.tools.enhancement.meta">
+      <Banner titleKey="renal.enhancement.scopeTitle" textKey="renal.enhancement.scopeText" />
+      <Section headerKey="common.inputs">
+        <ChoiceRow
+          labelKey="renal.enhancement.modality"
+          options={modalityOptions}
+          value={modality}
+          onChange={setModality}
+          variant="segmented"
+        />
+        <SwitchRow
           labelKey="renal.enhancement.visuallyUnequivocal"
           descriptionKey="renal.enhancement.visuallyUnequivocalDescription"
           value={visuallyUnequivocal}
           onValueChange={setVisuallyUnequivocal}
         />
         {!visuallyUnequivocal ? (
-          <>
-            <NumberField
-              labelKey="renal.enhancement.preContrast"
-              value={preContrast}
-              onChangeText={setPreContrast}
-              unitKey={modality === 'ct' ? 'units.hu' : 'units.signal'}
-            />
-            <NumberField
-              labelKey="renal.enhancement.postContrast"
-              value={postContrast}
-              onChangeText={setPostContrast}
-              unitKey={modality === 'ct' ? 'units.hu' : 'units.signal'}
-            />
-          </>
+          <InputRow
+            labelKey="renal.enhancement.preContrast"
+            value={preContrast}
+            onChangeText={setPreContrast}
+            unitKey={modality === 'ct' ? 'units.hu' : 'units.signal'}
+          />
         ) : null}
-      </SectionCard>
+        {!visuallyUnequivocal ? (
+          <InputRow
+            labelKey="renal.enhancement.postContrast"
+            value={postContrast}
+            onChangeText={setPostContrast}
+            unitKey={modality === 'ct' ? 'units.hu' : 'units.signal'}
+          />
+        ) : null}
+      </Section>
       <ResultCard
         badge={result.metric}
         title={result.title}
         primary={result.interpretation}
         severity={result.severity}
       />
-      <ActionButton labelKey="common.resetForm" onPress={reset} tone="renal" />
-      <InfoBanner textKey="renal.enhancement.thresholdReminder" tone="warning" />
-    </AppScreen>
+      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
+      <Banner textKey="renal.enhancement.thresholdReminder" tone="warning" />
+      <Disclaimer />
+    </Screen>
   );
 }

@@ -1,14 +1,17 @@
-import { AppScreen, InfoBanner, ToolCard } from '../components';
+import { Banner, NavRow, Screen, Section } from '../components';
 
 export function NotFoundScreen() {
   return (
-    <AppScreen titleKey="notFound.title" subtitleKey="notFound.subtitle" showBack={false}>
-      <InfoBanner titleKey="notFound.bannerTitle" textKey="notFound.bannerText" tone="warning" />
-      <ToolCard
-        titleKey="notFound.homeTitle"
-        descriptionKey="notFound.homeDescription"
-        route="/"
-      />
-    </AppScreen>
+    <Screen titleKey="notFound.title" subtitleKey="notFound.subtitle">
+      <Banner titleKey="notFound.bannerTitle" textKey="notFound.bannerText" tone="warning" />
+      <Section separatorInset={58}>
+        <NavRow
+          titleKey="notFound.homeTitle"
+          subtitleKey="notFound.homeDescription"
+          route="/"
+          icon="house.fill"
+        />
+      </Section>
+    </Screen>
   );
 }

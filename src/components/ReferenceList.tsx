@@ -1,6 +1,7 @@
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { colors, radii, spacing } from '../theme';
+import { radii, spacing, font, useTheme } from '../theme';
+import { Icon } from './Icon';
 
 export type ReferenceItem = Readonly<{
   id: string;
@@ -13,58 +14,62 @@ type ReferenceListProps = Readonly<{
   items: readonly ReferenceItem[];
 }>;
 
+/** External literature links as Settings-style rows; render inside a Section with separatorInset 58. */
 export function ReferenceList({ items }: ReferenceListProps) {
   const { t } = useI18n();
+  const { colors } = useTheme();
   return (
-    <View style={styles.list}>
-      {items.map((item) => (
-        <Pressable
-          key={item.id}
-          accessibilityRole="link"
-          accessibilityLabel={t(item.titleKey)}
-          onPress={() => {
-            void Linking.openURL(item.url);
-          }}
-          style={({ pressed }) => [styles.item, pressed && styles.pressed]}
-        >
-          <View style={styles.icon}>
-            <Text style={styles.iconText}>{t('common.referenceSymbol')}</Text>
-          </View>
-          <View style={styles.copy}>
-            <Text style={styles.title}>{t(item.titleKey)}</Text>
-            <Text style={styles.subtitle}>{t(item.subtitleKey)}</Text>
-          </View>
-          <Text style={styles.external}>{t('common.externalSymbol')}</Text>
-        </Pressable>
+    <>
+      {items.map((item, index) => (
+        <View key={item.id}>
+          {index > 0 ? (
+            <View style={[styles.separator, { backgroundColor: colors.separator }]} />
+          ) : null}
+          <Pressable
+            accessibilityRole="link"
+            accessibilityLabel={t(item.titleKey)}
+            onPress={() => {
+              void Linking.openURL(item.url);
+            }}
+            style={({ pressed }) => [styles.row, pressed && { backgroundColor: colors.highlight }]}
+          >
+            <View style={[styles.iconBox, { backgroundColor: colors.tint }]}>
+              <Icon name="link" size={15} color="#FFFFFF" weight="medium" />
+            </View>
+            <View style={styles.copy}>
+              <Text style={[styles.title, { color: colors.text }]}>{t(item.titleKey)}</Text>
+              <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t(item.subtitleKey)}</Text>
+            </View>
+            <Icon name="arrow.up.right" size={14} color={colors.textTertiary} weight="semibold" />
+          </Pressable>
+        </View>
       ))}
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  list: { gap: spacing.sm },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: spacing.sm,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.backgroundElevated,
-    padding: spacing.sm,
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    marginLeft: 58,
   },
-  icon: {
-    width: 34,
-    height: 34,
-    borderRadius: radii.pill,
-    backgroundColor: colors.primarySoft,
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    minHeight: 44,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 10,
+  },
+  iconBox: {
+    width: 29,
+    height: 29,
+    borderRadius: radii.sm - 1,
+    borderCurve: 'continuous',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  iconText: { color: colors.primary, fontSize: 15, fontWeight: '700' },
-  copy: { flex: 1 },
-  title: { color: colors.text, fontSize: 14, lineHeight: 19, fontWeight: '700' },
-  subtitle: { color: colors.textMuted, fontSize: 12, lineHeight: 17, marginTop: 3 },
-  external: { color: colors.textSubtle, fontSize: 16 },
-  pressed: { opacity: 0.7 },
+  copy: { flex: 1, gap: 2 },
+  title: { ...font.subheadBold },
+  subtitle: { ...font.footnote },
 });

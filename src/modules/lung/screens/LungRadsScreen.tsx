@@ -2,20 +2,20 @@ import { useMemo, useState } from 'react';
 import { useRouter, type Href } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import {
-  ActionButton,
-  AppScreen,
-  ChoiceChips,
+  Banner,
+  Button,
+  ChoiceRow,
   Disclaimer,
-  InfoBanner,
-  NumberField,
+  InputRow,
   ResultCard,
-  SectionCard,
-  ToggleRow,
+  Screen,
+  Section,
+  SwitchRow,
   type ChoiceOption,
 } from '../../../components';
 import { useI18n } from '../../../core/i18n';
 import { parseLocalizedNumber } from '../../../core/numbers';
-import { colors, radii, spacing } from '../../../theme';
+import { spacing, font, useTheme } from '../../../theme';
 import {
   assessLungRadsGrowth,
   calculateLungRads,
@@ -82,6 +82,7 @@ const associatedCategoryOptions: readonly ChoiceOption<Exclude<LungRadsCategory,
 
 export function LungRadsScreen() {
   const { t, tx } = useI18n();
+  const { colors } = useTheme();
   const router = useRouter();
   const [ctStatus, setCtStatus] = useState<CtStatus>('baseline');
   const [noduleType, setNoduleType] = useState<LungRadsNoduleType>('solid');
@@ -229,73 +230,72 @@ export function LungRadsScreen() {
   ];
 
   return (
-    <AppScreen titleKey="lung.tools.lungRads.title" subtitleKey="lung.tools.lungRads.meta">
-      <Disclaimer />
-      <InfoBanner titleKey="lung.lungRads.scopeTitle" textKey="lung.lungRads.scopeText" />
-      <SectionCard titleKey="lung.lungRads.studySection">
-        <ChoiceChips labelKey="lung.lungRads.ctStatus" options={ctOptions} value={ctStatus} onChange={setCtStatus} />
-        <ChoiceChips labelKey="lung.form.noduleType" options={typeOptions} value={noduleType} onChange={setNoduleType} columns={2} />
+    <Screen titleKey="lung.tools.lungRads.title" subtitleKey="lung.tools.lungRads.meta">
+      <Banner titleKey="lung.lungRads.scopeTitle" textKey="lung.lungRads.scopeText" />
+      <Section headerKey="lung.lungRads.studySection">
+        <ChoiceRow labelKey="lung.lungRads.ctStatus" options={ctOptions} value={ctStatus} onChange={setCtStatus} variant="list" />
+        <ChoiceRow labelKey="lung.form.noduleType" options={typeOptions} value={noduleType} onChange={setNoduleType} variant="chips" />
         {noduleType !== 'none' ? (
-          <ChoiceChips labelKey="lung.lungRads.noduleStatus" options={statusOptions} value={noduleStatus} onChange={setNoduleStatus} columns={3} />
+          <ChoiceRow labelKey="lung.lungRads.noduleStatus" options={statusOptions} value={noduleStatus} onChange={setNoduleStatus} variant="chips" />
         ) : null}
-      </SectionCard>
+      </Section>
 
       {needsSize ? (
-        <SectionCard titleKey="lung.lungRads.measurementSection" descriptionKey="lung.lungRads.measurementDescription">
-          <ToggleRow labelKey="lung.lungRads.useVolume" value={useVolume} onValueChange={setUseVolume} />
+        <Section headerKey="lung.lungRads.measurementSection" footerKey="lung.lungRads.measurementDescription">
+          <SwitchRow labelKey="lung.lungRads.useVolume" value={useVolume} onValueChange={setUseVolume} />
           {useVolume ? (
-            <NumberField labelKey="lung.lungRads.volume" value={volume} onChangeText={setVolume} unitKey="units.mm3" />
+            <InputRow labelKey="lung.lungRads.volume" value={volume} onChangeText={setVolume} unitKey="units.mm3" />
           ) : (
-            <NumberField labelKey="lung.form.totalDiameter" value={size} onChangeText={setSize} unitKey="units.mm" />
+            <InputRow labelKey="lung.form.totalDiameter" value={size} onChangeText={setSize} unitKey="units.mm" />
           )}
           {noduleType === 'partSolid' ? (
-            <>
-              <NumberField labelKey="lung.form.solidComponent" value={solidComponent} onChangeText={setSolidComponent} unitKey="units.mm" />
-              <ToggleRow labelKey="lung.lungRads.solidComponentGrowth" value={solidComponentGrowth} onValueChange={setSolidComponentGrowth} />
-            </>
+            <InputRow labelKey="lung.form.solidComponent" value={solidComponent} onChangeText={setSolidComponent} unitKey="units.mm" />
+          ) : null}
+          {noduleType === 'partSolid' ? (
+            <SwitchRow labelKey="lung.lungRads.solidComponentGrowth" value={solidComponentGrowth} onValueChange={setSolidComponentGrowth} />
           ) : null}
           {noduleType === 'juxtapleural' ? (
-            <ToggleRow
+            <SwitchRow
               labelKey="lung.lungRads.benignJuxtapleuralMorphology"
               descriptionKey="lung.lungRads.benignJuxtapleuralDescription"
               value={benignJuxtapleuralMorphology}
               onValueChange={setBenignJuxtapleuralMorphology}
             />
           ) : null}
-        </SectionCard>
+        </Section>
       ) : null}
 
       {noduleType === 'airway' ? (
-        <SectionCard titleKey="lung.lungRads.airwaySection">
-          <ChoiceChips labelKey="lung.lungRads.airwayLocation" options={airwayOptions} value={airwayLocation} onChange={setAirwayLocation} columns={1} />
-          <ToggleRow
+        <Section headerKey="lung.lungRads.airwaySection">
+          <ChoiceRow labelKey="lung.lungRads.airwayLocation" options={airwayOptions} value={airwayLocation} onChange={setAirwayLocation} variant="list" />
+          <SwitchRow
             labelKey="lung.lungRads.benignAirwaySecretions"
             descriptionKey="lung.lungRads.benignAirwaySecretionsDescription"
             value={benignAirwaySecretionFeatures}
             onValueChange={setBenignAirwaySecretionFeatures}
           />
-        </SectionCard>
+        </Section>
       ) : null}
 
       {noduleType === 'atypicalCyst' ? (
-        <SectionCard titleKey="lung.lungRads.cystSection" descriptionKey="lung.lungRads.cystDescription">
-          <ChoiceChips labelKey="lung.lungRads.cystMorphology" options={cystMorphologyOptions} value={cystMorphology} onChange={setCystMorphology} />
-          <ChoiceChips labelKey="lung.lungRads.cystChange" options={cystChangeOptions} value={cystChange} onChange={setCystChange} columns={1} />
-          <ToggleRow labelKey="lung.lungRads.associatedNodule" value={hasAssociatedNodule} onValueChange={setHasAssociatedNodule} />
+        <Section headerKey="lung.lungRads.cystSection" footerKey="lung.lungRads.cystDescription">
+          <ChoiceRow labelKey="lung.lungRads.cystMorphology" options={cystMorphologyOptions} value={cystMorphology} onChange={setCystMorphology} variant="chips" />
+          <ChoiceRow labelKey="lung.lungRads.cystChange" options={cystChangeOptions} value={cystChange} onChange={setCystChange} variant="list" />
+          <SwitchRow labelKey="lung.lungRads.associatedNodule" value={hasAssociatedNodule} onValueChange={setHasAssociatedNodule} />
           {hasAssociatedNodule ? (
-            <ChoiceChips labelKey="lung.lungRads.associatedCategory" options={associatedCategoryOptions} value={associatedCategory} onChange={setAssociatedCategory} />
+            <ChoiceRow labelKey="lung.lungRads.associatedCategory" options={associatedCategoryOptions} value={associatedCategory} onChange={setAssociatedCategory} variant="list" />
           ) : null}
-        </SectionCard>
+        </Section>
       ) : null}
 
-      <SectionCard titleKey="lung.lungRads.modifiersSection">
-        <ToggleRow labelKey="lung.lungRads.benignCalcification" value={benignCalcification} onValueChange={setBenignCalcification} />
-        <ToggleRow labelKey="lung.lungRads.macroscopicFat" value={macroscopicFat} onValueChange={setMacroscopicFat} />
-        <ToggleRow labelKey="lung.lungRads.inflammatoryFindings" descriptionKey="lung.lungRads.inflammatoryDescription" value={inflammatoryFindings} onValueChange={setInflammatoryFindings} />
-        <ToggleRow labelKey="lung.lungRads.multiple" value={multiple} onValueChange={setMultiple} />
-        <ToggleRow labelKey="lung.lungRads.additionalSuspiciousFeatures" descriptionKey="lung.lungRads.additionalSuspiciousDescription" value={additionalSuspiciousFeatures} onValueChange={setAdditionalSuspiciousFeatures} />
-        <ToggleRow labelKey="lung.lungRads.sModifier" descriptionKey="lung.lungRads.sModifierDescription" value={sModifier} onValueChange={setSModifier} />
-      </SectionCard>
+      <Section headerKey="lung.lungRads.modifiersSection">
+        <SwitchRow labelKey="lung.lungRads.benignCalcification" value={benignCalcification} onValueChange={setBenignCalcification} />
+        <SwitchRow labelKey="lung.lungRads.macroscopicFat" value={macroscopicFat} onValueChange={setMacroscopicFat} />
+        <SwitchRow labelKey="lung.lungRads.inflammatoryFindings" descriptionKey="lung.lungRads.inflammatoryDescription" value={inflammatoryFindings} onValueChange={setInflammatoryFindings} />
+        <SwitchRow labelKey="lung.lungRads.multiple" value={multiple} onValueChange={setMultiple} />
+        <SwitchRow labelKey="lung.lungRads.additionalSuspiciousFeatures" descriptionKey="lung.lungRads.additionalSuspiciousDescription" value={additionalSuspiciousFeatures} onValueChange={setAdditionalSuspiciousFeatures} />
+        <SwitchRow labelKey="lung.lungRads.sModifier" descriptionKey="lung.lungRads.sModifierDescription" value={sModifier} onValueChange={setSModifier} />
+      </Section>
 
       <ResultCard
         badge={result.displayCategory}
@@ -308,32 +308,38 @@ export function LungRadsScreen() {
       />
 
       {canOpenBrock ? (
-        <ActionButton labelKey="lung.lungRads.openBrock" onPress={openBrock} tone="lung" />
+        <Button labelKey="lung.lungRads.openBrock" onPress={openBrock} variant="tinted" accent="lung" icon="percent" />
       ) : null}
 
-      <SectionCard titleKey="lung.lungRads.growth.title" descriptionKey="lung.lungRads.growth.description">
-        <NumberField labelKey="lung.lungRads.growth.current" value={currentDiameter} onChangeText={setCurrentDiameter} unitKey="units.mm" />
-        <NumberField labelKey="lung.lungRads.growth.prior" value={priorDiameter} onChangeText={setPriorDiameter} unitKey="units.mm" />
-        <NumberField labelKey="lung.lungRads.growth.interval" value={intervalDays} onChangeText={setIntervalDays} unitKey="units.days" integer />
-        <View style={styles.growthResult}>
-          <Text style={styles.growthLabel}>{t('lung.lungRads.growth.interpretation')}</Text>
-          <Text style={styles.growthText}>{tx(growth.summary)}</Text>
+      <Section headerKey="lung.lungRads.growth.title" footerKey="lung.lungRads.growth.description">
+        <InputRow labelKey="lung.lungRads.growth.current" value={currentDiameter} onChangeText={setCurrentDiameter} unitKey="units.mm" />
+        <InputRow labelKey="lung.lungRads.growth.prior" value={priorDiameter} onChangeText={setPriorDiameter} unitKey="units.mm" />
+        <InputRow labelKey="lung.lungRads.growth.interval" value={intervalDays} onChangeText={setIntervalDays} unitKey="units.days" integer />
+        <View style={styles.growthRow}>
+          <Text style={[styles.growthLabel, { color: colors.textSecondary }]}>
+            {t('lung.lungRads.growth.interpretation')}
+          </Text>
+          <Text style={[styles.growthText, { color: colors.text }]}>{tx(growth.summary)}</Text>
         </View>
-      </SectionCard>
-      <ActionButton labelKey="common.resetForm" onPress={reset} tone="lung" />
-      <InfoBanner textKey="lung.lungRads.noRiskPercentages" tone="warning" />
-    </AppScreen>
+      </Section>
+
+      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
+      <Banner textKey="lung.lungRads.noRiskPercentages" tone="warning" />
+      <Disclaimer />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  growthResult: {
-    borderRadius: radii.md,
-    backgroundColor: colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.sm,
+  growthRow: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    gap: 3,
   },
-  growthLabel: { color: colors.textSubtle, fontSize: 11, fontWeight: '800', textTransform: 'uppercase' },
-  growthText: { color: colors.text, fontSize: 13, lineHeight: 19, marginTop: 3 },
+  growthLabel: {
+    ...font.captionBold,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+  },
+  growthText: { ...font.subhead },
 });

@@ -1,19 +1,23 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { colors, spacing } from '../theme';
+import { accentColor, spacing, font, useTheme, type ModuleAccentName } from '../theme';
 
 type KeyPointListProps = Readonly<{
   itemKeys: readonly string[];
+  accent?: ModuleAccentName;
 }>;
 
-export function KeyPointList({ itemKeys }: KeyPointListProps) {
+/** Bulleted key points, rendered as rows inside a Section. */
+export function KeyPointList({ itemKeys, accent = 'tint' }: KeyPointListProps) {
   const { t } = useI18n();
+  const { colors } = useTheme();
+  const dotColor = accentColor(colors, accent);
   return (
     <View style={styles.list}>
       {itemKeys.map((key) => (
         <View key={key} style={styles.row}>
-          <Text style={styles.bullet}>{t('common.bullet')}</Text>
-          <Text style={styles.text}>{t(key)}</Text>
+          <View style={[styles.dot, { backgroundColor: dotColor }]} />
+          <Text style={[styles.text, { color: colors.text }]}>{t(key)}</Text>
         </View>
       ))}
     </View>
@@ -21,8 +25,21 @@ export function KeyPointList({ itemKeys }: KeyPointListProps) {
 }
 
 const styles = StyleSheet.create({
-  list: { gap: spacing.xs },
-  row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.xs },
-  bullet: { color: colors.primary, fontSize: 14, lineHeight: 20 },
-  text: { flex: 1, color: colors.textMuted, fontSize: 13, lineHeight: 20 },
+  list: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    gap: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    marginTop: 7.5,
+  },
+  text: { ...font.subhead, flex: 1 },
 });

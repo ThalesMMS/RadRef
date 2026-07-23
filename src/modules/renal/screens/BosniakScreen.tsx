@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
 import { Share } from 'react-native';
 import {
-  ActionButton,
-  AppScreen,
-  ChoiceChips,
+  Banner,
+  Button,
+  ChoiceRow,
   Disclaimer,
-  InfoBanner,
-  NumberField,
+  InputRow,
   ResultCard,
-  SectionCard,
-  ToggleRow,
+  Screen,
+  Section,
+  SwitchRow,
   type ChoiceOption,
 } from '../../../components';
 import { msg } from '../../../core/domain';
@@ -179,54 +179,93 @@ export function BosniakScreen() {
   };
 
   return (
-    <AppScreen titleKey="renal.tools.bosniak.title" subtitleKey="renal.tools.bosniak.meta">
-      <Disclaimer />
-      <InfoBanner titleKey="renal.bosniak.scopeTitle" textKey="renal.bosniak.scopeText" />
+    <Screen titleKey="renal.tools.bosniak.title" subtitleKey="renal.tools.bosniak.meta">
+      <Banner titleKey="renal.bosniak.scopeTitle" textKey="renal.bosniak.scopeText" />
 
-      <SectionCard titleKey="renal.bosniak.acquisitionSection" descriptionKey="renal.bosniak.acquisitionDescription">
-        <ChoiceChips labelKey="renal.bosniak.acquisition" options={acquisitionOptions} value={acquisition} onChange={setAcquisition} columns={1} />
-        <ToggleRow labelKey="renal.bosniak.cysticMassConfirmed" descriptionKey="renal.bosniak.cysticMassDescription" value={cysticMassConfirmed} onValueChange={setCysticMassConfirmed} />
-        <NumberField labelKey="renal.bosniak.enhancingTissuePercent" value={enhancingTissuePercent} onChangeText={setEnhancingTissuePercent} unitKey="units.percent" helperKey="renal.bosniak.enhancingTissueHelper" />
-        <NumberField labelKey="renal.management.lesionSize" value={lesionSize} onChangeText={setLesionSize} unitKey="units.mm" />
-        <ToggleRow labelKey="renal.bosniak.alternativeEtiology" value={alternativeEtiology} onValueChange={setAlternativeEtiology} />
-        <ToggleRow labelKey="renal.bosniak.hereditarySyndrome" value={hereditarySyndrome} onValueChange={setHereditarySyndrome} />
-      </SectionCard>
+      <Section headerKey="renal.bosniak.acquisitionSection" footerKey="renal.bosniak.acquisitionDescription">
+        <ChoiceRow
+          labelKey="renal.bosniak.acquisition"
+          options={acquisitionOptions}
+          value={acquisition}
+          onChange={setAcquisition}
+          variant="list"
+        />
+        <SwitchRow
+          labelKey="renal.bosniak.cysticMassConfirmed"
+          descriptionKey="renal.bosniak.cysticMassDescription"
+          value={cysticMassConfirmed}
+          onValueChange={setCysticMassConfirmed}
+        />
+        <InputRow
+          labelKey="renal.bosniak.enhancingTissuePercent"
+          value={enhancingTissuePercent}
+          onChangeText={setEnhancingTissuePercent}
+          unitKey="units.percent"
+          helperKey="renal.bosniak.enhancingTissueHelper"
+        />
+        <InputRow
+          labelKey="renal.management.lesionSize"
+          value={lesionSize}
+          onChangeText={setLesionSize}
+          unitKey="units.mm"
+        />
+        <SwitchRow labelKey="renal.bosniak.alternativeEtiology" value={alternativeEtiology} onValueChange={setAlternativeEtiology} />
+        <SwitchRow labelKey="renal.bosniak.hereditarySyndrome" value={hereditarySyndrome} onValueChange={setHereditarySyndrome} />
+      </Section>
 
-      <SectionCard titleKey="renal.bosniak.contentSection">
-        <ToggleRow labelKey="renal.bosniak.wellDefined" value={wellDefined} onValueChange={setWellDefined} />
-        <ToggleRow labelKey="renal.bosniak.homogeneous" value={homogeneous} onValueChange={setHomogeneous} />
-        <ChoiceChips labelKey="renal.bosniak.contentPattern" options={contentOptions} value={contentPattern} onChange={setContentPattern} columns={1} />
-      </SectionCard>
+      <Section headerKey="renal.bosniak.contentSection">
+        <SwitchRow labelKey="renal.bosniak.wellDefined" value={wellDefined} onValueChange={setWellDefined} />
+        <SwitchRow labelKey="renal.bosniak.homogeneous" value={homogeneous} onValueChange={setHomogeneous} />
+        <ChoiceRow
+          labelKey="renal.bosniak.contentPattern"
+          options={contentOptions}
+          value={contentPattern}
+          onChange={setContentPattern}
+          variant="list"
+        />
+      </Section>
 
-      <SectionCard titleKey="renal.bosniak.wallSection">
-        <NumberField labelKey="renal.bosniak.wallThickness" value={wallThickness} onChangeText={setWallThickness} unitKey="units.mm" />
-        <ToggleRow labelKey="renal.bosniak.wallSmooth" value={wallSmooth} onValueChange={setWallSmooth} />
-        <ToggleRow labelKey="renal.bosniak.wallEnhances" value={wallEnhances} onValueChange={setWallEnhances} />
-      </SectionCard>
+      <Section headerKey="renal.bosniak.wallSection">
+        <InputRow labelKey="renal.bosniak.wallThickness" value={wallThickness} onChangeText={setWallThickness} unitKey="units.mm" />
+        <SwitchRow labelKey="renal.bosniak.wallSmooth" value={wallSmooth} onValueChange={setWallSmooth} />
+        <SwitchRow labelKey="renal.bosniak.wallEnhances" value={wallEnhances} onValueChange={setWallEnhances} />
+      </Section>
 
-      <SectionCard titleKey="renal.bosniak.septaSection">
-        <NumberField labelKey="renal.bosniak.septaCount" value={septaCount} onChangeText={setSeptaCount} integer />
-        <NumberField labelKey="renal.bosniak.septalThickness" value={septalThickness} onChangeText={setSeptalThickness} unitKey="units.mm" />
-        <ToggleRow labelKey="renal.bosniak.septaSmooth" value={septaSmooth} onValueChange={setSeptaSmooth} />
-        <ToggleRow labelKey="renal.bosniak.septaEnhance" value={septaEnhance} onValueChange={setSeptaEnhance} />
-      </SectionCard>
+      <Section headerKey="renal.bosniak.septaSection">
+        <InputRow labelKey="renal.bosniak.septaCount" value={septaCount} onChangeText={setSeptaCount} integer />
+        <InputRow labelKey="renal.bosniak.septalThickness" value={septalThickness} onChangeText={setSeptalThickness} unitKey="units.mm" />
+        <SwitchRow labelKey="renal.bosniak.septaSmooth" value={septaSmooth} onValueChange={setSeptaSmooth} />
+        <SwitchRow labelKey="renal.bosniak.septaEnhance" value={septaEnhance} onValueChange={setSeptaEnhance} />
+      </Section>
 
-      <SectionCard titleKey="renal.bosniak.calcificationNoduleSection">
-        <ChoiceChips labelKey="renal.bosniak.calcification" options={calcificationOptions} value={calcification} onChange={setCalcification} columns={1} />
-        <ChoiceChips labelKey="renal.bosniak.protrusionMargin" options={protrusionOptions} value={protrusionMargin} onChange={setProtrusionMargin} columns={3} />
+      <Section headerKey="renal.bosniak.calcificationNoduleSection">
+        <ChoiceRow
+          labelKey="renal.bosniak.calcification"
+          options={calcificationOptions}
+          value={calcification}
+          onChange={setCalcification}
+          variant="list"
+        />
+        <ChoiceRow
+          labelKey="renal.bosniak.protrusionMargin"
+          options={protrusionOptions}
+          value={protrusionMargin}
+          onChange={setProtrusionMargin}
+          variant="segmented"
+        />
         {protrusionMargin !== 'none' ? (
-          <>
-            <NumberField labelKey="renal.bosniak.protrusionSize" value={protrusionSize} onChangeText={setProtrusionSize} unitKey="units.mm" />
-            <ToggleRow labelKey="renal.bosniak.protrusionEnhances" value={protrusionEnhances} onValueChange={setProtrusionEnhances} />
-          </>
+          <InputRow labelKey="renal.bosniak.protrusionSize" value={protrusionSize} onChangeText={setProtrusionSize} unitKey="units.mm" />
         ) : null}
-      </SectionCard>
+        {protrusionMargin !== 'none' ? (
+          <SwitchRow labelKey="renal.bosniak.protrusionEnhances" value={protrusionEnhances} onValueChange={setProtrusionEnhances} />
+        ) : null}
+      </Section>
 
-      <SectionCard titleKey="renal.bosniak.managementContextSection">
-        <ToggleRow labelKey="renal.management.symptomatic" value={symptomatic} onValueChange={setSymptomatic} />
-        <ToggleRow labelKey="renal.management.comorbidity" value={comorbidity} onValueChange={setComorbidity} />
-        <ToggleRow labelKey="renal.management.targetableComponent" value={targetableSolidComponent} onValueChange={setTargetableSolidComponent} />
-      </SectionCard>
+      <Section headerKey="renal.bosniak.managementContextSection">
+        <SwitchRow labelKey="renal.management.symptomatic" value={symptomatic} onValueChange={setSymptomatic} />
+        <SwitchRow labelKey="renal.management.comorbidity" value={comorbidity} onValueChange={setComorbidity} />
+        <SwitchRow labelKey="renal.management.targetableComponent" value={targetableSolidComponent} onValueChange={setTargetableSolidComponent} />
+      </Section>
 
       <ResultCard
         badge={result.categoryLabel}
@@ -246,9 +285,10 @@ export function BosniakScreen() {
         notes={managementNotes}
         metadata={managementMetadata}
       />
-      <ActionButton labelKey="common.shareReport" onPress={shareReport} tone="renal" />
-      <ActionButton labelKey="common.resetForm" onPress={reset} tone="renal" />
-      <InfoBanner textKey="renal.bosniak.reportReminder" tone="warning" />
-    </AppScreen>
+      <Button labelKey="common.shareReport" onPress={shareReport} accent="renal" icon="square.and.arrow.up" />
+      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
+      <Banner textKey="renal.bosniak.reportReminder" tone="warning" />
+      <Disclaimer />
+    </Screen>
   );
 }

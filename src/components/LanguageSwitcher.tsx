@@ -1,14 +1,20 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useI18n, type LanguageCode } from '../core/i18n';
-import { colors, radii, spacing } from '../theme';
+import { radii, font, useTheme } from '../theme';
 
 const languages: readonly LanguageCode[] = ['pt', 'en'];
 
+/** Compact segmented language toggle, sized for the navigation bar. */
 export function LanguageSwitcher() {
   const { language, setLanguage, t } = useI18n();
+  const { colors, scheme } = useTheme();
 
   return (
-    <View style={styles.container} accessibilityRole="radiogroup" accessibilityLabel={t('language.selectorLabel')}>
+    <View
+      style={[styles.track, { backgroundColor: colors.segmentTrack }]}
+      accessibilityRole="radiogroup"
+      accessibilityLabel={t('language.selectorLabel')}
+    >
       {languages.map((option) => {
         const selected = option === language;
         return (
@@ -18,9 +24,22 @@ export function LanguageSwitcher() {
             accessibilityState={{ selected }}
             accessibilityLabel={t(`language.${option}.full`)}
             onPress={() => setLanguage(option)}
-            style={({ pressed }) => [styles.option, selected && styles.selected, pressed && styles.pressed]}
+            style={[
+              styles.segment,
+              selected && [
+                styles.segmentSelected,
+                { backgroundColor: scheme === 'dark' ? colors.segmentSurface : colors.card },
+              ],
+            ]}
           >
-            <Text style={[styles.label, selected && styles.selectedLabel]}>{t(`language.${option}.short`)}</Text>
+            <Text
+              style={[
+                selected ? font.captionBold : font.caption,
+                { color: selected ? colors.text : colors.textSecondary },
+              ]}
+            >
+              {t(`language.${option}.short`)}
+            </Text>
           </Pressable>
         );
       })}
@@ -29,35 +48,25 @@ export function LanguageSwitcher() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  track: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radii.pill,
+    borderRadius: radii.sm,
     padding: 2,
-    backgroundColor: colors.backgroundElevated,
   },
-  option: {
-    minWidth: 38,
-    minHeight: 30,
+  segment: {
+    minWidth: 36,
+    minHeight: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: spacing.xs,
-    borderRadius: radii.pill,
+    paddingHorizontal: 8,
+    borderRadius: radii.sm - 2,
+    borderCurve: 'continuous',
   },
-  selected: {
-    backgroundColor: colors.primarySoft,
-  },
-  pressed: {
-    opacity: 0.72,
-  },
-  label: {
-    color: colors.textMuted,
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.4,
-  },
-  selectedLabel: {
-    color: colors.primary,
+  segmentSelected: {
+    shadowColor: '#000000',
+    shadowOpacity: 0.12,
+    shadowRadius: 3,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 2,
   },
 });
