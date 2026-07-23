@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+title: RadRef
+message: "Se este software for utilizado em ensino ou pesquisa, cite o repositório e as publicações clínicas listadas em docs/CLINICAL-SOURCES.md."
+type: software
+authors:
+  - family-names: Santos
+    given-names: "Thales Matheus Mendonça"
+version: 1.0.0
+date-released: 2026-07-23
+license: MIT
+keywords:
+  - radiology
+  - React Native
+  - pulmonary nodule
+  - Lung-RADS
+  - Fleischner
+  - Bosniak
+  - renal cyst
