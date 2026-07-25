@@ -86,7 +86,8 @@ Esse comando executa:
 - Registro central dos módulos disponíveis.
 - Navegação baseada em arquivos com Expo Router.
 - Tela de erro para rotas não registradas.
-- Identidade visual única para todos os módulos.
+- Identidade visual única para todos os módulos, com tema claro e escuro seguindo o sistema.
+- Navegação nativa da plataforma: cabeçalhos da pilha nativa, listas agrupadas e SF Symbols no iOS.
 - Seletor **PT/EN** visível no cabeçalho de todas as telas.
 - Persistência local do idioma selecionado.
 
@@ -202,7 +203,7 @@ Auditoria completa: [`docs/MIGRATION-AUDIT.md`](docs/MIGRATION-AUDIT.md).
 
 ## Funcionalidades não migradas literalmente
 
-- O visual SwiftUI e o seletor segmentado original foram substituídos por uma interface React Native coerente entre módulos.
+- O visual SwiftUI original foi substituído por uma interface React Native coerente entre módulos, que reproduz os padrões nativos da plataforma (listas agrupadas, controles segmentados, cabeçalhos nativos).
 - O visualizador de PDF específico de iOS não foi portado. O RadRef abre links oficiais externos e não redistribui PDFs protegidos.
 - Elementos de navegação, compartilhamento e controles específicos do sistema Apple foram reconstruídos com equivalentes multiplataforma quando relevantes.
 - Não foram incluídas ingestão DICOM, segmentação, detecção automática, armazenamento de dados de pacientes ou integração com servidor; esses recursos também não faziam parte do núcleo calculador solicitado.

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { radii, spacing, font, useTheme, type Theme } from '../theme';
+import { font, radii, spacing, surfaceTint, useTheme, type Theme } from '../theme';
 import { Icon } from './Icon';
 
 export type ChoiceOption<T extends string> = Readonly<{
@@ -28,8 +28,8 @@ function autoVariant<T extends string>(options: readonly ChoiceOption<T>[], labe
 }
 
 /**
- * Single-choice control. Renders as a native-style segmented control (few short options),
- * wrapping capsule chips (many short options) or a checkmark list (long/described options).
+ * Single-choice control. Renders as a segmented control (few short options),
+ * wrapping chips (many short options) or a checkmark list (long or described options).
  */
 export function ChoiceRow<T extends string>({ labelKey, options, value, onChange, variant }: ChoiceRowProps<T>) {
   const { t } = useI18n();
@@ -57,7 +57,14 @@ export function ChoiceRow<T extends string>({ labelKey, options, value, onChange
                 style={({ pressed }) => [styles.listRow, pressed && { backgroundColor: theme.colors.highlight }]}
               >
                 <View style={styles.listCopy}>
-                  <Text style={[font.body, { color: theme.colors.text }]}>{t(option.labelKey)}</Text>
+                  <Text
+                    style={[
+                      selected ? font.bodyMedium : font.body,
+                      { color: selected ? theme.colors.tint : theme.colors.text },
+                    ]}
+                  >
+                    {t(option.labelKey)}
+                  </Text>
                   {option.descriptionKey ? (
                     <Text style={[font.footnote, { color: theme.colors.textSecondary }]}>
                       {t(option.descriptionKey)}
@@ -65,7 +72,7 @@ export function ChoiceRow<T extends string>({ labelKey, options, value, onChange
                   ) : null}
                 </View>
                 <View style={styles.check}>
-                  {selected ? <Icon name="checkmark" size={16} color={theme.colors.tint} weight="semibold" /> : null}
+                  {selected ? <Icon name="checkmark" size={15} color={theme.colors.tint} weight="semibold" /> : null}
                 </View>
               </Pressable>
             </View>
@@ -113,13 +120,13 @@ function Segmented<T extends string>({ options, labels, value, onChange, theme }
             style={({ pressed }) => [
               styles.segment,
               selected && [styles.segmentSelected, { backgroundColor: theme.colors.segmentSurface }],
-              pressed && !selected && { opacity: 0.55 },
+              pressed && !selected && styles.pressed,
             ]}
           >
             <Text
               numberOfLines={1}
               style={[
-                selected ? font.footnoteBold : font.footnote,
+                selected ? font.subheadBold : font.subhead,
                 { color: selected ? theme.colors.text : theme.colors.textSecondary },
               ]}
             >
@@ -145,14 +152,16 @@ function Chips<T extends string>({ options, labels, value, onChange, theme }: Co
             onPress={() => onChange(option.value)}
             style={({ pressed }) => [
               styles.chip,
-              { backgroundColor: selected ? theme.colors.tint : theme.colors.fill },
-              pressed && { opacity: 0.65 },
+              selected
+                ? { backgroundColor: surfaceTint(theme, theme.colors.tint), borderColor: theme.colors.tint }
+                : { backgroundColor: theme.colors.fill, borderColor: 'transparent' },
+              pressed && styles.pressed,
             ]}
           >
             <Text
               style={[
                 selected ? font.subheadBold : font.subhead,
-                { color: selected ? '#FFFFFF' : theme.colors.text },
+                { color: selected ? theme.colors.tint : theme.colors.text },
               ]}
             >
               {labels[index]}
@@ -167,30 +176,26 @@ function Chips<T extends string>({ options, labels, value, onChange, theme }: Co
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: spacing.md,
-    paddingVertical: 10,
-    gap: spacing.xs,
+    paddingVertical: spacing.sm,
+    gap: 10,
   },
   groupLabel: { ...font.subhead },
   track: {
     flexDirection: 'row',
-    borderRadius: radii.sm + 1,
+    borderRadius: radii.sm + 2,
     padding: 2,
   },
   segment: {
     flex: 1,
-    minHeight: 32,
-    borderRadius: radii.sm - 1,
+    minHeight: 34,
+    borderRadius: radii.sm,
     borderCurve: 'continuous',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: spacing.xs,
   },
   segmentSelected: {
-    shadowColor: '#000000',
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.14)',
   },
   chipWrap: {
     flexDirection: 'row',
@@ -198,20 +203,20 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   chip: {
-    minHeight: 34,
-    borderRadius: radii.pill,
-    paddingHorizontal: 14,
-    paddingVertical: 6,
+    minHeight: 36,
+    borderRadius: radii.sm + 2,
+    borderCurve: 'continuous',
+    borderWidth: 1.5,
+    paddingHorizontal: 13,
+    paddingVertical: 7,
     alignItems: 'center',
     justifyContent: 'center',
   },
   listLabel: {
-    ...font.footnote,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
+    ...font.subhead,
     paddingHorizontal: spacing.md,
-    paddingTop: 10,
-    paddingBottom: 6,
+    paddingTop: spacing.sm,
+    paddingBottom: 7,
   },
   listSeparator: {
     height: StyleSheet.hairlineWidth,
@@ -221,10 +226,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    minHeight: 44,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
-    paddingVertical: 10,
+    paddingVertical: 11,
   },
   listCopy: { flex: 1, gap: 2 },
-  check: { width: 20, alignItems: 'center' },
+  check: { width: 18, alignItems: 'center' },
+  pressed: { opacity: 0.55 },
 });

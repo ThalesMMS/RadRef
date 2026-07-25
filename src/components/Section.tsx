@@ -1,32 +1,35 @@
 import { Children, type PropsWithChildren, type ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { radii, spacing, font, useTheme } from '../theme';
+import { font, radii, spacing, useTheme } from '../theme';
 
 type SectionProps = PropsWithChildren<Readonly<{
   headerKey?: string;
   footerKey?: string;
-  /** Left inset of row separators; 58 aligns with text next to a 29pt icon. */
+  /** Left inset of row separators; 60 aligns with text next to a 32pt icon tile. */
   separatorInset?: number;
   /** Render header/footer around free-standing children (no grouped card). */
   plain?: boolean;
 }>>;
 
-/** iOS inset-grouped list: uppercase header, rounded card with hairline-separated rows, footnote footer. */
+/** iOS inset-grouped list: overline header, rounded card with hairline-separated rows, footnote footer. */
 export function Section({ headerKey, footerKey, separatorInset = spacing.md, plain = false, children }: SectionProps) {
   const { t } = useI18n();
   const { colors } = useTheme();
 
+  const header = headerKey ? (
+    <Text style={[styles.header, { color: colors.textSecondary }]}>{t(headerKey)}</Text>
+  ) : null;
+  const footer = footerKey ? (
+    <Text style={[styles.footer, { color: colors.textSecondary }]}>{t(footerKey)}</Text>
+  ) : null;
+
   if (plain) {
     return (
       <View>
-        {headerKey ? (
-          <Text style={[styles.header, { color: colors.textSecondary }]}>{t(headerKey)}</Text>
-        ) : null}
+        {header}
         <View style={styles.plainStack}>{children}</View>
-        {footerKey ? (
-          <Text style={[styles.footer, { color: colors.textSecondary }]}>{t(footerKey)}</Text>
-        ) : null}
+        {footer}
       </View>
     );
   }
@@ -47,24 +50,19 @@ export function Section({ headerKey, footerKey, separatorInset = spacing.md, pla
 
   return (
     <View>
-      {headerKey ? (
-        <Text style={[styles.header, { color: colors.textSecondary }]}>{t(headerKey)}</Text>
-      ) : null}
+      {header}
       <View style={[styles.card, { backgroundColor: colors.card }]}>{separated}</View>
-      {footerKey ? (
-        <Text style={[styles.footer, { color: colors.textSecondary }]}>{t(footerKey)}</Text>
-      ) : null}
+      {footer}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    ...font.footnote,
+    ...font.overline,
     textTransform: 'uppercase',
-    letterSpacing: 0.4,
     marginHorizontal: spacing.md,
-    marginBottom: 7,
+    marginBottom: 8,
   },
   card: {
     borderRadius: radii.xl,
@@ -80,6 +78,6 @@ const styles = StyleSheet.create({
   footer: {
     ...font.footnote,
     marginHorizontal: spacing.md,
-    marginTop: 7,
+    marginTop: 8,
   },
 });

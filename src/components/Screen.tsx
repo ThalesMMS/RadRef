@@ -1,13 +1,13 @@
 import { Stack } from 'expo-router';
 import type { PropsWithChildren } from 'react';
-import { Platform, ScrollView, StyleSheet, Text } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useI18n } from '../core/i18n';
-import { spacing, font, useTheme } from '../theme';
+import { font, spacing, useTheme } from '../theme';
 
 type ScreenProps = PropsWithChildren<Readonly<{
   titleKey: string;
-  /** Small context line rendered under the navigation title. */
+  /** Context line rendered under the navigation title. */
   subtitleKey?: string;
   /** Native large title (hub screens). Detail/form screens keep the inline title. */
   large?: boolean;
@@ -35,7 +35,9 @@ export function Screen({ titleKey, subtitleKey, large = false, testID, children 
         testID={testID}
       >
         {subtitleKey ? (
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t(subtitleKey)}</Text>
+          <View style={styles.lede}>
+            <Text style={[styles.ledeText, { color: colors.textSecondary }]}>{t(subtitleKey)}</Text>
+          </View>
         ) : null}
         {children}
       </ScrollView>
@@ -47,12 +49,12 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   content: {
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
+    paddingTop: spacing.sm,
     gap: spacing.lg,
   },
-  subtitle: {
-    ...font.footnote,
-    marginHorizontal: spacing.md,
-    marginBottom: -spacing.xs,
+  lede: {
+    paddingHorizontal: spacing.xxs,
+    marginBottom: -spacing.xxs,
   },
+  ledeText: { ...font.subhead },
 });

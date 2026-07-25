@@ -1,7 +1,8 @@
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { radii, spacing, font, useTheme } from '../theme';
+import { font, spacing, useTheme } from '../theme';
 import { Icon } from './Icon';
+import { IconTile } from './IconTile';
 
 export type ReferenceItem = Readonly<{
   id: string;
@@ -14,7 +15,7 @@ type ReferenceListProps = Readonly<{
   items: readonly ReferenceItem[];
 }>;
 
-/** External literature links as Settings-style rows; render inside a Section with separatorInset 58. */
+/** External literature links as list rows; render inside a Section with separatorInset 60. */
 export function ReferenceList({ items }: ReferenceListProps) {
   const { t } = useI18n();
   const { colors } = useTheme();
@@ -33,14 +34,12 @@ export function ReferenceList({ items }: ReferenceListProps) {
             }}
             style={({ pressed }) => [styles.row, pressed && { backgroundColor: colors.highlight }]}
           >
-            <View style={[styles.iconBox, { backgroundColor: colors.tint }]}>
-              <Icon name="link" size={15} color="#FFFFFF" weight="medium" />
-            </View>
+            <IconTile name="link" color={colors.tint} />
             <View style={styles.copy}>
               <Text style={[styles.title, { color: colors.text }]}>{t(item.titleKey)}</Text>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t(item.subtitleKey)}</Text>
             </View>
-            <Icon name="arrow.up.right" size={14} color={colors.textTertiary} weight="semibold" />
+            <Icon name="arrow.up.right" size={13} color={colors.textTertiary} weight="bold" />
           </Pressable>
         </View>
       ))}
@@ -51,23 +50,15 @@ export function ReferenceList({ items }: ReferenceListProps) {
 const styles = StyleSheet.create({
   separator: {
     height: StyleSheet.hairlineWidth,
-    marginLeft: 58,
+    marginLeft: 60,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    minHeight: 44,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
-    paddingVertical: 10,
-  },
-  iconBox: {
-    width: 29,
-    height: 29,
-    borderRadius: radii.sm - 1,
-    borderCurve: 'continuous',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 11,
   },
   copy: { flex: 1, gap: 2 },
   title: { ...font.subheadBold },

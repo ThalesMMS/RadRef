@@ -6,7 +6,6 @@ export function AboutScreen() {
 
   return (
     <Screen titleKey="about.title" subtitleKey="about.subtitle" large>
-      <Disclaimer />
       <Section headerKey="about.guidelinesTitle" footerKey="about.guidelinesDescription">
         <KeyPointList itemKeys={[
           'about.guideline.fleischner',
@@ -35,6 +34,7 @@ export function AboutScreen() {
       <Section>
         <ValueRow labelKey="about.versionLabel" value={version} />
       </Section>
+      <Disclaimer />
     </Screen>
   );
 }

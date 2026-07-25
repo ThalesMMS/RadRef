@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { radii, spacing, font, useTheme, type Palette } from '../theme';
+import { font, radii, spacing, surfaceTint, useTheme, type Palette } from '../theme';
 import { Icon, type IconName } from './Icon';
 
 type BannerTone = 'info' | 'warning' | 'danger';
@@ -17,15 +17,15 @@ const toneConfig: Readonly<Record<BannerTone, { icon: IconName; color: (colors: 
   danger: { icon: 'exclamationmark.octagon.fill', color: (colors) => colors.red },
 };
 
-/** Tinted callout card for scope notes and clinical caveats. */
+/** Tinted callout for scope notes and clinical caveats. */
 export function Banner({ titleKey, textKey, tone = 'info' }: BannerProps) {
   const { t } = useI18n();
   const theme = useTheme();
   const color = toneConfig[tone].color(theme.colors);
 
   return (
-    <View style={[styles.banner, { backgroundColor: `${color}${theme.scheme === 'dark' ? '2B' : '1C'}` }]}>
-      <Icon name={toneConfig[tone].icon} size={18} color={color} />
+    <View style={[styles.banner, { backgroundColor: surfaceTint(theme, color) }]}>
+      <Icon name={toneConfig[tone].icon} size={15} color={color} />
       <View style={styles.copy}>
         {titleKey ? <Text style={[styles.title, { color }]}>{t(titleKey)}</Text> : null}
         <Text style={[styles.text, { color: theme.colors.text }]}>{t(textKey)}</Text>
@@ -40,9 +40,9 @@ export function Disclaimer() {
   const { colors } = useTheme();
   return (
     <View style={styles.disclaimer}>
-      <Icon name="stethoscope" size={13} color={colors.textSecondary} />
+      <Icon name="stethoscope" size={12} color={colors.textSecondary} />
       <Text style={[styles.disclaimerText, { color: colors.textSecondary }]}>
-        <Text style={font.footnoteBold}>{t('disclaimer.title')}</Text>
+        <Text style={font.captionBold}>{t('disclaimer.title')}</Text>
         <Text>{' — '}</Text>
         <Text>{t('disclaimer.text')}</Text>
       </Text>
@@ -54,13 +54,14 @@ const styles = StyleSheet.create({
   banner: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: spacing.sm,
+    gap: 10,
     borderRadius: radii.lg,
     borderCurve: 'continuous',
-    padding: spacing.sm,
+    paddingVertical: spacing.sm,
+    paddingLeft: spacing.sm,
     paddingRight: spacing.md,
   },
-  copy: { flex: 1, gap: 2 },
+  copy: { flex: 1, gap: 3 },
   title: { ...font.footnoteBold },
   text: { ...font.footnote },
   disclaimer: {
@@ -69,5 +70,5 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: spacing.md,
   },
-  disclaimerText: { ...font.footnote, flex: 1 },
+  disclaimerText: { ...font.caption, flex: 1 },
 });

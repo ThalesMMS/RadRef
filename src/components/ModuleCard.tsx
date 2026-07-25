@@ -3,8 +3,9 @@ import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
 import type { RadiologyModule } from '../core/moduleRegistry';
-import { accentColor, radii, spacing, font, useTheme } from '../theme';
+import { accentColor, font, radii, spacing, useTheme } from '../theme';
 import { Icon, type IconName } from './Icon';
+import { IconTile } from './IconTile';
 
 const moduleIcons: Readonly<Record<RadiologyModule['id'], IconName>> = {
   lung: 'lungs.fill',
@@ -13,7 +14,7 @@ const moduleIcons: Readonly<Record<RadiologyModule['id'], IconName>> = {
 
 type ModuleCardProps = Readonly<{ module: RadiologyModule }>;
 
-/** Hero card for a clinical module on the home screen. */
+/** Hero card for a clinical module: what it is, what it does, which guidelines it follows. */
 export function ModuleCard({ module }: ModuleCardProps) {
   const router = useRouter();
   const { t } = useI18n();
@@ -32,19 +33,21 @@ export function ModuleCard({ module }: ModuleCardProps) {
       ]}
     >
       <View style={styles.topRow}>
-        <View style={[styles.iconBox, { backgroundColor: tint }]}>
-          <Icon name={moduleIcons[module.id]} size={24} color="#FFFFFF" weight="medium" />
-        </View>
+        <IconTile name={moduleIcons[module.id]} color={tint} size={40} />
         <View style={styles.titleWrap}>
           <Text style={[styles.title, { color: colors.text }]}>{t(module.titleKey)}</Text>
-          <Text style={[styles.guideline, { color: tint }]}>{t(module.guidelineKey)}</Text>
+          <Text style={[styles.count, { color: colors.textTertiary }]}>
+            {t('home.toolCount', { count: module.tools.length })}
+          </Text>
         </View>
-        <Icon name="chevron.right" size={14} color={colors.textTertiary} weight="semibold" />
+        <Icon name="chevron.right" size={13} color={colors.textTertiary} weight="bold" />
       </View>
-      <Text style={[styles.description, { color: colors.textSecondary }]}>{t(module.descriptionKey)}</Text>
-      <Text style={[styles.count, { color: colors.textTertiary }]}>
-        {t('home.toolCount', { count: module.tools.length })}
+      <Text style={[styles.description, { color: colors.textSecondary }]}>
+        {t(module.descriptionKey)}
       </Text>
+      <View style={[styles.guidelineRow, { borderTopColor: colors.separator }]}>
+        <Text style={[styles.guideline, { color: tint }]}>{t(module.guidelineKey)}</Text>
+      </View>
     </Pressable>
   );
 }
@@ -53,26 +56,23 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: radii.xl,
     borderCurve: 'continuous',
-    padding: spacing.md,
-    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    gap: spacing.sm,
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
   },
-  iconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: radii.md - 2,
-    borderCurve: 'continuous',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  titleWrap: { flex: 1, gap: 2 },
+  titleWrap: { flex: 1, gap: 1 },
   title: { ...font.headline },
-  guideline: { ...font.footnoteBold },
-  description: { ...font.subhead, marginTop: 2 },
   count: { ...font.caption },
-  pressed: { opacity: 0.75 },
+  description: { ...font.subhead },
+  guidelineRow: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingVertical: 11,
+  },
+  guideline: { ...font.caption },
+  pressed: { opacity: 0.7 },
 });

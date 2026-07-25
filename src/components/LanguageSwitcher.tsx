@@ -1,46 +1,45 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useI18n, type LanguageCode } from '../core/i18n';
-import { radii, font, useTheme } from '../theme';
+import { font, useTheme } from '../theme';
 
 const languages: readonly LanguageCode[] = ['pt', 'en'];
 
-/** Compact segmented language toggle, sized for the navigation bar. */
+/** Minimal PT/EN toggle for the navigation bar — plain text, no nested pill. */
 export function LanguageSwitcher() {
   const { language, setLanguage, t } = useI18n();
-  const { colors, scheme } = useTheme();
+  const { colors } = useTheme();
 
   return (
     <View
-      style={[styles.track, { backgroundColor: colors.segmentTrack }]}
+      style={styles.row}
       accessibilityRole="radiogroup"
       accessibilityLabel={t('language.selectorLabel')}
     >
-      {languages.map((option) => {
+      {languages.map((option, index) => {
         const selected = option === language;
         return (
-          <Pressable
-            key={option}
-            accessibilityRole="radio"
-            accessibilityState={{ selected }}
-            accessibilityLabel={t(`language.${option}.full`)}
-            onPress={() => setLanguage(option)}
-            style={[
-              styles.segment,
-              selected && [
-                styles.segmentSelected,
-                { backgroundColor: scheme === 'dark' ? colors.segmentSurface : colors.card },
-              ],
-            ]}
-          >
-            <Text
-              style={[
-                selected ? font.captionBold : font.caption,
-                { color: selected ? colors.text : colors.textSecondary },
-              ]}
+          <View key={option} style={styles.item}>
+            {index > 0 ? (
+              <View style={[styles.divider, { backgroundColor: colors.textTertiary }]} />
+            ) : null}
+            <Pressable
+              accessibilityRole="radio"
+              accessibilityState={{ selected }}
+              accessibilityLabel={t(`language.${option}.full`)}
+              onPress={() => setLanguage(option)}
+              hitSlop={8}
+              style={({ pressed }) => [styles.button, pressed && styles.pressed]}
             >
-              {t(`language.${option}.short`)}
-            </Text>
-          </Pressable>
+              <Text
+                style={[
+                  selected ? font.footnoteBold : font.footnote,
+                  { color: selected ? colors.tint : colors.textTertiary },
+                ]}
+              >
+                {t(`language.${option}.short`)}
+              </Text>
+            </Pressable>
+          </View>
         );
       })}
     </View>
@@ -48,25 +47,9 @@ export function LanguageSwitcher() {
 }
 
 const styles = StyleSheet.create({
-  track: {
-    flexDirection: 'row',
-    borderRadius: radii.sm,
-    padding: 2,
-  },
-  segment: {
-    minWidth: 36,
-    minHeight: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 8,
-    borderRadius: radii.sm - 2,
-    borderCurve: 'continuous',
-  },
-  segmentSelected: {
-    shadowColor: '#000000',
-    shadowOpacity: 0.12,
-    shadowRadius: 3,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 2,
-  },
+  row: { flexDirection: 'row', alignItems: 'center' },
+  item: { flexDirection: 'row', alignItems: 'center' },
+  divider: { width: StyleSheet.hairlineWidth, height: 12, marginHorizontal: 7 },
+  button: { minHeight: 30, justifyContent: 'center' },
+  pressed: { opacity: 0.5 },
 });

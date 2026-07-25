@@ -2,6 +2,7 @@ export * from './Banner';
 export * from './Button';
 export * from './ChoiceRow';
 export * from './Icon';
+export * from './IconTile';
 export * from './InputRow';
 export * from './KeyPointList';
 export * from './LanguageSwitcher';

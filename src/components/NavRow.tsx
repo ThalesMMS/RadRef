@@ -2,8 +2,9 @@ import type { Href } from 'expo-router';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { accentColor, radii, spacing, font, useTheme, type ModuleAccentName } from '../theme';
+import { accentColor, font, spacing, useTheme, type ModuleAccentName } from '../theme';
 import { Icon, type IconName } from './Icon';
+import { IconTile } from './IconTile';
 
 type NavRowProps = Readonly<{
   titleKey: string;
@@ -17,7 +18,7 @@ type NavRowProps = Readonly<{
   testID?: string;
 }>;
 
-/** Settings-style tappable row: tinted icon square, title/subtitle, trailing chevron. */
+/** Tappable list row: tinted icon tile, title over subtitle, trailing chevron. */
 export function NavRow({ titleKey, subtitleKey, route, onPress, icon, accent = 'tint', external = false, testID }: NavRowProps) {
   const router = useRouter();
   const { t } = useI18n();
@@ -37,18 +38,14 @@ export function NavRow({ titleKey, subtitleKey, route, onPress, icon, accent = '
       testID={testID}
       style={({ pressed }) => [styles.row, pressed && { backgroundColor: colors.highlight }]}
     >
-      {icon ? (
-        <View style={[styles.iconBox, { backgroundColor: tint }]}>
-          <Icon name={icon} size={16} color="#FFFFFF" weight="medium" />
-        </View>
-      ) : null}
+      {icon ? <IconTile name={icon} color={tint} /> : null}
       <View style={styles.copy}>
         <Text style={[styles.title, { color: colors.text }]}>{t(titleKey)}</Text>
         {subtitleKey ? (
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t(subtitleKey)}</Text>
         ) : null}
       </View>
-      <Icon name={external ? 'arrow.up.right' : 'chevron.right'} size={14} color={colors.textTertiary} weight="semibold" />
+      <Icon name={external ? 'arrow.up.right' : 'chevron.right'} size={13} color={colors.textTertiary} weight="bold" />
     </Pressable>
   );
 }
@@ -75,20 +72,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    minHeight: 44,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
-    paddingVertical: 10,
-  },
-  iconBox: {
-    width: 29,
-    height: 29,
-    borderRadius: radii.sm - 1,
-    borderCurve: 'continuous',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 11,
   },
   copy: { flex: 1, gap: 2 },
   title: { ...font.body },
   subtitle: { ...font.footnote },
-  value: { ...font.body },
+  value: { ...font.body, fontVariant: ['tabular-nums'] },
 });

@@ -19,16 +19,20 @@ export type Palette = Readonly<{
   /** tertiaryLabel */
   textTertiary: string;
   separator: string;
+  /** Accent for text and glyphs drawn on background/card surfaces. */
   tint: string;
   lung: string;
   renal: string;
+  /** Deeper accent for filled surfaces that carry white text. */
+  tintSolid: string;
+  lungSolid: string;
+  renalSolid: string;
   green: string;
-  yellow: string;
   orange: string;
   red: string;
   pink: string;
   gray: string;
-  /** solid track of the custom segmented control */
+  /** track of the custom segmented control */
   segmentTrack: string;
   /** selected segment surface */
   segmentSurface: string;
@@ -38,20 +42,22 @@ export const palettes: Readonly<Record<ThemeScheme, Palette>> = {
   light: {
     background: '#F2F2F7',
     card: '#FFFFFF',
-    fill: 'rgba(118, 118, 128, 0.12)',
-    highlight: 'rgba(120, 120, 128, 0.20)',
-    text: '#000000',
+    fill: 'rgba(118, 118, 128, 0.10)',
+    highlight: 'rgba(120, 120, 128, 0.16)',
+    text: '#1C1C1E',
     textSecondary: 'rgba(60, 60, 67, 0.60)',
-    textTertiary: 'rgba(60, 60, 67, 0.30)',
-    separator: 'rgba(60, 60, 67, 0.29)',
-    tint: '#007AFF',
-    lung: '#007AFF',
-    renal: '#2FA8BE',
-    green: '#34C759',
-    yellow: '#FFCC00',
-    orange: '#FF9500',
-    red: '#FF3B30',
-    pink: '#FF2D55',
+    textTertiary: 'rgba(60, 60, 67, 0.32)',
+    separator: 'rgba(60, 60, 67, 0.20)',
+    tint: '#0B69D4',
+    lung: '#0B69D4',
+    renal: '#0E8C8C',
+    tintSolid: '#0B69D4',
+    lungSolid: '#0B69D4',
+    renalSolid: '#0E8C8C',
+    green: '#248A3D',
+    orange: '#C86A00',
+    red: '#D70015',
+    pink: '#BF2C55',
     gray: '#8E8E93',
     segmentTrack: 'rgba(118, 118, 128, 0.12)',
     segmentSurface: '#FFFFFF',
@@ -59,34 +65,43 @@ export const palettes: Readonly<Record<ThemeScheme, Palette>> = {
   dark: {
     background: '#000000',
     card: '#1C1C1E',
-    fill: 'rgba(118, 118, 128, 0.24)',
-    highlight: 'rgba(120, 120, 128, 0.32)',
+    fill: 'rgba(118, 118, 128, 0.22)',
+    highlight: 'rgba(120, 120, 128, 0.30)',
     text: '#FFFFFF',
     textSecondary: 'rgba(235, 235, 245, 0.60)',
     textTertiary: 'rgba(235, 235, 245, 0.30)',
-    separator: 'rgba(84, 84, 88, 0.60)',
-    tint: '#0A84FF',
-    lung: '#0A84FF',
-    renal: '#4DC4DB',
+    separator: 'rgba(84, 84, 88, 0.55)',
+    tint: '#4C9CFF',
+    lung: '#4C9CFF',
+    renal: '#4CD0D0',
+    tintSolid: '#0A6FE0',
+    lungSolid: '#0A6FE0',
+    renalSolid: '#0A7C7C',
     green: '#30D158',
-    yellow: '#FFD60A',
     orange: '#FF9F0A',
-    red: '#FF453A',
-    pink: '#FF375F',
-    gray: '#8E8E93',
-    segmentTrack: 'rgba(118, 118, 128, 0.18)',
-    segmentSurface: '#636366',
+    red: '#FF6961',
+    pink: '#FF6482',
+    gray: '#98989D',
+    segmentTrack: 'rgba(118, 118, 128, 0.20)',
+    segmentSurface: '#5A5A5E',
   },
 } as const;
 
 export type Theme = Readonly<{
   scheme: ThemeScheme;
   colors: Palette;
+  /** Translucent version of a solid theme color, for tinted surfaces. */
+  alpha: (color: string, opacity: number) => string;
 }>;
+
+function withAlpha(color: string, opacity: number): string {
+  const clamped = Math.round(Math.min(Math.max(opacity, 0), 1) * 255);
+  return `${color}${clamped.toString(16).padStart(2, '0').toUpperCase()}`;
+}
 
 export function useTheme(): Theme {
   const scheme = useColorScheme() === 'dark' ? 'dark' : 'light';
-  return { scheme, colors: palettes[scheme] };
+  return { scheme, colors: palettes[scheme], alpha: withAlpha };
 }
 
 export type ModuleAccentName = 'lung' | 'renal' | 'tint';
@@ -95,16 +110,22 @@ export function accentColor(colors: Palette, accent: ModuleAccentName): string {
   return accent === 'lung' ? colors.lung : accent === 'renal' ? colors.renal : colors.tint;
 }
 
-export type SeverityColors = Readonly<{
-  /** saturated severity color (badges, emphasis) */
-  color: string;
-  /** translucent wash used behind result surfaces */
-  wash: string;
-  /** text drawn on top of the saturated color */
-  onColor: string;
-}>;
+/** Accent variant safe to fill a surface that carries white text. */
+export function accentSolid(colors: Palette, accent: ModuleAccentName): string {
+  return accent === 'lung' ? colors.lungSolid : accent === 'renal' ? colors.renalSolid : colors.tintSolid;
+}
 
-const severityAlpha: Readonly<Record<ThemeScheme, string>> = { light: '2E', dark: '3D' };
+/** Opacity of a tinted surface (icon tile, chip, callout) against the card. */
+export function surfaceTint(theme: Theme, color: string): string {
+  return withAlpha(color, theme.scheme === 'dark' ? 0.2 : 0.12);
+}
+
+export type SeverityColors = Readonly<{
+  /** saturated severity color (badges, eyebrow, bullets) */
+  color: string;
+  /** faint tint behind the result surface — a hint, never a wash */
+  surface: string;
+}>;
 
 const severityBase: Readonly<Record<Severity, (colors: Palette) => string>> = {
   neutral: (colors) => colors.gray,
@@ -116,7 +137,7 @@ const severityBase: Readonly<Record<Severity, (colors: Palette) => string>> = {
 
 export function severityColors(theme: Theme, severity: Severity): SeverityColors {
   const color = severityBase[severity](theme.colors);
-  return { color, wash: `${color}${severityAlpha[theme.scheme]}`, onColor: '#FFFFFF' };
+  return { color, surface: withAlpha(color, theme.scheme === 'dark' ? 0.14 : 0.07) };
 }
 
 export const spacing = {
@@ -133,21 +154,26 @@ export const radii = {
   sm: 8,
   md: 12,
   lg: 16,
-  xl: 22,
+  xl: 20,
   pill: 999,
 } as const;
 
 /** iOS text-style ramp (SF on iOS, Roboto on Android). Colors are applied at use sites. */
 export const font = {
-  title2: { fontSize: 22, lineHeight: 28, fontWeight: '700', letterSpacing: 0.35 },
+  title2: { fontSize: 22, lineHeight: 27, fontWeight: '700', letterSpacing: 0.35 },
   title3: { fontSize: 20, lineHeight: 25, fontWeight: '600', letterSpacing: 0.38 },
   headline: { fontSize: 17, lineHeight: 22, fontWeight: '600', letterSpacing: -0.41 },
-  body: { fontSize: 17, lineHeight: 22, fontWeight: '400', letterSpacing: -0.41 },
+  body: { fontSize: 17, lineHeight: 23, fontWeight: '400', letterSpacing: -0.41 },
+  bodyMedium: { fontSize: 17, lineHeight: 24, fontWeight: '500', letterSpacing: -0.41 },
   callout: { fontSize: 16, lineHeight: 21, fontWeight: '400', letterSpacing: -0.32 },
   subhead: { fontSize: 15, lineHeight: 20, fontWeight: '400', letterSpacing: -0.24 },
   subheadBold: { fontSize: 15, lineHeight: 20, fontWeight: '600', letterSpacing: -0.24 },
   footnote: { fontSize: 13, lineHeight: 18, fontWeight: '400', letterSpacing: -0.08 },
   footnoteBold: { fontSize: 13, lineHeight: 18, fontWeight: '600', letterSpacing: -0.08 },
   caption: { fontSize: 12, lineHeight: 16, fontWeight: '400', letterSpacing: 0 },
-  captionBold: { fontSize: 12, lineHeight: 16, fontWeight: '600', letterSpacing: 0 },
+  captionBold: { fontSize: 12, lineHeight: 16, fontWeight: '600', letterSpacing: 0.06 },
+  /** Small all-caps label used for section eyebrows. */
+  overline: { fontSize: 12, lineHeight: 16, fontWeight: '600', letterSpacing: 0.5 },
+  /** Numeric/code text that should align in columns. */
+  mono: { fontSize: 12, lineHeight: 16, fontWeight: '500', letterSpacing: 0.2 },
 } as const satisfies Readonly<Record<string, TextStyle>>;

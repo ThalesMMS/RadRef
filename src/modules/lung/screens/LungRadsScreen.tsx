@@ -336,10 +336,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     gap: 3,
   },
-  growthLabel: {
-    ...font.captionBold,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
-  },
+  growthLabel: { ...font.subhead },
   growthText: { ...font.subhead },
 });

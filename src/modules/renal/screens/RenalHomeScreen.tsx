@@ -17,7 +17,7 @@ export function RenalHomeScreen() {
       <Section
         headerKey="renal.home.toolsTitle"
         footerKey="renal.home.toolsDescription"
-        separatorInset={58}
+        separatorInset={60}
       >
         {moduleDefinition.tools.map((tool) => (
           <NavRow

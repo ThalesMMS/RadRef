@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import type { MessageRef, Severity } from '../core/domain';
 import { useI18n } from '../core/i18n';
-import { radii, severityColors, spacing, font, useTheme } from '../theme';
+import { font, radii, severityColors, spacing, surfaceTint, useTheme } from '../theme';
 import { Icon } from './Icon';
 
 type MetadataItem = Readonly<{
@@ -20,6 +20,9 @@ type ResultCardProps = Readonly<{
   secondary?: MessageRef;
 }>;
 
+/** Category codes longer than this are rule identifiers, not labels — shown as a footnote. */
+const MAX_BADGE_LENGTH = 10;
+
 export function ResultCard({
   badge,
   title,
@@ -34,26 +37,22 @@ export function ResultCard({
   const theme = useTheme();
   const { colors } = theme;
   const palette = severityColors(theme, severity);
+  const isLabelBadge = badge !== undefined && badge.length <= MAX_BADGE_LENGTH;
 
   return (
     <View style={[styles.card, { backgroundColor: colors.card }]}>
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: palette.wash }]} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: palette.surface }]} />
+      <View style={[styles.accent, { backgroundColor: palette.color }]} />
       <View style={styles.content}>
         <View style={styles.topRow}>
           <View style={styles.titleWrap}>
             <Text style={[styles.eyebrow, { color: palette.color }]}>{t('result.label')}</Text>
             <Text style={[styles.title, { color: colors.text }]}>{tx(title)}</Text>
           </View>
-          {badge ? (
-            badge.length <= 8 ? (
-              <View style={[styles.badge, { backgroundColor: palette.color }]}>
-                <Text style={[styles.badgeText, { color: palette.onColor }]}>{badge}</Text>
-              </View>
-            ) : (
-              <View style={[styles.badgeCompact, { backgroundColor: colors.fill }]}>
-                <Text style={[styles.badgeCompactText, { color: palette.color }]}>{badge}</Text>
-              </View>
-            )
+          {isLabelBadge ? (
+            <View style={[styles.badge, { backgroundColor: surfaceTint(theme, palette.color) }]}>
+              <Text style={[styles.badgeText, { color: palette.color }]}>{badge}</Text>
+            </View>
           ) : null}
         </View>
 
@@ -77,8 +76,8 @@ export function ResultCard({
         ) : null}
 
         {notes.length > 0 ? (
-          <View style={[styles.notes, { borderTopColor: colors.separator }]}>
-            <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>{t('result.notes')}</Text>
+          <View style={[styles.block, { borderTopColor: colors.separator }]}>
+            <Text style={[styles.blockTitle, { color: colors.textSecondary }]}>{t('result.notes')}</Text>
             {notes.map((note, index) => (
               <View key={`${note.key}:${index}`} style={styles.noteRow}>
                 <View style={[styles.noteDot, { backgroundColor: palette.color }]} />
@@ -89,15 +88,19 @@ export function ResultCard({
         ) : null}
 
         {warnings.length > 0 ? (
-          <View style={[styles.warnings, { backgroundColor: `${colors.orange}${theme.scheme === 'dark' ? '33' : '26'}` }]}>
-            <Text style={[styles.sectionTitle, { color: colors.orange }]}>{t('result.warnings')}</Text>
+          <View style={[styles.warnings, { backgroundColor: surfaceTint(theme, colors.orange) }]}>
+            <Text style={[styles.blockTitle, { color: colors.orange }]}>{t('result.warnings')}</Text>
             {warnings.map((warning, index) => (
               <View key={`${warning.key}:${index}`} style={styles.noteRow}>
-                <Icon name="exclamationmark.triangle.fill" size={13} color={colors.orange} />
+                <Icon name="exclamationmark.triangle.fill" size={12} color={colors.orange} />
                 <Text style={[styles.noteText, { color: colors.text }]}>{tx(warning)}</Text>
               </View>
             ))}
           </View>
+        ) : null}
+
+        {badge !== undefined && !isLabelBadge ? (
+          <Text style={[styles.code, { color: colors.textTertiary }]}>{badge}</Text>
         ) : null}
       </View>
     </View>
@@ -110,8 +113,17 @@ const styles = StyleSheet.create({
     borderCurve: 'continuous',
     overflow: 'hidden',
   },
+  accent: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 3,
+  },
   content: {
-    padding: spacing.md,
+    paddingLeft: spacing.md + 3,
+    paddingRight: spacing.md,
+    paddingVertical: spacing.md,
     gap: spacing.sm,
   },
   topRow: {
@@ -122,36 +134,24 @@ const styles = StyleSheet.create({
   },
   titleWrap: { flex: 1, gap: 3 },
   eyebrow: {
-    ...font.captionBold,
+    ...font.overline,
     textTransform: 'uppercase',
-    letterSpacing: 0.6,
   },
   title: { ...font.title3 },
   badge: {
-    minWidth: 44,
-    minHeight: 36,
-    borderRadius: radii.md - 2,
+    minWidth: 52,
+    borderRadius: radii.md,
     borderCurve: 'continuous',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: spacing.sm,
-    paddingVertical: 6,
+    paddingVertical: 7,
   },
   badgeText: {
-    ...font.headline,
+    ...font.title3,
     fontVariant: ['tabular-nums'],
   },
-  badgeCompact: {
-    maxWidth: 150,
-    borderRadius: radii.pill,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  badgeCompactText: {
-    ...font.footnoteBold,
-    fontVariant: ['tabular-nums'],
-  },
-  primary: { ...font.body },
+  primary: { ...font.bodyMedium },
   secondary: { ...font.subhead },
   metadata: {
     flexDirection: 'row',
@@ -159,32 +159,31 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   metadataPill: {
-    borderRadius: radii.sm,
+    borderRadius: radii.sm + 2,
     borderCurve: 'continuous',
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    gap: 1,
+    paddingVertical: 7,
+    gap: 2,
   },
   metadataLabel: {
     fontSize: 11,
-    lineHeight: 14,
-    fontWeight: '400',
-    textTransform: 'uppercase',
-    letterSpacing: 0.3,
-  },
-  metadataValue: {
-    ...font.footnoteBold,
-    fontVariant: ['tabular-nums'],
-  },
-  notes: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    paddingTop: spacing.sm,
-    gap: 6,
-  },
-  sectionTitle: {
-    ...font.captionBold,
+    lineHeight: 13,
+    fontWeight: '500',
     textTransform: 'uppercase',
     letterSpacing: 0.4,
+  },
+  metadataValue: {
+    ...font.subheadBold,
+    fontVariant: ['tabular-nums'],
+  },
+  block: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: spacing.sm,
+    gap: 7,
+  },
+  blockTitle: {
+    ...font.overline,
+    textTransform: 'uppercase',
   },
   noteRow: {
     flexDirection: 'row',
@@ -192,16 +191,20 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   noteDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    marginTop: 6.5,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    marginTop: 7,
   },
   noteText: { ...font.footnote, flex: 1 },
   warnings: {
     borderRadius: radii.md,
     borderCurve: 'continuous',
     padding: spacing.sm,
-    gap: 6,
+    gap: 7,
+  },
+  code: {
+    ...font.mono,
+    fontVariant: ['tabular-nums'],
   },
 });

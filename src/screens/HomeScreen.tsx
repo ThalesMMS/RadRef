@@ -13,7 +13,7 @@ export function HomeScreen() {
           <ModuleCard key={module.id} module={module} />
         ))}
       </Section>
-      <Section footerKey="about.cardMeta" separatorInset={58}>
+      <Section footerKey="about.cardMeta" separatorInset={60}>
         <NavRow
           titleKey="about.title"
           subtitleKey="about.cardDescription"

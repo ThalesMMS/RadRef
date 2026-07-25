@@ -40,7 +40,7 @@ export function RenalReferencesScreen() {
           ]}
         />
       </Section>
-      <Section headerKey="common.references" separatorInset={58}>
+      <Section headerKey="common.references" separatorInset={60}>
         <ReferenceList items={renalReferences} />
       </Section>
     </Screen>

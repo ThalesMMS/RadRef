@@ -17,7 +17,7 @@ export function LungHomeScreen() {
       <Section
         headerKey="lung.home.toolsTitle"
         footerKey="lung.home.toolsDescription"
-        separatorInset={58}
+        separatorInset={60}
       >
         {moduleDefinition.tools.map((tool) => (
           <NavRow

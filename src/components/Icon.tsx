@@ -18,7 +18,6 @@ export type IconName =
   | 'arrow.up.right'
   | 'checkmark'
   | 'square.and.arrow.up'
-  | 'cross.case.fill'
   | 'chevron.right'
   | 'stethoscope'
   | 'house.fill';
@@ -41,7 +40,6 @@ const fallbackGlyphs: Readonly<Record<IconName, string>> = {
   'arrow.up.right': '↗',
   checkmark: '✓',
   'square.and.arrow.up': '⇧',
-  'cross.case.fill': '✚',
   'chevron.right': '›',
   stethoscope: '✚',
   'house.fill': '⌂',

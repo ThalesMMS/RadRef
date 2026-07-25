@@ -1,12 +1,12 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { accentColor, radii, spacing, font, useTheme, type ModuleAccentName } from '../theme';
+import { accentColor, accentSolid, font, radii, spacing, surfaceTint, useTheme, type ModuleAccentName } from '../theme';
 import { Icon, type IconName } from './Icon';
 
 type ButtonProps = Readonly<{
   labelKey: string;
   onPress: () => void;
-  /** filled: prominent tinted background; tinted: translucent wash; plain: borderless text. */
+  /** filled: prominent accent surface; tinted: translucent accent; plain: borderless text. */
   variant?: 'filled' | 'tinted' | 'plain';
   accent?: ModuleAccentName;
   icon?: IconName;
@@ -17,7 +17,11 @@ export function Button({ labelKey, onPress, variant = 'filled', accent = 'tint',
   const { t } = useI18n();
   const theme = useTheme();
   const tint = accentColor(theme.colors, accent);
-  const background = variant === 'filled' ? tint : variant === 'tinted' ? `${tint}${theme.scheme === 'dark' ? '2E' : '1F'}` : 'transparent';
+  const background = variant === 'filled'
+    ? accentSolid(theme.colors, accent)
+    : variant === 'tinted'
+      ? surfaceTint(theme, tint)
+      : 'transparent';
   const foreground = variant === 'filled' ? '#FFFFFF' : tint;
 
   return (
@@ -35,7 +39,7 @@ export function Button({ labelKey, onPress, variant = 'filled', accent = 'tint',
         disabled && styles.disabled,
       ]}
     >
-      {icon ? <Icon name={icon} size={17} color={foreground} weight="semibold" /> : null}
+      {icon ? <Icon name={icon} size={16} color={foreground} weight="semibold" /> : null}
       <Text style={[styles.label, { color: foreground }]}>{t(labelKey)}</Text>
     </Pressable>
   );
@@ -48,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.xs,
-    borderRadius: radii.lg - 2,
+    borderRadius: radii.lg,
     borderCurve: 'continuous',
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,

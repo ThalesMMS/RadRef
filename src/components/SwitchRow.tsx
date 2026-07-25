@@ -1,6 +1,6 @@
 import { StyleSheet, Switch, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { spacing, font, useTheme } from '../theme';
+import { font, spacing, useTheme } from '../theme';
 
 type SwitchRowProps = Readonly<{
   labelKey: string;
@@ -26,6 +26,7 @@ export function SwitchRow({ labelKey, descriptionKey, value, onValueChange, disa
         value={value}
         onValueChange={onValueChange}
         disabled={disabled}
+        trackColor={{ true: colors.tint, false: colors.fill }}
       />
     </View>
   );
@@ -36,9 +37,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    minHeight: 44,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
-    paddingVertical: 8,
+    paddingVertical: 9,
   },
   copy: { flex: 1, gap: 2 },
   label: { ...font.body },

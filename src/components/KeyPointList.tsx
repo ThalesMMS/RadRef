@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
-import { accentColor, spacing, font, useTheme, type ModuleAccentName } from '../theme';
+import { accentColor, font, spacing, useTheme, type ModuleAccentName } from '../theme';
 
 type KeyPointListProps = Readonly<{
   itemKeys: readonly string[];
   accent?: ModuleAccentName;
 }>;
 
-/** Bulleted key points, rendered as rows inside a Section. */
+/** Bulleted key points, rendered as one block inside a Section. */
 export function KeyPointList({ itemKeys, accent = 'tint' }: KeyPointListProps) {
   const { t } = useI18n();
   const { colors } = useTheme();
@@ -27,19 +27,19 @@ export function KeyPointList({ itemKeys, accent = 'tint' }: KeyPointListProps) {
 const styles = StyleSheet.create({
   list: {
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    gap: 10,
+    paddingVertical: spacing.md - 2,
+    gap: 12,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 10,
+    gap: 11,
   },
   dot: {
     width: 5,
     height: 5,
     borderRadius: 2.5,
-    marginTop: 7.5,
+    marginTop: 7,
   },
   text: { ...font.subhead, flex: 1 },
 });
