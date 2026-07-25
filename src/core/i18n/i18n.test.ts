@@ -2,6 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import {
+  adultFractureAreas,
+  adultFractureRegions,
+  dislocationDirectionKeys,
+  dislocationJointKeys,
+  pediatricPatternKeys,
+  ucpfTypeKeys,
+} from '../../modules/fracture/domain/index.ts';
+import {
+  aastRegions,
+  aastScales,
+  solidOrganCriteria,
+} from '../../modules/trauma/domain/index.ts';
 
 const root = process.cwd();
 const en = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/en.json'), 'utf8')) as Record<string, string>;
@@ -22,6 +35,7 @@ function sourceKeys(): Set<string> {
     /\b(?:t|msg|invalid)\("([^"]+)"/g,
     /(?:titleKey|subtitleKey|descriptionKey|labelKey|helperKey|placeholderKey|textKey|metaKey)="([^"]+)"/g,
     /(?:titleKey|subtitleKey|descriptionKey|labelKey|helperKey|placeholderKey|textKey|metaKey):\s*'([^']+)'/g,
+    /['"]((?:fracture|trauma)\.[^'"`$]+)['"]/g,
   ];
   for (const file of files) {
     const source = readFileSync(file, 'utf8');
@@ -34,6 +48,30 @@ function sourceKeys(): Set<string> {
   }
   return keys;
 }
+
+const fractureDataKeys = [
+  ...adultFractureAreas.map((area) => area.labelKey),
+  ...adultFractureRegions.flatMap((region) => [
+    region.labelKey,
+    ...(region.noteKey ? [region.noteKey] : []),
+    ...region.patterns.map((pattern) => pattern.labelKey),
+  ]),
+  ...Object.values(pediatricPatternKeys),
+  ...Object.values(ucpfTypeKeys),
+  ...Object.values(dislocationJointKeys),
+  ...Object.values(dislocationDirectionKeys),
+];
+
+const traumaDataKeys = [
+  ...aastRegions.map((region) => region.labelKey),
+  ...aastScales.flatMap((scale) => [
+    scale.titleKey,
+    scale.versionKey,
+    ...scale.noteKeys,
+    ...scale.grades.flatMap((grade) => grade.criteria.map((criterion) => criterion.key)),
+  ]),
+  ...solidOrganCriteria.map((criterion) => criterion.labelKey),
+];
 
 const dynamicKeys = [
   ...['0', '1', '2', '3', '4A', '4B', '4X'].map((value) => `lung.lungRads.category.${value}`),
@@ -56,6 +94,16 @@ const dynamicKeys = [
     'mriT1MarkedHomogeneous',
     'mriT1Heterogeneous',
   ].map((value) => `renal.bosniak.reason.special.${value}`),
+  ...['skin', 'muscle', 'arterial', 'contamination', 'boneLoss'].flatMap((component) =>
+    ['1', '2', '3'].map((grade) => `fracture.open.${component}.${grade}`)),
+  ...['1', '2', '3'].map((grade) => `fracture.open.grade.${grade}`),
+  ...['E', 'M', 'D'].map((value) => `fracture.pediatric.subsegment.${value}`),
+  ...['1', '2'].map((value) => `fracture.pediatric.severity.${value}`),
+  ...['I', 'II', 'III', 'IV', 'V', 'VI'].map((value) => `fracture.periprosthetic.joint.${value}`),
+  ...['I', 'II', 'III', 'IV', 'V'].map((value) => `trauma.solidOrgan.grade.${value}`),
+  ...['spleen', 'liver', 'kidney'].map((value) => `trauma.solidOrgan.result.title.${value}`),
+  ...fractureDataKeys,
+  ...traumaDataKeys,
   'language.pt.short',
   'language.pt.full',
   'language.en.short',
@@ -64,7 +112,7 @@ const dynamicKeys = [
 
 test('English and Portuguese dictionaries have exact key parity', () => {
   assert.deepEqual(Object.keys(en).sort(), Object.keys(pt).sort());
-  assert.ok(Object.keys(en).length >= 590);
+  assert.ok(Object.keys(en).length >= 1400);
   for (const [key, value] of Object.entries(en)) assert.ok(value.trim(), `empty EN value: ${key}`);
   for (const [key, value] of Object.entries(pt)) assert.ok(value.trim(), `empty PT value: ${key}`);
 });

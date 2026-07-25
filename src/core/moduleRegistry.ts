@@ -1,4 +1,4 @@
-export type ModuleAccent = 'lung' | 'renal';
+export type ModuleAccent = 'lung' | 'renal' | 'fracture' | 'trauma';
 
 export type ToolDefinition = Readonly<{
   id: string;
@@ -9,7 +9,7 @@ export type ToolDefinition = Readonly<{
 }>;
 
 export type RadiologyModule = Readonly<{
-  id: 'lung' | 'renal';
+  id: 'lung' | 'renal' | 'fracture' | 'trauma';
   titleKey: string;
   descriptionKey: string;
   shortLabelKey: string;
@@ -95,6 +95,91 @@ export const radiologyModules: readonly RadiologyModule[] = [
         descriptionKey: 'renal.tools.references.description',
         route: '/renal/references',
         metaKey: 'renal.tools.references.meta',
+      },
+    ],
+  },
+  {
+    id: 'fracture',
+    titleKey: 'module.fracture.title',
+    descriptionKey: 'module.fracture.description',
+    shortLabelKey: 'module.fracture.shortLabel',
+    route: '/fracture',
+    guidelineKey: 'module.fracture.guidelines',
+    accent: 'fracture',
+    tools: [
+      {
+        id: 'adultAoOta',
+        titleKey: 'fracture.tools.adult.title',
+        descriptionKey: 'fracture.tools.adult.description',
+        route: '/fracture/adult',
+        metaKey: 'fracture.tools.adult.meta',
+      },
+      {
+        id: 'openFracture',
+        titleKey: 'fracture.tools.open.title',
+        descriptionKey: 'fracture.tools.open.description',
+        route: '/fracture/open',
+        metaKey: 'fracture.tools.open.meta',
+      },
+      {
+        id: 'pediatricFracture',
+        titleKey: 'fracture.tools.pediatric.title',
+        descriptionKey: 'fracture.tools.pediatric.description',
+        route: '/fracture/pediatric',
+        metaKey: 'fracture.tools.pediatric.meta',
+      },
+      {
+        id: 'periprosthetic',
+        titleKey: 'fracture.tools.periprosthetic.title',
+        descriptionKey: 'fracture.tools.periprosthetic.description',
+        route: '/fracture/periprosthetic',
+        metaKey: 'fracture.tools.periprosthetic.meta',
+      },
+      {
+        id: 'dislocations',
+        titleKey: 'fracture.tools.dislocations.title',
+        descriptionKey: 'fracture.tools.dislocations.description',
+        route: '/fracture/dislocations',
+        metaKey: 'fracture.tools.dislocations.meta',
+      },
+      {
+        id: 'fractureReferences',
+        titleKey: 'common.references',
+        descriptionKey: 'fracture.tools.references.description',
+        route: '/fracture/references',
+        metaKey: 'fracture.tools.references.meta',
+      },
+    ],
+  },
+  {
+    id: 'trauma',
+    titleKey: 'module.trauma.title',
+    descriptionKey: 'module.trauma.description',
+    shortLabelKey: 'module.trauma.shortLabel',
+    route: '/trauma',
+    guidelineKey: 'module.trauma.guidelines',
+    accent: 'trauma',
+    tools: [
+      {
+        id: 'solidOrgan',
+        titleKey: 'trauma.tools.solidOrgan.title',
+        descriptionKey: 'trauma.tools.solidOrgan.description',
+        route: '/trauma/solid-organ',
+        metaKey: 'trauma.tools.solidOrgan.meta',
+      },
+      {
+        id: 'aastScales',
+        titleKey: 'trauma.tools.scales.title',
+        descriptionKey: 'trauma.tools.scales.description',
+        route: '/trauma/scales',
+        metaKey: 'trauma.tools.scales.meta',
+      },
+      {
+        id: 'traumaReferences',
+        titleKey: 'common.references',
+        descriptionKey: 'trauma.tools.references.description',
+        route: '/trauma/references',
+        metaKey: 'trauma.tools.references.meta',
       },
     ],
   },

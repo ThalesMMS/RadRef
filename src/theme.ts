@@ -23,10 +23,14 @@ export type Palette = Readonly<{
   tint: string;
   lung: string;
   renal: string;
+  fracture: string;
+  trauma: string;
   /** Deeper accent for filled surfaces that carry white text. */
   tintSolid: string;
   lungSolid: string;
   renalSolid: string;
+  fractureSolid: string;
+  traumaSolid: string;
   green: string;
   orange: string;
   red: string;
@@ -51,9 +55,13 @@ export const palettes: Readonly<Record<ThemeScheme, Palette>> = {
     tint: '#0B69D4',
     lung: '#0B69D4',
     renal: '#0E8C8C',
+    fracture: '#7A4EB2',
+    trauma: '#B5472F',
     tintSolid: '#0B69D4',
     lungSolid: '#0B69D4',
     renalSolid: '#0E8C8C',
+    fractureSolid: '#6D3FA5',
+    traumaSolid: '#A13B27',
     green: '#248A3D',
     orange: '#C86A00',
     red: '#D70015',
@@ -74,9 +82,13 @@ export const palettes: Readonly<Record<ThemeScheme, Palette>> = {
     tint: '#4C9CFF',
     lung: '#4C9CFF',
     renal: '#4CD0D0',
+    fracture: '#C49AFF',
+    trauma: '#FF8A70',
     tintSolid: '#0A6FE0',
     lungSolid: '#0A6FE0',
     renalSolid: '#0A7C7C',
+    fractureSolid: '#7442AA',
+    traumaSolid: '#A63A27',
     green: '#30D158',
     orange: '#FF9F0A',
     red: '#FF6961',
@@ -104,15 +116,23 @@ export function useTheme(): Theme {
   return { scheme, colors: palettes[scheme], alpha: withAlpha };
 }
 
-export type ModuleAccentName = 'lung' | 'renal' | 'tint';
+export type ModuleAccentName = 'lung' | 'renal' | 'fracture' | 'trauma' | 'tint';
 
 export function accentColor(colors: Palette, accent: ModuleAccentName): string {
-  return accent === 'lung' ? colors.lung : accent === 'renal' ? colors.renal : colors.tint;
+  if (accent === 'lung') return colors.lung;
+  if (accent === 'renal') return colors.renal;
+  if (accent === 'fracture') return colors.fracture;
+  if (accent === 'trauma') return colors.trauma;
+  return colors.tint;
 }
 
 /** Accent variant safe to fill a surface that carries white text. */
 export function accentSolid(colors: Palette, accent: ModuleAccentName): string {
-  return accent === 'lung' ? colors.lungSolid : accent === 'renal' ? colors.renalSolid : colors.tintSolid;
+  if (accent === 'lung') return colors.lungSolid;
+  if (accent === 'renal') return colors.renalSolid;
+  if (accent === 'fracture') return colors.fractureSolid;
+  if (accent === 'trauma') return colors.traumaSolid;
+  return colors.tintSolid;
 }
 
 /** Opacity of a tinted surface (icon tile, chip, callout) against the card. */

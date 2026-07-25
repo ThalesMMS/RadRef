@@ -53,3 +53,45 @@ export const renalReferences: readonly ReferenceItem[] = [
     url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10263289/',
   },
 ];
+
+export const fractureReferences: readonly ReferenceItem[] = [
+  {
+    id: 'ao-ota-compendium-2018',
+    titleKey: 'fracture.references.compendium.title',
+    subtitleKey: 'fracture.references.compendium.subtitle',
+    url: 'https://doi.org/10.1097/BOT.0000000000001063',
+  },
+  {
+    id: 'ota-open-fracture',
+    titleKey: 'fracture.references.open.title',
+    subtitleKey: 'fracture.references.open.subtitle',
+    url: 'https://doi.org/10.1097/BOT.0b013e3181c7cb43',
+  },
+  {
+    id: 'aospine-classification',
+    titleKey: 'fracture.references.spine.title',
+    subtitleKey: 'fracture.references.spine.subtitle',
+    url: 'https://doi.org/10.1007/s00586-015-3834-3',
+  },
+  {
+    id: 'ucpf',
+    titleKey: 'fracture.references.ucpf.title',
+    subtitleKey: 'fracture.references.ucpf.subtitle',
+    url: 'https://doi.org/10.1302/0301-620X.96B6.34040',
+  },
+];
+
+export const traumaReferences: readonly ReferenceItem[] = [
+  {
+    id: 'aast-injury-scales',
+    titleKey: 'trauma.references.scales.title',
+    subtitleKey: 'trauma.references.scales.subtitle',
+    url: 'https://www.aast.org/resources-detail/injury-scoring-scale',
+  },
+  {
+    id: 'aast-solid-organs-2018',
+    titleKey: 'trauma.references.solidOrgans.title',
+    subtitleKey: 'trauma.references.solidOrgans.subtitle',
+    url: 'https://doi.org/10.1097/TA.0000000000002058',
+  },
+];

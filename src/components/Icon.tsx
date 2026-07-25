@@ -4,6 +4,11 @@ import { Text } from 'react-native';
 export type IconName =
   | 'lungs.fill'
   | 'drop.fill'
+  | 'bandage.fill'
+  | 'cross.case.fill'
+  | 'figure.child'
+  | 'wrench.and.screwdriver.fill'
+  | 'arrow.left.and.right'
   | 'calendar.badge.clock'
   | 'chart.bar.doc.horizontal'
   | 'percent'
@@ -26,6 +31,11 @@ export type IconName =
 const fallbackGlyphs: Readonly<Record<IconName, string>> = {
   'lungs.fill': '◉',
   'drop.fill': '◈',
+  'bandage.fill': '▱',
+  'cross.case.fill': '✚',
+  'figure.child': '◌',
+  'wrench.and.screwdriver.fill': '⚒',
+  'arrow.left.and.right': '↔',
   'calendar.badge.clock': '▤',
   'chart.bar.doc.horizontal': '▥',
   percent: '%',

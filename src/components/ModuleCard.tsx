@@ -10,6 +10,8 @@ import { IconTile } from './IconTile';
 const moduleIcons: Readonly<Record<RadiologyModule['id'], IconName>> = {
   lung: 'lungs.fill',
   renal: 'drop.fill',
+  fracture: 'bandage.fill',
+  trauma: 'cross.case.fill',
 };
 
 type ModuleCardProps = Readonly<{ module: RadiologyModule }>;

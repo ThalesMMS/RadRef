@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import { Banner, Disclaimer, KeyPointList, Screen, Section, ValueRow } from '../components';
 
 export function AboutScreen() {
-  const version = Constants.expoConfig?.version ?? '1.0.0';
+  const version = Constants.expoConfig?.version ?? '1.1.0';
 
   return (
     <Screen titleKey="about.title" subtitleKey="about.subtitle" large>
@@ -13,6 +13,8 @@ export function AboutScreen() {
           'about.guideline.brock',
           'about.guideline.bosniak',
           'about.guideline.cua',
+          'about.guideline.aoOta',
+          'about.guideline.aast',
         ]} />
       </Section>
       <Section headerKey="about.offlineTitle" footerKey="about.offlineDescription">

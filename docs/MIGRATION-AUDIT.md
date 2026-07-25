@@ -1,4 +1,4 @@
-# Auditoria dos projetos Swift e plano de migração
+# Auditoria dos projetos Swift, plano de migração e expansão clínica
 
 ## Escopo da inspeção
 
@@ -139,7 +139,7 @@ As regras foram convertidas em tabelas mentais de decisão e casos-limite, sem p
 
 ### Etapa 2 — domínio TypeScript puro
 
-Foram criados seis motores independentes:
+Na etapa inicial foram criados seis motores independentes:
 
 ```text
 lung/domain/fleischner.ts
@@ -182,3 +182,113 @@ Foram mantidos os metadados bibliográficos e links oficiais. PDFs locais não f
 - Fórmulas e decisões dependem da qualidade das medidas e da correta seleção do contexto pelo usuário.
 - Diretrizes futuras podem alterar categorias, textos ou manejo; a versão de cada fonte deve permanecer visível e atualizada de forma controlada.
 - Resultados raros ou clinicamente conflitantes devem ser confrontados com a publicação original e política local.
+
+## 6. Expansão da versão 1.1 — Fraturas
+
+### Fontes inspecionadas
+
+Foi analisado o *Fracture and Dislocation Classification Compendium—2018*, com atenção a:
+
+- princípios de localização por osso e segmento;
+- morfologia diafisária e de segmentos terminais;
+- códigos por tipo, grupo e subgrupo;
+- qualificações e modificadores universais;
+- OTA Open Fracture Classification;
+- luxações;
+- PCCF pediátrica;
+- UCPF periprotética;
+- coluna, sacro e tórax.
+
+### Estratégia de implementação
+
+Uma reprodução integral das 173 páginas produziria uma interface excessivamente extensa e aumentaria o risco de copiar figuras/tabelas protegidas. A implementação foi dividida em cinco ferramentas práticas:
+
+1. navegador adulto AO/OTA;
+2. OTA-OFC;
+3. PCCF pediátrica;
+4. UCPF;
+5. luxações.
+
+O navegador adulto usa um registro hierárquico tipado, em vez de centenas de condicionais. Ele cobre 31 regiões principais e preserva o encadeamento tipo → grupo → subgrupo. Para regiões diafisárias, o usuário pode acrescentar a qualificação de terço proximal, médio ou distal.
+
+### Cobertura deliberadamente parcial
+
+O módulo não reproduz integralmente:
+
+- todas as qualificações específicas;
+- todos os modificadores universais;
+- todas as combinações de mão, pé e falanges;
+- todos os subgrupos raros;
+- figuras e diagramas do compêndio;
+- algoritmos de tratamento.
+
+A tela avisa que o código final pode depender de informações adicionais, redução ou achado operatório e que o compêndio original é definitivo.
+
+### Decisões específicas
+
+- Rádio/ulna e tíbia/fíbula permanecem codificados de forma independente quando o compêndio assim determina.
+- O código maleolar é separado do código isolado da fíbula distal.
+- OTA-OFC preserva cinco componentes independentes e não cria uma pontuação composta inexistente.
+- PCCF gera código estruturado, mas não tenta validar maturidade esquelética ou prognóstico.
+- UCPF gera o modificador `[articulação + tipo]`; a avaliação de estabilidade do implante e estoque ósseo continua dependente do caso.
+- Luxações usam a posição do osso distal e o modificador de direção, conforme a convenção do compêndio.
+
+## 7. Expansão da versão 1.1 — Trauma AAST
+
+### Fontes inspecionadas
+
+Foram analisados:
+
+- a cópia arquivada da página AAST *Injury Scoring Scale*, com 32 tabelas;
+- o artigo de revisão de 2018 para baço, fígado e rim.
+
+### Estratégia de implementação
+
+As escalas AAST foram representadas como um registro de dados com:
+
+- identificador;
+- região anatômica;
+- título e versão;
+- graus disponíveis;
+- critérios condensados;
+- AIS quando explicitamente disponível;
+- notas de multiplicidade, bilateralidade ou ajuste vascular.
+
+A ferramenta de órgãos sólidos foi mantida separada porque os critérios de TC de 2018 têm uso radiológico direto e lógica de classificação específica.
+
+### Tratamento de inconsistências da fonte
+
+A cópia arquivada apresenta formatação incompleta em alguns graus máximos e mistura tabelas de diferentes épocas. Foram adotadas as seguintes regras:
+
+- não preencher por inferência linhas ausentes;
+- marcar a versão como histórica/legada quando não há revisão de 2018;
+- manter notas explícitas quando o maior grau está em branco na fonte arquivada;
+- não converter a graduação em recomendação terapêutica;
+- não reproduzir códigos ICD-9, pois não são necessários ao objetivo radiológico do aplicativo.
+
+### Direitos e redação
+
+A página AAST informa que a associação não detém o copyright das tabelas e orienta solicitar permissão à editora para reprodução. Por isso, o conteúdo foi resumido e parafraseado. O projeto não incorpora imagens ou tabelas originais.
+
+## 8. Arquivos de domínio adicionados na versão 1.1
+
+```text
+fracture/domain/adultAoOta.ts
+fracture/domain/openFracture.ts
+fracture/domain/pediatric.ts
+fracture/domain/periprosthetic.ts
+fracture/domain/dislocations.ts
+trauma/domain/aastScales.ts
+trauma/domain/solidOrgan.ts
+```
+
+Cada conjunto possui testes próprios e rotas independentes. O total da suíte passou de 51 para 69 testes.
+
+## 9. Riscos residuais adicionais
+
+- O navegador AO/OTA não equivale ao compêndio completo e não deve ser usado para codificação de pesquisa sem conferência da fonte.
+- Classificações de fratura podem mudar após imagens adicionais, redução ou cirurgia.
+- Algumas escalas AAST históricas foram criadas para avaliação operatória, não para graduação exclusiva por TC.
+- A graduação AAST não determina manejo isoladamente.
+- Textos condensados podem omitir nuances presentes nas publicações originais; o usuário deve consultar a fonte para casos limítrofes.
+
