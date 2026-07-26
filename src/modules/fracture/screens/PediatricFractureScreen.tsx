@@ -21,6 +21,8 @@ import {
   type PediatricSeverity,
   type PediatricSubsegment,
 } from '../domain';
+import { pediatricIllustration } from '../illustrations';
+import { FractureIllustration } from './FractureIllustration';
 
 const boneOptions: readonly ChoiceOption<PediatricBone>[] = [
   { value: 'humerus', labelKey: 'fracture.pediatric.bone.humerus' },
@@ -109,6 +111,10 @@ export function PediatricFractureScreen() {
         <ChoiceRow labelKey="fracture.pediatric.segmentLabel" options={segmentOptions} value={segment} onChange={selectSegment} variant="chips" />
         <ChoiceRow labelKey="fracture.pediatric.subsegmentLabel" options={subsegmentOptions} value={subsegment} onChange={selectSubsegment} variant="segmented" />
       </Section>
+      <FractureIllustration
+        illustration={pediatricIllustration(subsegment)}
+        selectedCode={pattern}
+      />
       <Section headerKey="fracture.pediatric.patternTitle" footerKey="fracture.pediatric.patternDescription">
         <ChoiceRow labelKey="fracture.pediatric.patternLabel" options={patternOptions} value={pattern} onChange={setPattern} variant="list" />
         <ChoiceRow labelKey="fracture.pediatric.severityLabel" options={severityOptions} value={severity} onChange={setSeverity} variant="list" />

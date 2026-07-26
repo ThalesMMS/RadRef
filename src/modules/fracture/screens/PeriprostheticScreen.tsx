@@ -15,6 +15,8 @@ import {
   type UcpfJoint,
   type UcpfType,
 } from '../domain';
+import { periprostheticIllustration } from '../illustrations';
+import { FractureIllustration } from './FractureIllustration';
 
 const jointOptions: readonly ChoiceOption<UcpfJoint>[] = ([
   'I', 'II', 'III', 'IV', 'V', 'VI',
@@ -41,6 +43,10 @@ export function PeriprostheticScreen() {
         <ChoiceRow labelKey="fracture.periprosthetic.jointLabel" options={jointOptions} value={joint} onChange={setJoint} variant="chips" />
         <ChoiceRow labelKey="fracture.periprosthetic.typeLabel" options={typeOptions} value={type} onChange={setType} variant="list" />
       </Section>
+      <FractureIllustration
+        illustration={periprostheticIllustration(joint)}
+        selectedCode={`${joint}${type}`}
+      />
       <ResultCard
         badge={result.code}
         title={result.title}
