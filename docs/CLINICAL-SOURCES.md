@@ -141,7 +141,8 @@ A ferramenta não recomenda observação, embolização ou cirurgia. Manejo depe
 
 - O compêndio AO/OTA autoriza uso de sua classificação e figuras para pesquisa, educação e finalidade médica, mas informa que uso comercial/lucrativo exige permissão.
 - A página AAST fornecida declara que a AAST não detém o copyright das tabelas publicadas e orienta solicitar licença à editora para reprodução formal.
-- Por isso, o RadRef preserva códigos e conceitos clínicos, usa descrições condensadas/parafraseadas e não redistribui as páginas, desenhos ou tabelas originais dentro do aplicativo.
+- Para textos e tabelas, o RadRef preserva códigos e conceitos clínicos, usa descrições condensadas/parafraseadas e não redistribui as páginas originais.
+- Exceção: o módulo de fraturas exibe as pranchas de ilustração do compêndio AO/OTA 2018 (`assets/fracture/aoota-2018`), extraídas do PDF em `references/` por `scripts/extract-fracture-illustrations.py`. O script enquadra a ilustração em si — o desenho, suas chamadas e os códigos de classificação — e remove o texto corrido da página; nenhuma página do suplemento é redistribuída. Cada prancha é creditada na tela com a página impressa (S__). O uso se apoia na autorização educacional/médica do compêndio; distribuição comercial exige permissão prévia da AO Foundation/OTA.
 
 ## Hierarquia de uso
 

@@ -147,6 +147,22 @@ export type SeverityColors = Readonly<{
   surface: string;
 }>;
 
+/** Steps on the severity meter — `neutral` sits at 0 and fills nothing. */
+export const severitySteps = 4;
+
+const severityRanks: Readonly<Record<Severity, number>> = {
+  neutral: 0,
+  low: 1,
+  moderate: 2,
+  high: 3,
+  critical: 4,
+};
+
+/** How far a severity fills the meter, from 0 (indeterminate) to `severitySteps`. */
+export function severityRank(severity: Severity): number {
+  return severityRanks[severity];
+}
+
 const severityBase: Readonly<Record<Severity, (colors: Palette) => string>> = {
   neutral: (colors) => colors.gray,
   low: (colors) => colors.green,
@@ -180,6 +196,8 @@ export const radii = {
 
 /** iOS text-style ramp (SF on iOS, Roboto on Android). Colors are applied at use sites. */
 export const font = {
+  /** Category glyph in the result hero — the one number a reader looks for. */
+  display: { fontSize: 34, lineHeight: 40, fontWeight: '700', letterSpacing: 0.4 },
   title2: { fontSize: 22, lineHeight: 27, fontWeight: '700', letterSpacing: 0.35 },
   title3: { fontSize: 20, lineHeight: 25, fontWeight: '600', letterSpacing: 0.38 },
   headline: { fontSize: 17, lineHeight: 22, fontWeight: '600', letterSpacing: -0.41 },

@@ -11,6 +11,7 @@ import {
   Screen,
   Section,
   SwitchRow,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import { useI18n } from '../../../core/i18n';
@@ -230,18 +231,39 @@ export function LungRadsScreen() {
   ];
 
   return (
-    <Screen titleKey="lung.tools.lungRads.title" subtitleKey="lung.tools.lungRads.meta">
+    <Screen
+      titleKey="lung.tools.lungRads.title"
+      subtitleKey="lung.tools.lungRads.meta"
+      switcher={<ToolSwitcher moduleId="lung" current="/lung/lung-rads" />}
+      result={(
+        <>
+          <ResultCard
+            variant="hero"
+            badge={result.displayCategory}
+            title={result.title}
+            primary={result.management}
+            severity={result.severity}
+            notes={result.notes}
+            warnings={result.warnings}
+            metadata={metadata}
+          />
+          {canOpenBrock ? (
+            <Button labelKey="lung.lungRads.openBrock" onPress={openBrock} variant="tinted" accent="lung" icon="percent" />
+          ) : null}
+        </>
+      )}
+    >
       <Banner titleKey="lung.lungRads.scopeTitle" textKey="lung.lungRads.scopeText" />
       <Section headerKey="lung.lungRads.studySection">
-        <ChoiceRow labelKey="lung.lungRads.ctStatus" options={ctOptions} value={ctStatus} onChange={setCtStatus} variant="list" />
-        <ChoiceRow labelKey="lung.form.noduleType" options={typeOptions} value={noduleType} onChange={setNoduleType} variant="chips" />
+        <ChoiceRow labelKey="lung.lungRads.ctStatus" options={ctOptions} value={ctStatus} onChange={setCtStatus} variant="menu" />
+        <ChoiceRow labelKey="lung.form.noduleType" options={typeOptions} value={noduleType} onChange={setNoduleType} variant="menu" />
         {noduleType !== 'none' ? (
-          <ChoiceRow labelKey="lung.lungRads.noduleStatus" options={statusOptions} value={noduleStatus} onChange={setNoduleStatus} variant="chips" />
+          <ChoiceRow labelKey="lung.lungRads.noduleStatus" options={statusOptions} value={noduleStatus} onChange={setNoduleStatus} variant="menu" />
         ) : null}
       </Section>
 
       {needsSize ? (
-        <Section headerKey="lung.lungRads.measurementSection" footerKey="lung.lungRads.measurementDescription">
+        <Section headerKey="lung.lungRads.measurementSection" infoKey="lung.lungRads.measurementDescription">
           <SwitchRow labelKey="lung.lungRads.useVolume" value={useVolume} onValueChange={setUseVolume} />
           {useVolume ? (
             <InputRow labelKey="lung.lungRads.volume" value={volume} onChangeText={setVolume} unitKey="units.mm3" />
@@ -257,7 +279,7 @@ export function LungRadsScreen() {
           {noduleType === 'juxtapleural' ? (
             <SwitchRow
               labelKey="lung.lungRads.benignJuxtapleuralMorphology"
-              descriptionKey="lung.lungRads.benignJuxtapleuralDescription"
+              infoKey="lung.lungRads.benignJuxtapleuralDescription"
               value={benignJuxtapleuralMorphology}
               onValueChange={setBenignJuxtapleuralMorphology}
             />
@@ -267,10 +289,10 @@ export function LungRadsScreen() {
 
       {noduleType === 'airway' ? (
         <Section headerKey="lung.lungRads.airwaySection">
-          <ChoiceRow labelKey="lung.lungRads.airwayLocation" options={airwayOptions} value={airwayLocation} onChange={setAirwayLocation} variant="list" />
+          <ChoiceRow labelKey="lung.lungRads.airwayLocation" options={airwayOptions} value={airwayLocation} onChange={setAirwayLocation} variant="menu" />
           <SwitchRow
             labelKey="lung.lungRads.benignAirwaySecretions"
-            descriptionKey="lung.lungRads.benignAirwaySecretionsDescription"
+            infoKey="lung.lungRads.benignAirwaySecretionsDescription"
             value={benignAirwaySecretionFeatures}
             onValueChange={setBenignAirwaySecretionFeatures}
           />
@@ -278,12 +300,12 @@ export function LungRadsScreen() {
       ) : null}
 
       {noduleType === 'atypicalCyst' ? (
-        <Section headerKey="lung.lungRads.cystSection" footerKey="lung.lungRads.cystDescription">
+        <Section headerKey="lung.lungRads.cystSection" infoKey="lung.lungRads.cystDescription">
           <ChoiceRow labelKey="lung.lungRads.cystMorphology" options={cystMorphologyOptions} value={cystMorphology} onChange={setCystMorphology} variant="chips" />
-          <ChoiceRow labelKey="lung.lungRads.cystChange" options={cystChangeOptions} value={cystChange} onChange={setCystChange} variant="list" />
+          <ChoiceRow labelKey="lung.lungRads.cystChange" options={cystChangeOptions} value={cystChange} onChange={setCystChange} variant="menu" />
           <SwitchRow labelKey="lung.lungRads.associatedNodule" value={hasAssociatedNodule} onValueChange={setHasAssociatedNodule} />
           {hasAssociatedNodule ? (
-            <ChoiceRow labelKey="lung.lungRads.associatedCategory" options={associatedCategoryOptions} value={associatedCategory} onChange={setAssociatedCategory} variant="list" />
+            <ChoiceRow labelKey="lung.lungRads.associatedCategory" options={associatedCategoryOptions} value={associatedCategory} onChange={setAssociatedCategory} variant="segmented" />
           ) : null}
         </Section>
       ) : null}
@@ -291,27 +313,13 @@ export function LungRadsScreen() {
       <Section headerKey="lung.lungRads.modifiersSection">
         <SwitchRow labelKey="lung.lungRads.benignCalcification" value={benignCalcification} onValueChange={setBenignCalcification} />
         <SwitchRow labelKey="lung.lungRads.macroscopicFat" value={macroscopicFat} onValueChange={setMacroscopicFat} />
-        <SwitchRow labelKey="lung.lungRads.inflammatoryFindings" descriptionKey="lung.lungRads.inflammatoryDescription" value={inflammatoryFindings} onValueChange={setInflammatoryFindings} />
+        <SwitchRow labelKey="lung.lungRads.inflammatoryFindings" infoKey="lung.lungRads.inflammatoryDescription" value={inflammatoryFindings} onValueChange={setInflammatoryFindings} />
         <SwitchRow labelKey="lung.lungRads.multiple" value={multiple} onValueChange={setMultiple} />
-        <SwitchRow labelKey="lung.lungRads.additionalSuspiciousFeatures" descriptionKey="lung.lungRads.additionalSuspiciousDescription" value={additionalSuspiciousFeatures} onValueChange={setAdditionalSuspiciousFeatures} />
-        <SwitchRow labelKey="lung.lungRads.sModifier" descriptionKey="lung.lungRads.sModifierDescription" value={sModifier} onValueChange={setSModifier} />
+        <SwitchRow labelKey="lung.lungRads.additionalSuspiciousFeatures" infoKey="lung.lungRads.additionalSuspiciousDescription" value={additionalSuspiciousFeatures} onValueChange={setAdditionalSuspiciousFeatures} />
+        <SwitchRow labelKey="lung.lungRads.sModifier" infoKey="lung.lungRads.sModifierDescription" value={sModifier} onValueChange={setSModifier} />
       </Section>
 
-      <ResultCard
-        badge={result.displayCategory}
-        title={result.title}
-        primary={result.management}
-        severity={result.severity}
-        notes={result.notes}
-        warnings={result.warnings}
-        metadata={metadata}
-      />
-
-      {canOpenBrock ? (
-        <Button labelKey="lung.lungRads.openBrock" onPress={openBrock} variant="tinted" accent="lung" icon="percent" />
-      ) : null}
-
-      <Section headerKey="lung.lungRads.growth.title" footerKey="lung.lungRads.growth.description">
+      <Section headerKey="lung.lungRads.growth.title" infoKey="lung.lungRads.growth.description">
         <InputRow labelKey="lung.lungRads.growth.current" value={currentDiameter} onChangeText={setCurrentDiameter} unitKey="units.mm" />
         <InputRow labelKey="lung.lungRads.growth.prior" value={priorDiameter} onChangeText={setPriorDiameter} unitKey="units.mm" />
         <InputRow labelKey="lung.lungRads.growth.interval" value={intervalDays} onChangeText={setIntervalDays} unitKey="units.days" integer />

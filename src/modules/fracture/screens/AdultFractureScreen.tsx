@@ -7,6 +7,7 @@ import {
   ResultCard,
   Screen,
   Section,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import {
@@ -114,9 +115,24 @@ export function AdultFractureScreen() {
   ];
 
   return (
-    <Screen titleKey="fracture.tools.adult.title" subtitleKey="fracture.tools.adult.meta">
+    <Screen
+      titleKey="fracture.tools.adult.title"
+      subtitleKey="fracture.tools.adult.meta"
+      switcher={<ToolSwitcher moduleId="fracture" current="/fracture/adult" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.code}
+          title={result.title}
+          primary={result.recommendation}
+          severity={result.severity}
+          notes={result.notes}
+          {...(result.warnings ? { warnings: result.warnings } : {})}
+        />
+      )}
+    >
       <Banner titleKey="fracture.adult.scopeTitle" textKey="fracture.adult.scopeText" />
-      <Section headerKey="fracture.adult.locationTitle" footerKey="fracture.adult.locationDescription">
+      <Section headerKey="fracture.adult.locationTitle" infoKey="fracture.adult.locationDescription">
         <ChoiceRow
           labelKey="fracture.adult.areaLabel"
           options={areaOptions()}
@@ -129,20 +145,20 @@ export function AdultFractureScreen() {
           options={regionOptions(area)}
           value={regionId}
           onChange={selectRegion}
-          variant="list"
+          variant="menu"
         />
       </Section>
       <FractureIllustration
         illustration={adultIllustration(regionId)}
         selectedCode={typeCode}
       />
-      <Section headerKey="fracture.adult.morphologyTitle" footerKey="fracture.adult.morphologyDescription">
+      <Section headerKey="fracture.adult.morphologyTitle" infoKey="fracture.adult.morphologyDescription">
         <ChoiceRow
           labelKey="fracture.adult.typeLabel"
           options={typeOptions}
           value={typeCode}
           onChange={selectType}
-          variant="list"
+          variant="menu"
         />
         {groups.length > 0 ? (
           <ChoiceRow
@@ -150,7 +166,7 @@ export function AdultFractureScreen() {
             options={groupOptions}
             value={groupCode}
             onChange={selectGroup}
-            variant="list"
+            variant="menu"
           />
         ) : null}
         {subgroups.length > 0 ? (
@@ -159,7 +175,7 @@ export function AdultFractureScreen() {
             options={subgroupOptions}
             value={subgroupCode}
             onChange={setSubgroupCode}
-            variant="list"
+            variant="menu"
           />
         ) : null}
         {region.supportsThirds ? (
@@ -172,14 +188,6 @@ export function AdultFractureScreen() {
           />
         ) : null}
       </Section>
-      <ResultCard
-        badge={result.code}
-        title={result.title}
-        primary={result.recommendation}
-        severity={result.severity}
-        notes={result.notes}
-        {...(result.warnings ? { warnings: result.warnings } : {})}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
       <Banner textKey="fracture.adult.coverageWarning" tone="warning" />
       <Disclaimer />

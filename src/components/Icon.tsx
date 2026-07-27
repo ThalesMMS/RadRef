@@ -16,6 +16,7 @@ export type IconName =
   | 'list.number'
   | 'circle.lefthalf.filled'
   | 'arrow.triangle.branch'
+  | 'info.circle'
   | 'info.circle.fill'
   | 'exclamationmark.triangle.fill'
   | 'exclamationmark.octagon.fill'
@@ -24,6 +25,10 @@ export type IconName =
   | 'checkmark'
   | 'square.and.arrow.up'
   | 'chevron.right'
+  | 'chevron.down'
+  | 'chevron.up'
+  | 'chevron.up.chevron.down'
+  | 'xmark'
   | 'stethoscope'
   | 'house.fill';
 
@@ -43,6 +48,7 @@ const fallbackGlyphs: Readonly<Record<IconName, string>> = {
   'list.number': '≡',
   'circle.lefthalf.filled': '◐',
   'arrow.triangle.branch': '⑂',
+  'info.circle': 'ⓘ',
   'info.circle.fill': 'ⓘ',
   'exclamationmark.triangle.fill': '⚠',
   'exclamationmark.octagon.fill': '⚠',
@@ -51,6 +57,10 @@ const fallbackGlyphs: Readonly<Record<IconName, string>> = {
   checkmark: '✓',
   'square.and.arrow.up': '⇧',
   'chevron.right': '›',
+  'chevron.down': '⌄',
+  'chevron.up': '⌃',
+  'chevron.up.chevron.down': '⇅',
+  xmark: '✕',
   stethoscope: '✚',
   'house.fill': '⌂',
 };

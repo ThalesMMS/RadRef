@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useI18n } from '../core/i18n';
 import { font, radii, spacing, useTheme } from '../theme';
+import { InfoButton } from './InfoButton';
 
 type InputRowProps = Readonly<{
   labelKey: string;
@@ -10,6 +11,8 @@ type InputRowProps = Readonly<{
   helperKey?: string;
   placeholderKey?: string;
   integer?: boolean;
+  /** Measurement rule reachable from an inline (i) next to the label. */
+  infoKey?: string;
 }>;
 
 /** Numeric row: label on the left, a compact editable value field on the right. */
@@ -21,13 +24,17 @@ export function InputRow({
   helperKey,
   placeholderKey = 'common.numericPlaceholder',
   integer = false,
+  infoKey,
 }: InputRowProps) {
   const { t } = useI18n();
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Text style={[styles.label, { color: colors.text }]}>{t(labelKey)}</Text>
+        <View style={styles.labelWrap}>
+          <Text style={[styles.label, { color: colors.text }]}>{t(labelKey)}</Text>
+          {infoKey === undefined ? null : <InfoButton titleKey={labelKey} textKey={infoKey} size={14} />}
+        </View>
         <View style={[styles.field, { backgroundColor: colors.fill }]}>
           <TextInput
             accessibilityLabel={t(labelKey)}
@@ -63,7 +70,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.sm,
   },
-  label: { ...font.body, flex: 1 },
+  labelWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  label: { ...font.body, flexShrink: 1 },
   field: {
     flexDirection: 'row',
     alignItems: 'center',

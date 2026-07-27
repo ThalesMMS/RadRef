@@ -27,15 +27,17 @@ As rotas são verificadas contra `moduleRegistry.ts` pela suíte de testes.
 
 Os componentes reutilizáveis incluem:
 
-- `Screen`: rolagem, teclado, área segura e cabeçalho nativo;
-- `Section`: agrupamento de campos e listas;
-- `ChoiceRow`, `SwitchRow` e `InputRow`: entradas consistentes;
-- `ResultCard`: código, resultado, notas e alertas por severidade;
+- `Screen`: rolagem, teclado, área segura e cabeçalho nativo; recebe ainda `switcher` (rola junto com a lede) e `result`, fixado abaixo da barra de navegação enquanto o formulário rola por baixo;
+- `Section`: agrupamento de campos e listas, com `infoKey` opcional no cabeçalho;
+- `ChoiceRow`, `SwitchRow` e `InputRow`: entradas consistentes; `ChoiceRow` resolve entre controle segmentado, chips, linha compacta com seletor (`menu`) e lista aberta;
+- `ResultCard`: código, resultado, medidor de severidade, notas e alertas; a variante `hero` recolhe notas e metadados atrás de um disclosure para caber fixada no topo;
+- `Sheet` e `InfoButton`: folha inferior reutilizada pelos seletores e pelo (i) inline que abre definições e critérios;
+- `ToolSwitcher`: alternância entre as ferramentas irmãs de um módulo, lida de `moduleRegistry.ts`;
 - `Banner` e `Disclaimer`: contexto, escopo e segurança;
 - `ModuleCard` e `NavRow`: navegação dirigida pelo registro;
 - `ReferenceList` e `KeyPointList`: conteúdo de referência;
 - `Icon`: SF Symbols no iOS e fallback textual nas demais plataformas;
-- tokens de tema em `src/theme.ts` para claro/escuro e acentos por módulo.
+- tokens de tema em `src/theme.ts` para claro/escuro, acentos por módulo e a escala de severidade do medidor.
 
 Os componentes recebem chaves de tradução ou `MessageRef`, nunca texto clínico embutido.
 

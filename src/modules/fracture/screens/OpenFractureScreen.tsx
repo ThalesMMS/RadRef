@@ -7,6 +7,7 @@ import {
   ResultCard,
   Screen,
   Section,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import { classifyOpenFracture, type OtaOfcGrade } from '../domain';
@@ -52,26 +53,33 @@ export function OpenFractureScreen() {
   };
 
   return (
-    <Screen titleKey="fracture.tools.open.title" subtitleKey="fracture.tools.open.meta">
+    <Screen
+      titleKey="fracture.tools.open.title"
+      subtitleKey="fracture.tools.open.meta"
+      switcher={<ToolSwitcher moduleId="fracture" current="/fracture/open" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.code}
+          title={result.title}
+          primary={result.recommendation}
+          severity={result.severity}
+          notes={result.notes}
+        />
+      )}
+    >
       <Banner titleKey="fracture.open.scopeTitle" textKey="fracture.open.scopeText" />
       <FractureIllustration
         illustration={openFractureIllustration}
         selectedCode="OTA-OFC"
       />
-      <Section headerKey="fracture.open.componentsTitle" footerKey="fracture.open.componentsDescription">
-        <ChoiceRow labelKey="fracture.open.component.skin" options={options('skin')} value={skin} onChange={setSkin} variant="list" />
-        <ChoiceRow labelKey="fracture.open.component.muscle" options={options('muscle')} value={muscle} onChange={setMuscle} variant="list" />
-        <ChoiceRow labelKey="fracture.open.component.arterial" options={options('arterial')} value={arterial} onChange={setArterial} variant="list" />
-        <ChoiceRow labelKey="fracture.open.component.contamination" options={options('contamination')} value={contamination} onChange={setContamination} variant="list" />
-        <ChoiceRow labelKey="fracture.open.component.boneLoss" options={options('boneLoss')} value={boneLoss} onChange={setBoneLoss} variant="list" />
+      <Section headerKey="fracture.open.componentsTitle" infoKey="fracture.open.componentsDescription">
+        <ChoiceRow labelKey="fracture.open.component.skin" options={options('skin')} value={skin} onChange={setSkin} variant="menu" />
+        <ChoiceRow labelKey="fracture.open.component.muscle" options={options('muscle')} value={muscle} onChange={setMuscle} variant="menu" />
+        <ChoiceRow labelKey="fracture.open.component.arterial" options={options('arterial')} value={arterial} onChange={setArterial} variant="menu" />
+        <ChoiceRow labelKey="fracture.open.component.contamination" options={options('contamination')} value={contamination} onChange={setContamination} variant="menu" />
+        <ChoiceRow labelKey="fracture.open.component.boneLoss" options={options('boneLoss')} value={boneLoss} onChange={setBoneLoss} variant="menu" />
       </Section>
-      <ResultCard
-        badge={result.code}
-        title={result.title}
-        primary={result.recommendation}
-        severity={result.severity}
-        notes={result.notes}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
       <Banner textKey="fracture.open.surgicalReminder" tone="warning" />
       <Disclaimer />

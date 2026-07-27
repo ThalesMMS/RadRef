@@ -1,11 +1,15 @@
 export type ModuleAccent = 'lung' | 'renal' | 'fracture' | 'trauma';
 
+/** `reference` tools are source lists; they stay out of the in-module tool switcher. */
+export type ToolKind = 'tool' | 'reference';
+
 export type ToolDefinition = Readonly<{
   id: string;
   titleKey: string;
   descriptionKey: string;
   route: string;
   metaKey?: string;
+  kind?: ToolKind;
 }>;
 
 export type RadiologyModule = Readonly<{
@@ -56,6 +60,7 @@ export const radiologyModules: readonly RadiologyModule[] = [
         descriptionKey: 'lung.tools.references.description',
         route: '/lung/references',
         metaKey: 'lung.tools.references.meta',
+        kind: 'reference',
       },
     ],
   },
@@ -95,6 +100,7 @@ export const radiologyModules: readonly RadiologyModule[] = [
         descriptionKey: 'renal.tools.references.description',
         route: '/renal/references',
         metaKey: 'renal.tools.references.meta',
+        kind: 'reference',
       },
     ],
   },
@@ -148,6 +154,7 @@ export const radiologyModules: readonly RadiologyModule[] = [
         descriptionKey: 'fracture.tools.references.description',
         route: '/fracture/references',
         metaKey: 'fracture.tools.references.meta',
+        kind: 'reference',
       },
     ],
   },
@@ -180,6 +187,7 @@ export const radiologyModules: readonly RadiologyModule[] = [
         descriptionKey: 'trauma.tools.references.description',
         route: '/trauma/references',
         metaKey: 'trauma.tools.references.meta',
+        kind: 'reference',
       },
     ],
   },
@@ -189,4 +197,9 @@ export function moduleById(id: RadiologyModule['id']): RadiologyModule {
   const module = radiologyModules.find((candidate) => candidate.id === id);
   if (!module) throw new Error(`Unknown module: ${id}`);
   return module;
+}
+
+/** Sibling tools offered by the in-module switcher — everything except source lists. */
+export function switchableTools(id: RadiologyModule['id']): readonly ToolDefinition[] {
+  return moduleById(id).tools.filter((tool) => tool.kind !== 'reference');
 }

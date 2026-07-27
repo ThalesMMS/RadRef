@@ -1,6 +1,7 @@
 import { StyleSheet, Switch, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
 import { font, spacing, useTheme } from '../theme';
+import { InfoButton } from './InfoButton';
 
 type SwitchRowProps = Readonly<{
   labelKey: string;
@@ -8,15 +9,27 @@ type SwitchRowProps = Readonly<{
   value: boolean;
   onValueChange: (value: boolean) => void;
   disabled?: boolean;
+  /** Definition or criterion reachable from an inline (i) next to the label. */
+  infoKey?: string;
 }>;
 
-export function SwitchRow({ labelKey, descriptionKey, value, onValueChange, disabled = false }: SwitchRowProps) {
+export function SwitchRow({
+  labelKey,
+  descriptionKey,
+  value,
+  onValueChange,
+  disabled = false,
+  infoKey,
+}: SwitchRowProps) {
   const { t } = useI18n();
   const { colors } = useTheme();
   return (
     <View style={[styles.row, disabled && styles.disabled]}>
       <View style={styles.copy}>
-        <Text style={[styles.label, { color: colors.text }]}>{t(labelKey)}</Text>
+        <View style={styles.labelRow}>
+          <Text style={[styles.label, { color: colors.text }]}>{t(labelKey)}</Text>
+          {infoKey === undefined ? null : <InfoButton titleKey={labelKey} textKey={infoKey} size={14} />}
+        </View>
         {descriptionKey ? (
           <Text style={[styles.description, { color: colors.textSecondary }]}>{t(descriptionKey)}</Text>
         ) : null}
@@ -42,7 +55,12 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
   },
   copy: { flex: 1, gap: 2 },
-  label: { ...font.body },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  label: { ...font.body, flexShrink: 1 },
   description: { ...font.footnote },
   disabled: { opacity: 0.4 },
 });

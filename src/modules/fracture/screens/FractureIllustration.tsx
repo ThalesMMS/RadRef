@@ -26,7 +26,7 @@ export function FractureIllustration({ illustration, selectedCode }: FractureIll
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const aspectRatio = illustration.aspectRatio ?? (1104 / 500);
+  const { aspectRatio } = illustration;
   const modalWidth = Math.max(width - (spacing.md * 2), 1);
   const previewHeight = Math.min((previewWidth || modalWidth) / aspectRatio, 520);
 

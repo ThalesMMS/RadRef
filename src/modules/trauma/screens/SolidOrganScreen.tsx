@@ -7,6 +7,7 @@ import {
   ResultCard,
   Screen,
   Section,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import {
@@ -47,20 +48,27 @@ export function SolidOrganScreen() {
   };
 
   return (
-    <Screen titleKey="trauma.tools.solidOrgan.title" subtitleKey="trauma.tools.solidOrgan.meta">
+    <Screen
+      titleKey="trauma.tools.solidOrgan.title"
+      subtitleKey="trauma.tools.solidOrgan.meta"
+      switcher={<ToolSwitcher moduleId="trauma" current="/trauma/solid-organ" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.code}
+          title={result.title}
+          primary={result.recommendation}
+          severity={result.severity}
+          notes={result.notes}
+          {...(result.warnings ? { warnings: result.warnings } : {})}
+        />
+      )}
+    >
       <Banner titleKey="trauma.solidOrgan.scopeTitle" textKey="trauma.solidOrgan.scopeText" />
-      <Section headerKey="trauma.solidOrgan.inputsTitle" footerKey="trauma.solidOrgan.inputsDescription">
+      <Section headerKey="trauma.solidOrgan.inputsTitle" infoKey="trauma.solidOrgan.inputsDescription">
         <ChoiceRow labelKey="trauma.solidOrgan.organLabel" options={organOptions} value={organ} onChange={selectOrgan} variant="segmented" />
-        <ChoiceRow labelKey="trauma.solidOrgan.criterionLabel" options={criterionOptions} value={criterionId} onChange={setCriterionId} variant="list" />
+        <ChoiceRow labelKey="trauma.solidOrgan.criterionLabel" options={criterionOptions} value={criterionId} onChange={setCriterionId} variant="menu" />
       </Section>
-      <ResultCard
-        badge={result.code}
-        title={result.title}
-        primary={result.recommendation}
-        severity={result.severity}
-        notes={result.notes}
-        {...(result.warnings ? { warnings: result.warnings } : {})}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="trauma" />
       <Banner textKey="trauma.solidOrgan.protocolReminder" tone="warning" />
       <Disclaimer />

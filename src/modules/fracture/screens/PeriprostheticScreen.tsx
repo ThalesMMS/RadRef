@@ -7,6 +7,7 @@ import {
   ResultCard,
   Screen,
   Section,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import {
@@ -37,22 +38,29 @@ export function PeriprostheticScreen() {
   };
 
   return (
-    <Screen titleKey="fracture.tools.periprosthetic.title" subtitleKey="fracture.tools.periprosthetic.meta">
+    <Screen
+      titleKey="fracture.tools.periprosthetic.title"
+      subtitleKey="fracture.tools.periprosthetic.meta"
+      switcher={<ToolSwitcher moduleId="fracture" current="/fracture/periprosthetic" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.code}
+          title={result.title}
+          primary={result.recommendation}
+          severity={result.severity}
+          notes={result.notes}
+        />
+      )}
+    >
       <Banner titleKey="fracture.periprosthetic.scopeTitle" textKey="fracture.periprosthetic.scopeText" />
-      <Section headerKey="fracture.periprosthetic.inputsTitle" footerKey="fracture.periprosthetic.inputsDescription">
+      <Section headerKey="fracture.periprosthetic.inputsTitle" infoKey="fracture.periprosthetic.inputsDescription">
         <ChoiceRow labelKey="fracture.periprosthetic.jointLabel" options={jointOptions} value={joint} onChange={setJoint} variant="chips" />
-        <ChoiceRow labelKey="fracture.periprosthetic.typeLabel" options={typeOptions} value={type} onChange={setType} variant="list" />
+        <ChoiceRow labelKey="fracture.periprosthetic.typeLabel" options={typeOptions} value={type} onChange={setType} variant="menu" />
       </Section>
       <FractureIllustration
         illustration={periprostheticIllustration(joint)}
         selectedCode={`${joint}${type}`}
-      />
-      <ResultCard
-        badge={result.code}
-        title={result.title}
-        primary={result.recommendation}
-        severity={result.severity}
-        notes={result.notes}
       />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
       <Disclaimer />

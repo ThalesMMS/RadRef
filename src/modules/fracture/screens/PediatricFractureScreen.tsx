@@ -7,6 +7,7 @@ import {
   ResultCard,
   Screen,
   Section,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import {
@@ -104,9 +105,24 @@ export function PediatricFractureScreen() {
   };
 
   return (
-    <Screen titleKey="fracture.tools.pediatric.title" subtitleKey="fracture.tools.pediatric.meta">
+    <Screen
+      titleKey="fracture.tools.pediatric.title"
+      subtitleKey="fracture.tools.pediatric.meta"
+      switcher={<ToolSwitcher moduleId="fracture" current="/fracture/pediatric" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.code}
+          title={result.title}
+          primary={result.recommendation}
+          severity={result.severity}
+          notes={result.notes}
+          {...(result.warnings ? { warnings: result.warnings } : {})}
+        />
+      )}
+    >
       <Banner titleKey="fracture.pediatric.scopeTitle" textKey="fracture.pediatric.scopeText" />
-      <Section headerKey="fracture.pediatric.locationTitle" footerKey="fracture.pediatric.locationDescription">
+      <Section headerKey="fracture.pediatric.locationTitle" infoKey="fracture.pediatric.locationDescription">
         <ChoiceRow labelKey="fracture.pediatric.boneLabel" options={boneOptions} value={bone} onChange={setBone} variant="chips" />
         <ChoiceRow labelKey="fracture.pediatric.segmentLabel" options={segmentOptions} value={segment} onChange={selectSegment} variant="chips" />
         <ChoiceRow labelKey="fracture.pediatric.subsegmentLabel" options={subsegmentOptions} value={subsegment} onChange={selectSubsegment} variant="segmented" />
@@ -115,19 +131,11 @@ export function PediatricFractureScreen() {
         illustration={pediatricIllustration(subsegment)}
         selectedCode={pattern}
       />
-      <Section headerKey="fracture.pediatric.patternTitle" footerKey="fracture.pediatric.patternDescription">
-        <ChoiceRow labelKey="fracture.pediatric.patternLabel" options={patternOptions} value={pattern} onChange={setPattern} variant="list" />
-        <ChoiceRow labelKey="fracture.pediatric.severityLabel" options={severityOptions} value={severity} onChange={setSeverity} variant="list" />
+      <Section headerKey="fracture.pediatric.patternTitle" infoKey="fracture.pediatric.patternDescription">
+        <ChoiceRow labelKey="fracture.pediatric.patternLabel" options={patternOptions} value={pattern} onChange={setPattern} variant="menu" />
+        <ChoiceRow labelKey="fracture.pediatric.severityLabel" options={severityOptions} value={severity} onChange={setSeverity} variant="menu" />
         <ChoiceRow labelKey="fracture.pediatric.qualificationLabel" options={qualificationOptions} value={qualification} onChange={setQualification} variant="chips" />
       </Section>
-      <ResultCard
-        badge={result.code}
-        title={result.title}
-        primary={result.recommendation}
-        severity={result.severity}
-        notes={result.notes}
-        {...(result.warnings ? { warnings: result.warnings } : {})}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
       <Disclaimer />
     </Screen>

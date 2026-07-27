@@ -9,6 +9,7 @@ import {
   Screen,
   Section,
   SwitchRow,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import { msg } from '../../../core/domain';
@@ -62,7 +63,22 @@ export function ManagementScreen() {
           : 'neutral';
 
   return (
-    <Screen titleKey="renal.tools.management.title" subtitleKey="renal.tools.management.meta">
+    <Screen
+      titleKey="renal.tools.management.title"
+      subtitleKey="renal.tools.management.meta"
+      switcher={<ToolSwitcher moduleId="renal" current="/renal/management" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={category === 'notApplicable' ? 'N/A' : category === 'incomplete' ? '—' : category}
+          title={msg('renal.management.resultTitle')}
+          primary={result.primary}
+          {...(result.followUp === undefined ? {} : { secondary: result.followUp })}
+          severity={severity}
+          notes={[...result.notes, result.evidence]}
+        />
+      )}
+    >
       <Banner titleKey="renal.management.scopeTitle" textKey="renal.management.scopeText" />
       <Section headerKey="common.inputs">
         <ChoiceRow
@@ -70,7 +86,7 @@ export function ManagementScreen() {
           options={categoryOptions}
           value={category}
           onChange={setCategory}
-          variant="list"
+          variant="menu"
         />
         {category === 'III' || category === 'IV' ? (
           <InputRow labelKey="renal.management.lesionSize" value={lesionSize} onChangeText={setLesionSize} unitKey="units.mm" />
@@ -79,7 +95,7 @@ export function ManagementScreen() {
         {category === 'III' || category === 'IV' ? (
           <SwitchRow
             labelKey="renal.management.comorbidity"
-            descriptionKey="renal.management.comorbidityDescription"
+            infoKey="renal.management.comorbidityDescription"
             value={comorbidity}
             onValueChange={setComorbidity}
           />
@@ -87,20 +103,12 @@ export function ManagementScreen() {
         {category === 'III' || category === 'IV' ? (
           <SwitchRow
             labelKey="renal.management.targetableComponent"
-            descriptionKey="renal.management.targetableComponentDescription"
+            infoKey="renal.management.targetableComponentDescription"
             value={targetableSolidComponent}
             onValueChange={setTargetableSolidComponent}
           />
         ) : null}
       </Section>
-      <ResultCard
-        badge={category === 'notApplicable' ? 'N/A' : category === 'incomplete' ? '—' : category}
-        title={msg('renal.management.resultTitle')}
-        primary={result.primary}
-        {...(result.followUp === undefined ? {} : { secondary: result.followUp })}
-        severity={severity}
-        notes={[...result.notes, result.evidence]}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
       <Banner textKey="renal.management.sharedDecisionReminder" tone="warning" />
       <Disclaimer />

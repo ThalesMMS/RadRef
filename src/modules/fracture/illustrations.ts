@@ -6,181 +6,243 @@ import type {
   UcpfJoint,
 } from './domain';
 
+/**
+ * Plates extracted from the AO/OTA 2018 compendium by
+ * `scripts/extract-fracture-illustrations.py`, which frames each one around the
+ * artwork itself — the drawing, its callouts and its classification codes, with
+ * the surrounding page text stripped. Aspect ratios come from
+ * `assets/fracture/aoota-2018/plates.json`; rerun the script after changing the
+ * manifest so both stay in sync.
+ */
 export type FractureIllustrationSource = Readonly<{
   image: ImageSourcePropType;
   /** Printed supplement page (the PDF has three unnumbered pages before S1). */
   sourcePage: number;
-  /** Pixel aspect ratio of the extracted plate. Most adult type plates use 1104 × 500. */
-  aspectRatio?: number;
+  /** Pixel aspect ratio (width / height) of the extracted plate. */
+  aspectRatio: number;
 }>;
 
 const adultIllustrations: Readonly<Record<AdultFractureRegion['id'], FractureIllustrationSource>> = {
   humerusProximal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-humerus-proximal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-humerus-proximal.png'),
     sourcePage: 11,
+    aspectRatio: 3.203,
   },
   humerusShaft: {
-    image: require('../../../assets/fracture/aoota-2018/adult-humerus-shaft.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-humerus-shaft.png'),
     sourcePage: 15,
+    aspectRatio: 2.821,
   },
   humerusDistal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-humerus-distal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-humerus-distal.png'),
     sourcePage: 17,
+    aspectRatio: 3.579,
   },
   radiusProximal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-forearm-proximal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-radius-proximal.png'),
     sourcePage: 21,
+    aspectRatio: 4.878,
   },
   radiusShaft: {
-    image: require('../../../assets/fracture/aoota-2018/adult-forearm-shaft.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-radius-shaft.png'),
     sourcePage: 24,
+    aspectRatio: 2.757,
   },
   radiusDistal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-forearm-distal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-radius-distal.png'),
     sourcePage: 28,
+    aspectRatio: 4.5,
   },
   ulnaProximal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-forearm-proximal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-ulna-proximal.png'),
     sourcePage: 21,
+    aspectRatio: 3.854,
   },
   ulnaShaft: {
-    image: require('../../../assets/fracture/aoota-2018/adult-forearm-shaft.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-ulna-shaft.png'),
     sourcePage: 24,
+    aspectRatio: 2.683,
   },
   ulnaDistal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-forearm-distal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-ulna-distal.png'),
     sourcePage: 28,
+    aspectRatio: 4.018,
   },
   scapula: {
-    image: require('../../../assets/fracture/aoota-2018/adult-scapula.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-scapula.png'),
     sourcePage: 101,
+    aspectRatio: 2.287,
   },
   clavicle: {
-    image: require('../../../assets/fracture/aoota-2018/adult-clavicle.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-clavicle.png'),
     sourcePage: 105,
+    aspectRatio: 6.593,
   },
   femurProximal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-femur-proximal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-femur-proximal.png'),
     sourcePage: 33,
+    aspectRatio: 3.571,
   },
   femurShaft: {
-    image: require('../../../assets/fracture/aoota-2018/adult-femur-shaft.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-femur-shaft.png'),
     sourcePage: 37,
+    aspectRatio: 2.143,
   },
   femurDistal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-femur-distal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-femur-distal.png'),
     sourcePage: 40,
+    aspectRatio: 4.932,
   },
   patella: {
-    image: require('../../../assets/fracture/aoota-2018/adult-patella.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-patella.png'),
     sourcePage: 45,
+    aspectRatio: 3.6,
   },
   tibiaProximal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-tibia-proximal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-tibia-proximal.png'),
     sourcePage: 49,
+    aspectRatio: 4.147,
   },
   tibiaShaft: {
-    image: require('../../../assets/fracture/aoota-2018/adult-tibia-shaft.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-tibia-shaft.png'),
     sourcePage: 53,
+    aspectRatio: 2.133,
   },
   tibiaDistal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-tibia-distal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-tibia-distal.png'),
     sourcePage: 56,
+    aspectRatio: 3.711,
   },
   fibulaProximal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-fibula-proximal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-fibula-proximal.png'),
     sourcePage: 61,
+    aspectRatio: 2.829,
   },
   fibulaShaft: {
-    image: require('../../../assets/fracture/aoota-2018/adult-fibula-shaft.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-fibula-shaft.png'),
     sourcePage: 62,
+    aspectRatio: 1.685,
   },
   fibulaDistal: {
-    image: require('../../../assets/fracture/aoota-2018/adult-fibula-distal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-fibula-distal.png'),
     sourcePage: 63,
+    aspectRatio: 2.273,
   },
   malleolar: {
-    image: require('../../../assets/fracture/aoota-2018/adult-malleolar.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-malleolar.png'),
     sourcePage: 65,
+    aspectRatio: 3.529,
   },
   pelvicRing: {
-    image: require('../../../assets/fracture/aoota-2018/adult-pelvic-ring.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-pelvic-ring.png'),
     sourcePage: 71,
+    aspectRatio: 4.369,
   },
   acetabulum: {
-    image: require('../../../assets/fracture/aoota-2018/adult-acetabulum.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-acetabulum.png'),
     sourcePage: 77,
+    aspectRatio: 3.22,
   },
   handCarpus: {
-    image: require('../../../assets/fracture/aoota-2018/adult-hand-carpus.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-hand-carpus.png'),
     sourcePage: 83,
-    aspectRatio: 900 / 720,
+    aspectRatio: 0.56,
   },
   foot: {
-    image: require('../../../assets/fracture/aoota-2018/adult-foot.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-foot.png'),
     sourcePage: 89,
-    aspectRatio: 900 / 720,
+    aspectRatio: 0.375,
   },
   cervicalSpine: {
-    image: require('../../../assets/fracture/aoota-2018/adult-cervical-spine.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-cervical-spine.png'),
     sourcePage: 146,
+    aspectRatio: 2.731,
   },
   thoracolumbarSpine: {
-    image: require('../../../assets/fracture/aoota-2018/adult-thoracolumbar-spine.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-thoracolumbar-spine.png'),
     sourcePage: 151,
+    aspectRatio: 3.516,
   },
   sacrum: {
-    image: require('../../../assets/fracture/aoota-2018/adult-sacrum.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-sacrum.png'),
     sourcePage: 155,
-    aspectRatio: 900 / 720,
+    aspectRatio: 1.841,
   },
   ribs: {
-    image: require('../../../assets/fracture/aoota-2018/adult-ribs.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-ribs.png'),
     sourcePage: 161,
+    aspectRatio: 3.321,
   },
   sternum: {
-    image: require('../../../assets/fracture/aoota-2018/adult-sternum.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/adult-sternum.png'),
     sourcePage: 163,
+    aspectRatio: 0.887,
   },
 };
 
 const pediatricIllustrations: Readonly<Record<PediatricSubsegment, FractureIllustrationSource>> = {
   E: {
-    image: require('../../../assets/fracture/aoota-2018/pediatric-epiphyseal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/pediatric-epiphyseal.png'),
     sourcePage: 119,
-    aspectRatio: 920 / 610,
+    aspectRatio: 3.173,
   },
   M: {
-    image: require('../../../assets/fracture/aoota-2018/pediatric-metaphyseal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/pediatric-metaphyseal.png'),
     sourcePage: 119,
-    aspectRatio: 920 / 540,
+    aspectRatio: 2.848,
   },
   D: {
-    image: require('../../../assets/fracture/aoota-2018/pediatric-diaphyseal.jpg'),
+    image: require('../../../assets/fracture/aoota-2018/pediatric-diaphyseal.png'),
     sourcePage: 120,
-    aspectRatio: 920 / 560,
+    aspectRatio: 3.622,
   },
 };
 
-const dislocationImages = {
-  110: require('../../../assets/fracture/aoota-2018/dislocation-110.jpg'),
-  111: require('../../../assets/fracture/aoota-2018/dislocation-111.jpg'),
-  112: require('../../../assets/fracture/aoota-2018/dislocation-112.jpg'),
-  113: require('../../../assets/fracture/aoota-2018/dislocation-113.jpg'),
-  114: require('../../../assets/fracture/aoota-2018/dislocation-114.jpg'),
-  115: require('../../../assets/fracture/aoota-2018/dislocation-115.jpg'),
-  116: require('../../../assets/fracture/aoota-2018/dislocation-116.jpg'),
-  117: require('../../../assets/fracture/aoota-2018/dislocation-117.jpg'),
-  118: require('../../../assets/fracture/aoota-2018/dislocation-118.jpg'),
-  119: require('../../../assets/fracture/aoota-2018/dislocation-119.jpg'),
-} as const satisfies Readonly<Record<number, ImageSourcePropType>>;
+const dislocationPlates = {
+  110: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-110.png'),
+    aspectRatio: 0.954,
+  },
+  111: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-111.png'),
+    aspectRatio: 2.402,
+  },
+  112: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-112.png'),
+    aspectRatio: 0.876,
+  },
+  113: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-113.png'),
+    aspectRatio: 2.961,
+  },
+  114: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-114.png'),
+    aspectRatio: 0.734,
+  },
+  115: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-115.png'),
+    aspectRatio: 0.672,
+  },
+  116: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-116.png'),
+    aspectRatio: 0.706,
+  },
+  117: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-117.png'),
+    aspectRatio: 0.664,
+  },
+  118: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-118.png'),
+    aspectRatio: 0.581,
+  },
+  119: {
+    image: require('../../../assets/fracture/aoota-2018/dislocation-119.png'),
+    aspectRatio: 1.158,
+  },
+} as const satisfies Readonly<Record<number, Omit<FractureIllustrationSource, 'sourcePage'>>>;
 
-function dislocationPage(pdfPage: keyof typeof dislocationImages): FractureIllustrationSource {
-  return {
-    image: dislocationImages[pdfPage],
-    sourcePage: pdfPage - 3,
-    aspectRatio: 900 / 760,
-  };
+function dislocationPage(pdfPage: keyof typeof dislocationPlates): FractureIllustrationSource {
+  return { ...dislocationPlates[pdfPage], sourcePage: pdfPage - 3 };
 }
 
 const dislocationIllustrations: Readonly<Record<DislocationJoint, FractureIllustrationSource>> = {
@@ -208,21 +270,21 @@ const dislocationIllustrations: Readonly<Record<DislocationJoint, FractureIllust
 };
 
 const periprostheticUpper: FractureIllustrationSource = {
-  image: require('../../../assets/fracture/aoota-2018/periprosthetic-upper.jpg'),
+  image: require('../../../assets/fracture/aoota-2018/periprosthetic-upper.png'),
   sourcePage: 142,
-  aspectRatio: 920 / 820,
+  aspectRatio: 0.964,
 };
 
 const periprostheticLower: FractureIllustrationSource = {
-  image: require('../../../assets/fracture/aoota-2018/periprosthetic-lower.jpg'),
+  image: require('../../../assets/fracture/aoota-2018/periprosthetic-lower.png'),
   sourcePage: 143,
-  aspectRatio: 920 / 820,
+  aspectRatio: 0.963,
 };
 
 export const openFractureIllustration: FractureIllustrationSource = {
-  image: require('../../../assets/fracture/aoota-2018/open-fracture.jpg'),
+  image: require('../../../assets/fracture/aoota-2018/open-fracture.png'),
   sourcePage: 106,
-  aspectRatio: 920 / 690,
+  aspectRatio: 1.057,
 };
 
 export function adultIllustration(regionId: AdultFractureRegion['id']): FractureIllustrationSource {

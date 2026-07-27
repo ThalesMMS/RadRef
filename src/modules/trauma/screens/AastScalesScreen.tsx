@@ -6,6 +6,7 @@ import {
   KeyPointList,
   Screen,
   Section,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import {
@@ -40,11 +41,15 @@ export function AastScalesScreen() {
   };
 
   return (
-    <Screen titleKey="trauma.tools.scales.title" subtitleKey="trauma.tools.scales.meta">
+    <Screen
+      titleKey="trauma.tools.scales.title"
+      subtitleKey="trauma.tools.scales.meta"
+      switcher={<ToolSwitcher moduleId="trauma" current="/trauma/scales" />}
+    >
       <Banner titleKey="trauma.aast.scopeTitle" textKey="trauma.aast.scopeText" />
-      <Section headerKey="trauma.aast.selectionTitle" footerKey="trauma.aast.selectionDescription">
+      <Section headerKey="trauma.aast.selectionTitle" infoKey="trauma.aast.selectionDescription">
         <ChoiceRow labelKey="trauma.aast.regionLabel" options={regionOptions} value={region} onChange={selectRegion} variant="chips" />
-        <ChoiceRow labelKey="trauma.aast.scaleLabel" options={scaleOptions} value={scaleId} onChange={setScaleId} variant="list" />
+        <ChoiceRow labelKey="trauma.aast.scaleLabel" options={scaleOptions} value={scaleId} onChange={setScaleId} variant="menu" />
       </Section>
       <Section headerKey={scale.titleKey} footerKey={scale.versionKey} plain>
         <AastGradeList scale={scale} />

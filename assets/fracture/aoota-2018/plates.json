@@ -1,0 +1,378 @@
+[
+  {
+    "name": "adult-humerus-proximal",
+    "printedPage": 11,
+    "width": 1800,
+    "height": 562,
+    "aspectRatio": 3.203,
+    "kb": 176
+  },
+  {
+    "name": "adult-humerus-shaft",
+    "printedPage": 15,
+    "width": 1800,
+    "height": 638,
+    "aspectRatio": 2.821,
+    "kb": 103
+  },
+  {
+    "name": "adult-humerus-distal",
+    "printedPage": 17,
+    "width": 1800,
+    "height": 503,
+    "aspectRatio": 3.579,
+    "kb": 138
+  },
+  {
+    "name": "adult-radius-proximal",
+    "printedPage": 21,
+    "width": 1800,
+    "height": 369,
+    "aspectRatio": 4.878,
+    "kb": 76
+  },
+  {
+    "name": "adult-ulna-proximal",
+    "printedPage": 21,
+    "width": 1800,
+    "height": 467,
+    "aspectRatio": 3.854,
+    "kb": 127
+  },
+  {
+    "name": "adult-radius-shaft",
+    "printedPage": 24,
+    "width": 1800,
+    "height": 653,
+    "aspectRatio": 2.757,
+    "kb": 125
+  },
+  {
+    "name": "adult-ulna-shaft",
+    "printedPage": 24,
+    "width": 1800,
+    "height": 671,
+    "aspectRatio": 2.683,
+    "kb": 125
+  },
+  {
+    "name": "adult-radius-distal",
+    "printedPage": 28,
+    "width": 1800,
+    "height": 400,
+    "aspectRatio": 4.5,
+    "kb": 90
+  },
+  {
+    "name": "adult-ulna-distal",
+    "printedPage": 28,
+    "width": 1800,
+    "height": 448,
+    "aspectRatio": 4.018,
+    "kb": 66
+  },
+  {
+    "name": "adult-scapula",
+    "printedPage": 101,
+    "width": 1800,
+    "height": 787,
+    "aspectRatio": 2.287,
+    "kb": 203
+  },
+  {
+    "name": "adult-clavicle",
+    "printedPage": 105,
+    "width": 1800,
+    "height": 273,
+    "aspectRatio": 6.593,
+    "kb": 109
+  },
+  {
+    "name": "adult-femur-proximal",
+    "printedPage": 33,
+    "width": 1800,
+    "height": 504,
+    "aspectRatio": 3.571,
+    "kb": 114
+  },
+  {
+    "name": "adult-femur-shaft",
+    "printedPage": 37,
+    "width": 1800,
+    "height": 840,
+    "aspectRatio": 2.143,
+    "kb": 111
+  },
+  {
+    "name": "adult-femur-distal",
+    "printedPage": 40,
+    "width": 1800,
+    "height": 365,
+    "aspectRatio": 4.932,
+    "kb": 81
+  },
+  {
+    "name": "adult-patella",
+    "printedPage": 45,
+    "width": 1800,
+    "height": 500,
+    "aspectRatio": 3.6,
+    "kb": 148
+  },
+  {
+    "name": "adult-tibia-proximal",
+    "printedPage": 49,
+    "width": 1800,
+    "height": 434,
+    "aspectRatio": 4.147,
+    "kb": 103
+  },
+  {
+    "name": "adult-tibia-shaft",
+    "printedPage": 53,
+    "width": 1800,
+    "height": 844,
+    "aspectRatio": 2.133,
+    "kb": 169
+  },
+  {
+    "name": "adult-tibia-distal",
+    "printedPage": 56,
+    "width": 1800,
+    "height": 485,
+    "aspectRatio": 3.711,
+    "kb": 111
+  },
+  {
+    "name": "adult-fibula-proximal",
+    "printedPage": 61,
+    "width": 1488,
+    "height": 526,
+    "aspectRatio": 2.829,
+    "kb": 53
+  },
+  {
+    "name": "adult-fibula-shaft",
+    "printedPage": 62,
+    "width": 1486,
+    "height": 882,
+    "aspectRatio": 1.685,
+    "kb": 46
+  },
+  {
+    "name": "adult-fibula-distal",
+    "printedPage": 63,
+    "width": 1275,
+    "height": 561,
+    "aspectRatio": 2.273,
+    "kb": 49
+  },
+  {
+    "name": "adult-malleolar",
+    "printedPage": 65,
+    "width": 1800,
+    "height": 510,
+    "aspectRatio": 3.529,
+    "kb": 199
+  },
+  {
+    "name": "adult-pelvic-ring",
+    "printedPage": 71,
+    "width": 1800,
+    "height": 412,
+    "aspectRatio": 4.369,
+    "kb": 218
+  },
+  {
+    "name": "adult-acetabulum",
+    "printedPage": 77,
+    "width": 1800,
+    "height": 559,
+    "aspectRatio": 3.22,
+    "kb": 185
+  },
+  {
+    "name": "adult-hand-carpus",
+    "printedPage": 83,
+    "width": 920,
+    "height": 1644,
+    "aspectRatio": 0.56,
+    "kb": 277
+  },
+  {
+    "name": "adult-foot",
+    "printedPage": 89,
+    "width": 502,
+    "height": 1338,
+    "aspectRatio": 0.375,
+    "kb": 195
+  },
+  {
+    "name": "adult-cervical-spine",
+    "printedPage": 146,
+    "width": 1360,
+    "height": 498,
+    "aspectRatio": 2.731,
+    "kb": 197
+  },
+  {
+    "name": "adult-thoracolumbar-spine",
+    "printedPage": 151,
+    "width": 1800,
+    "height": 512,
+    "aspectRatio": 3.516,
+    "kb": 284
+  },
+  {
+    "name": "adult-sacrum",
+    "printedPage": 155,
+    "width": 1108,
+    "height": 602,
+    "aspectRatio": 1.841,
+    "kb": 96
+  },
+  {
+    "name": "adult-ribs",
+    "printedPage": 161,
+    "width": 1800,
+    "height": 542,
+    "aspectRatio": 3.321,
+    "kb": 270
+  },
+  {
+    "name": "adult-sternum",
+    "printedPage": 163,
+    "width": 768,
+    "height": 866,
+    "aspectRatio": 0.887,
+    "kb": 45
+  },
+  {
+    "name": "pediatric-epiphyseal",
+    "printedPage": 119,
+    "width": 1412,
+    "height": 445,
+    "aspectRatio": 3.173,
+    "kb": 69
+  },
+  {
+    "name": "pediatric-metaphyseal",
+    "printedPage": 119,
+    "width": 1196,
+    "height": 420,
+    "aspectRatio": 2.848,
+    "kb": 81
+  },
+  {
+    "name": "pediatric-diaphyseal",
+    "printedPage": 120,
+    "width": 1800,
+    "height": 497,
+    "aspectRatio": 3.622,
+    "kb": 108
+  },
+  {
+    "name": "dislocation-110",
+    "printedPage": 107,
+    "width": 1422,
+    "height": 1490,
+    "aspectRatio": 0.954,
+    "kb": 594
+  },
+  {
+    "name": "dislocation-111",
+    "printedPage": 108,
+    "width": 1696,
+    "height": 706,
+    "aspectRatio": 2.402,
+    "kb": 85
+  },
+  {
+    "name": "dislocation-112",
+    "printedPage": 109,
+    "width": 620,
+    "height": 708,
+    "aspectRatio": 0.876,
+    "kb": 97
+  },
+  {
+    "name": "dislocation-113",
+    "printedPage": 110,
+    "width": 1800,
+    "height": 608,
+    "aspectRatio": 2.961,
+    "kb": 135
+  },
+  {
+    "name": "dislocation-114",
+    "printedPage": 111,
+    "width": 1152,
+    "height": 1570,
+    "aspectRatio": 0.734,
+    "kb": 384
+  },
+  {
+    "name": "dislocation-115",
+    "printedPage": 112,
+    "width": 520,
+    "height": 774,
+    "aspectRatio": 0.672,
+    "kb": 116
+  },
+  {
+    "name": "dislocation-116",
+    "printedPage": 113,
+    "width": 538,
+    "height": 762,
+    "aspectRatio": 0.706,
+    "kb": 113
+  },
+  {
+    "name": "dislocation-117",
+    "printedPage": 114,
+    "width": 1196,
+    "height": 1800,
+    "aspectRatio": 0.664,
+    "kb": 435
+  },
+  {
+    "name": "dislocation-118",
+    "printedPage": 115,
+    "width": 480,
+    "height": 826,
+    "aspectRatio": 0.581,
+    "kb": 126
+  },
+  {
+    "name": "dislocation-119",
+    "printedPage": 116,
+    "width": 968,
+    "height": 836,
+    "aspectRatio": 1.158,
+    "kb": 117
+  },
+  {
+    "name": "periprosthetic-upper",
+    "printedPage": 142,
+    "width": 1735,
+    "height": 1800,
+    "aspectRatio": 0.964,
+    "kb": 612
+  },
+  {
+    "name": "periprosthetic-lower",
+    "printedPage": 143,
+    "width": 1734,
+    "height": 1800,
+    "aspectRatio": 0.963,
+    "kb": 721
+  },
+  {
+    "name": "open-fracture",
+    "printedPage": 106,
+    "width": 1486,
+    "height": 1406,
+    "aspectRatio": 1.057,
+    "kb": 256
+  }
+]

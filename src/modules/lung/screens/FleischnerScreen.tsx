@@ -9,6 +9,7 @@ import {
   Screen,
   Section,
   SwitchRow,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import { useI18n } from '../../../core/i18n';
@@ -70,9 +71,24 @@ export function FleischnerScreen() {
   ];
 
   return (
-    <Screen titleKey="lung.tools.fleischner.title" subtitleKey="lung.tools.fleischner.meta">
+    <Screen
+      titleKey="lung.tools.fleischner.title"
+      subtitleKey="lung.tools.fleischner.meta"
+      switcher={<ToolSwitcher moduleId="lung" current="/lung/fleischner" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.code}
+          title={result.title}
+          primary={result.recommendation}
+          severity={result.severity}
+          notes={result.notes}
+          metadata={metadata}
+        />
+      )}
+    >
       <Banner titleKey="lung.fleischner.scopeTitle" textKey="lung.fleischner.scopeText" />
-      <Section headerKey="common.inputs" footerKey="lung.fleischner.inputDescription">
+      <Section headerKey="common.inputs" infoKey="lung.fleischner.inputDescription">
         <ChoiceRow
           labelKey="lung.form.noduleType"
           options={noduleTypes}
@@ -85,7 +101,7 @@ export function FleischnerScreen() {
           value={size}
           onChangeText={setSize}
           unitKey="units.mm"
-          helperKey="lung.form.diameterHelper"
+          infoKey="lung.form.diameterHelper"
         />
         {noduleType === 'partSolid' ? (
           <InputRow
@@ -100,23 +116,15 @@ export function FleischnerScreen() {
           options={riskOptions}
           value={risk}
           onChange={setRisk}
-          variant="list"
+          variant="menu"
         />
         <SwitchRow
           labelKey="lung.form.multipleNodules"
-          descriptionKey="lung.form.multipleNodulesDescription"
+          infoKey="lung.form.multipleNodulesDescription"
           value={multiple}
           onValueChange={setMultiple}
         />
       </Section>
-      <ResultCard
-        badge={result.code}
-        title={result.title}
-        primary={result.recommendation}
-        severity={result.severity}
-        notes={result.notes}
-        metadata={metadata}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
       <Banner textKey="lung.fleischner.measurementReminder" tone="warning" />
       <Disclaimer />

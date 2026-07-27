@@ -10,6 +10,7 @@ import {
   Screen,
   Section,
   SwitchRow,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import { msg } from '../../../core/domain';
@@ -179,20 +180,36 @@ export function BosniakScreen() {
   };
 
   return (
-    <Screen titleKey="renal.tools.bosniak.title" subtitleKey="renal.tools.bosniak.meta">
+    <Screen
+      titleKey="renal.tools.bosniak.title"
+      subtitleKey="renal.tools.bosniak.meta"
+      switcher={<ToolSwitcher moduleId="renal" current="/renal/bosniak" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.categoryLabel}
+          title={result.title}
+          primary={result.riskSummary}
+          secondary={result.reportSuggestion}
+          severity={result.severity}
+          notes={result.rationale}
+          warnings={result.warnings}
+        />
+      )}
+    >
       <Banner titleKey="renal.bosniak.scopeTitle" textKey="renal.bosniak.scopeText" />
 
-      <Section headerKey="renal.bosniak.acquisitionSection" footerKey="renal.bosniak.acquisitionDescription">
+      <Section headerKey="renal.bosniak.acquisitionSection" infoKey="renal.bosniak.acquisitionDescription">
         <ChoiceRow
           labelKey="renal.bosniak.acquisition"
           options={acquisitionOptions}
           value={acquisition}
           onChange={setAcquisition}
-          variant="list"
+          variant="menu"
         />
         <SwitchRow
           labelKey="renal.bosniak.cysticMassConfirmed"
-          descriptionKey="renal.bosniak.cysticMassDescription"
+          infoKey="renal.bosniak.cysticMassDescription"
           value={cysticMassConfirmed}
           onValueChange={setCysticMassConfirmed}
         />
@@ -201,7 +218,7 @@ export function BosniakScreen() {
           value={enhancingTissuePercent}
           onChangeText={setEnhancingTissuePercent}
           unitKey="units.percent"
-          helperKey="renal.bosniak.enhancingTissueHelper"
+          infoKey="renal.bosniak.enhancingTissueHelper"
         />
         <InputRow
           labelKey="renal.management.lesionSize"
@@ -221,7 +238,7 @@ export function BosniakScreen() {
           options={contentOptions}
           value={contentPattern}
           onChange={setContentPattern}
-          variant="list"
+          variant="menu"
         />
       </Section>
 
@@ -244,7 +261,7 @@ export function BosniakScreen() {
           options={calcificationOptions}
           value={calcification}
           onChange={setCalcification}
-          variant="list"
+          variant="menu"
         />
         <ChoiceRow
           labelKey="renal.bosniak.protrusionMargin"
@@ -266,16 +283,6 @@ export function BosniakScreen() {
         <SwitchRow labelKey="renal.management.comorbidity" value={comorbidity} onValueChange={setComorbidity} />
         <SwitchRow labelKey="renal.management.targetableComponent" value={targetableSolidComponent} onValueChange={setTargetableSolidComponent} />
       </Section>
-
-      <ResultCard
-        badge={result.categoryLabel}
-        title={result.title}
-        primary={result.riskSummary}
-        secondary={result.reportSuggestion}
-        severity={result.severity}
-        notes={result.rationale}
-        warnings={result.warnings}
-      />
 
       <ResultCard
         badge={result.categoryLabel}

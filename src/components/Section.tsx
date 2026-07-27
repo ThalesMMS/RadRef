@@ -2,6 +2,7 @@ import { Children, type PropsWithChildren, type ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useI18n } from '../core/i18n';
 import { font, radii, spacing, useTheme } from '../theme';
+import { InfoButton } from './InfoButton';
 
 type SectionProps = PropsWithChildren<Readonly<{
   headerKey?: string;
@@ -10,15 +11,27 @@ type SectionProps = PropsWithChildren<Readonly<{
   separatorInset?: number;
   /** Render header/footer around free-standing children (no grouped card). */
   plain?: boolean;
+  /** Scope or criteria for the whole group, reachable from an (i) in the header. */
+  infoKey?: string;
 }>>;
 
 /** iOS inset-grouped list: overline header, rounded card with hairline-separated rows, footnote footer. */
-export function Section({ headerKey, footerKey, separatorInset = spacing.md, plain = false, children }: SectionProps) {
+export function Section({
+  headerKey,
+  footerKey,
+  separatorInset = spacing.md,
+  plain = false,
+  infoKey,
+  children,
+}: SectionProps) {
   const { t } = useI18n();
   const { colors } = useTheme();
 
   const header = headerKey ? (
-    <Text style={[styles.header, { color: colors.textSecondary }]}>{t(headerKey)}</Text>
+    <View style={styles.headerRow}>
+      <Text style={[styles.header, { color: colors.textSecondary }]}>{t(headerKey)}</Text>
+      {infoKey === undefined ? null : <InfoButton titleKey={headerKey} textKey={infoKey} size={14} />}
+    </View>
   ) : null;
   const footer = footerKey ? (
     <Text style={[styles.footer, { color: colors.textSecondary }]}>{t(footerKey)}</Text>
@@ -58,11 +71,17 @@ export function Section({ headerKey, footerKey, separatorInset = spacing.md, pla
 }
 
 const styles = StyleSheet.create({
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginHorizontal: spacing.md,
+    marginBottom: 8,
+  },
   header: {
     ...font.overline,
     textTransform: 'uppercase',
-    marginHorizontal: spacing.md,
-    marginBottom: 8,
+    flexShrink: 1,
   },
   card: {
     borderRadius: radii.xl,

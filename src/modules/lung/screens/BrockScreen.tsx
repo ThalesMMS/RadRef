@@ -10,6 +10,7 @@ import {
   Screen,
   Section,
   SwitchRow,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import { useI18n } from '../../../core/i18n';
@@ -92,7 +93,22 @@ export function BrockScreen() {
   }] : [];
 
   return (
-    <Screen titleKey="lung.tools.brock.title" subtitleKey="lung.tools.brock.meta">
+    <Screen
+      titleKey="lung.tools.brock.title"
+      subtitleKey="lung.tools.brock.meta"
+      switcher={<ToolSwitcher moduleId="lung" current="/lung/brock" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          {...(badge === undefined ? {} : { badge })}
+          title={result.title}
+          primary={result.interpretation}
+          severity={result.severity}
+          notes={result.notes}
+          metadata={metadata}
+        />
+      )}
+    >
       <Banner titleKey="lung.brock.scopeTitle" textKey="lung.brock.scopeText" />
       {fromLungRads ? <Banner textKey="lung.brock.prefillNotice" /> : null}
       <Section headerKey="lung.brock.patientSection">
@@ -107,21 +123,13 @@ export function BrockScreen() {
           value={diameter}
           onChangeText={setDiameter}
           unitKey="units.mm"
-          helperKey="lung.brock.sizeRange"
+          infoKey="lung.brock.sizeRange"
         />
         <ChoiceRow labelKey="lung.form.noduleType" options={typeOptions} value={noduleType} onChange={setNoduleType} variant="chips" />
         <InputRow labelKey="lung.brock.noduleCount" value={noduleCount} onChangeText={setNoduleCount} integer />
         <SwitchRow labelKey="lung.brock.upperLobe" value={upperLobe} onValueChange={setUpperLobe} />
         <SwitchRow labelKey="lung.brock.spiculation" value={spiculation} onValueChange={setSpiculation} />
       </Section>
-      <ResultCard
-        {...(badge === undefined ? {} : { badge })}
-        title={result.title}
-        primary={result.interpretation}
-        severity={result.severity}
-        notes={result.notes}
-        metadata={metadata}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
       <Banner textKey="lung.brock.notStandaloneManagement" tone="warning" />
       <Disclaimer />

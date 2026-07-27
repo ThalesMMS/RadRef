@@ -9,6 +9,7 @@ import {
   Screen,
   Section,
   SwitchRow,
+  ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
 import { parseLocalizedNumber } from '../../../core/numbers';
@@ -44,7 +45,20 @@ export function EnhancementScreen() {
   }, [modality, postContrast, preContrast, visuallyUnequivocal]);
 
   return (
-    <Screen titleKey="renal.tools.enhancement.title" subtitleKey="renal.tools.enhancement.meta">
+    <Screen
+      titleKey="renal.tools.enhancement.title"
+      subtitleKey="renal.tools.enhancement.meta"
+      switcher={<ToolSwitcher moduleId="renal" current="/renal/enhancement" />}
+      result={(
+        <ResultCard
+          variant="hero"
+          badge={result.metric}
+          title={result.title}
+          primary={result.interpretation}
+          severity={result.severity}
+        />
+      )}
+    >
       <Banner titleKey="renal.enhancement.scopeTitle" textKey="renal.enhancement.scopeText" />
       <Section headerKey="common.inputs">
         <ChoiceRow
@@ -56,7 +70,7 @@ export function EnhancementScreen() {
         />
         <SwitchRow
           labelKey="renal.enhancement.visuallyUnequivocal"
-          descriptionKey="renal.enhancement.visuallyUnequivocalDescription"
+          infoKey="renal.enhancement.visuallyUnequivocalDescription"
           value={visuallyUnequivocal}
           onValueChange={setVisuallyUnequivocal}
         />
@@ -77,12 +91,6 @@ export function EnhancementScreen() {
           />
         ) : null}
       </Section>
-      <ResultCard
-        badge={result.metric}
-        title={result.title}
-        primary={result.interpretation}
-        severity={result.severity}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
       <Banner textKey="renal.enhancement.thresholdReminder" tone="warning" />
       <Disclaimer />
