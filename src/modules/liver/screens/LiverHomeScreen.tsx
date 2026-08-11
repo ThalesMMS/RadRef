@@ -5,6 +5,7 @@ const moduleDefinition = moduleById('liver');
 
 const toolIcons: Readonly<Record<string, IconName>> = {
   liRads: 'list.number',
+  treatmentResponse: 'arrow.triangle.branch',
   liverReferences: 'books.vertical.fill',
 };
 
@@ -35,6 +36,7 @@ export function LiverHomeScreen() {
             'liver.home.keyPoint.highRisk',
             'liver.home.keyPoint.majorFeatures',
             'liver.home.keyPoint.ancillary',
+            'liver.home.keyPoint.tra',
           ]}
         />
       </Section>
