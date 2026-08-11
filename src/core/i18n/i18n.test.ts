@@ -12,6 +12,10 @@ import {
 } from '../../modules/fracture/domain/index.ts';
 import { liverEn, liverPt } from '../../modules/liver/i18n.ts';
 import {
+  liverTreatmentResponseEn,
+  liverTreatmentResponsePt,
+} from '../../modules/liver/treatmentResponseI18n.ts';
+import {
   aastRegions,
   aastScales,
   solidOrganCriteria,
@@ -20,8 +24,8 @@ import {
 const root = process.cwd();
 const enBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/en.json'), 'utf8')) as Record<string, string>;
 const ptBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/pt.json'), 'utf8')) as Record<string, string>;
-const en: Record<string, string> = { ...enBase, ...liverEn };
-const pt: Record<string, string> = { ...ptBase, ...liverPt };
+const en: Record<string, string> = { ...enBase, ...liverEn, ...liverTreatmentResponseEn };
+const pt: Record<string, string> = { ...ptBase, ...liverPt, ...liverTreatmentResponsePt };
 
 function walk(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -105,6 +109,11 @@ const dynamicKeys = [
   ...['I', 'II', 'III', 'IV', 'V', 'VI'].map((value) => `fracture.periprosthetic.joint.${value}`),
   ...['I', 'II', 'III', 'IV', 'V'].map((value) => `trauma.solidOrgan.grade.${value}`),
   ...['spleen', 'liver', 'kidney'].map((value) => `trauma.solidOrgan.result.title.${value}`),
+  ...['notApplicable', 'nonevaluable', 'nonviable', 'equivocal', 'nonprogressing', 'viable'].flatMap((value) => [
+    `liver.tra.result.title.${value}`,
+    `liver.tra.result.management.${value}`,
+    `liver.tra.result.report.${value}`,
+  ]),
   ...fractureDataKeys,
   ...traumaDataKeys,
   'language.pt.short',

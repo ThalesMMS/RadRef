@@ -121,6 +121,13 @@ export const radiologyModules: readonly RadiologyModule[] = [
         metaKey: 'liver.tools.liRads.meta',
       },
       {
+        id: 'treatmentResponse',
+        titleKey: 'liver.tools.treatmentResponse.title',
+        descriptionKey: 'liver.tools.treatmentResponse.description',
+        route: '/liver/treatment-response',
+        metaKey: 'liver.tools.treatmentResponse.meta',
+      },
+      {
         id: 'liverReferences',
         titleKey: 'common.references',
         descriptionKey: 'liver.tools.references.description',
