@@ -13,6 +13,7 @@ export function AboutScreen() {
           'about.guideline.brock',
           'about.guideline.bosniak',
           'about.guideline.cua',
+          'about.guideline.liRads',
           'about.guideline.aoOta',
           'about.guideline.aast',
         ]} />
