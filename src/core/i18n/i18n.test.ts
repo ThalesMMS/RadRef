@@ -10,6 +10,7 @@ import {
   pediatricPatternKeys,
   ucpfTypeKeys,
 } from '../../modules/fracture/domain/index.ts';
+import { liverEn, liverPt } from '../../modules/liver/i18n.ts';
 import {
   aastRegions,
   aastScales,
@@ -17,8 +18,10 @@ import {
 } from '../../modules/trauma/domain/index.ts';
 
 const root = process.cwd();
-const en = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/en.json'), 'utf8')) as Record<string, string>;
-const pt = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/pt.json'), 'utf8')) as Record<string, string>;
+const enBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/en.json'), 'utf8')) as Record<string, string>;
+const ptBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/pt.json'), 'utf8')) as Record<string, string>;
+const en: Record<string, string> = { ...enBase, ...liverEn };
+const pt: Record<string, string> = { ...ptBase, ...liverPt };
 
 function walk(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -35,7 +38,7 @@ function sourceKeys(): Set<string> {
     /\b(?:t|msg|invalid)\("([^"]+)"/g,
     /(?:titleKey|subtitleKey|descriptionKey|labelKey|helperKey|placeholderKey|textKey|metaKey)="([^"]+)"/g,
     /(?:titleKey|subtitleKey|descriptionKey|labelKey|helperKey|placeholderKey|textKey|metaKey):\s*'([^']+)'/g,
-    /['"]((?:fracture|trauma)\.[^'"`$]+)['"]/g,
+    /['"]((?:fracture|trauma|liver)\.[^'"`$]+)['"]/g,
   ];
   for (const file of files) {
     const source = readFileSync(file, 'utf8');
@@ -112,7 +115,7 @@ const dynamicKeys = [
 
 test('English and Portuguese dictionaries have exact key parity', () => {
   assert.deepEqual(Object.keys(en).sort(), Object.keys(pt).sort());
-  assert.ok(Object.keys(en).length >= 1400);
+  assert.ok(Object.keys(en).length >= 1500);
   for (const [key, value] of Object.entries(en)) assert.ok(value.trim(), `empty EN value: ${key}`);
   for (const [key, value] of Object.entries(pt)) assert.ok(value.trim(), `empty PT value: ${key}`);
 });

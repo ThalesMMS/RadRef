@@ -13,7 +13,7 @@ export type ToolDefinition = Readonly<{
 }>;
 
 export type RadiologyModule = Readonly<{
-  id: 'lung' | 'renal' | 'fracture' | 'trauma';
+  id: 'lung' | 'renal' | 'liver' | 'fracture' | 'trauma';
   titleKey: string;
   descriptionKey: string;
   shortLabelKey: string;
@@ -100,6 +100,32 @@ export const radiologyModules: readonly RadiologyModule[] = [
         descriptionKey: 'renal.tools.references.description',
         route: '/renal/references',
         metaKey: 'renal.tools.references.meta',
+        kind: 'reference',
+      },
+    ],
+  },
+  {
+    id: 'liver',
+    titleKey: 'module.liver.title',
+    descriptionKey: 'module.liver.description',
+    shortLabelKey: 'module.liver.shortLabel',
+    route: '/liver',
+    guidelineKey: 'module.liver.guidelines',
+    accent: 'trauma',
+    tools: [
+      {
+        id: 'liRads',
+        titleKey: 'liver.tools.liRads.title',
+        descriptionKey: 'liver.tools.liRads.description',
+        route: '/liver/li-rads',
+        metaKey: 'liver.tools.liRads.meta',
+      },
+      {
+        id: 'liverReferences',
+        titleKey: 'common.references',
+        descriptionKey: 'liver.tools.references.description',
+        route: '/liver/references',
+        metaKey: 'liver.tools.references.meta',
         kind: 'reference',
       },
     ],

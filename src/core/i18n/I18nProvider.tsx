@@ -9,6 +9,7 @@ import {
   useState,
   type PropsWithChildren,
 } from 'react';
+import { liverEn, liverPt } from '../../modules/liver/i18n';
 import type { MessageParams, MessageRef } from '../domain';
 import en from './locales/en.json';
 import pt from './locales/pt.json';
@@ -17,7 +18,6 @@ export type LanguageCode = 'en' | 'pt';
 export type TranslationParams = MessageParams;
 
 type Dictionary = Readonly<Record<string, string>>;
-
 type I18nContextValue = Readonly<{
   language: LanguageCode;
   setLanguage: (language: LanguageCode) => void;
@@ -25,7 +25,10 @@ type I18nContextValue = Readonly<{
   tx: (message: MessageRef) => string;
 }>;
 
-const dictionaries: Readonly<Record<LanguageCode, Dictionary>> = { en, pt };
+const dictionaries: Readonly<Record<LanguageCode, Dictionary>> = {
+  en: { ...en, ...liverEn },
+  pt: { ...pt, ...liverPt },
+};
 const storageKey = 'radref:language';
 
 const I18nContext = createContext<I18nContextValue | undefined>(undefined);
