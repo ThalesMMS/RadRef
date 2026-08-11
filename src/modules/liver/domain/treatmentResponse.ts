@@ -137,7 +137,7 @@ function makeResult(
 
   return {
     category,
-    displayCategory: category === 'notApplicable' ? 'N/A' : category,
+    displayCategory: category === 'notApplicable' ? 'liver.tra.result.title.notApplicable' : category,
     ...(options.algorithm === undefined ? {} : { algorithm: options.algorithm }),
     title: msg(`liver.tra.result.title.${key}`),
     management: msg(`liver.tra.result.management.${key}`),

@@ -105,6 +105,9 @@ export function TreatmentResponseScreen() {
     useAncillaryFeatures,
     withinTreatmentZone,
   ]);
+  const displayCategory = result.category === 'notApplicable'
+    ? t(result.displayCategory)
+    : result.displayCategory;
 
   const reset = () => {
     setAge('60');
@@ -141,7 +144,7 @@ export function TreatmentResponseScreen() {
         category: t(optionLabelKey(pretreatmentOptions, pretreatmentCategory)),
         size: preSize,
       }),
-      t('liver.tra.share.assessment', { category: result.displayCategory, measurement: currentSize }),
+      t('liver.tra.share.assessment', { category: displayCategory, measurement: currentSize }),
       t('liver.tra.share.imageLocation', {
         series: seriesNumber.trim() || '—',
         image: imageNumber.trim() || '—',
@@ -176,7 +179,7 @@ export function TreatmentResponseScreen() {
       result={(
         <ResultCard
           variant="hero"
-          badge={result.displayCategory}
+          badge={displayCategory}
           title={result.title}
           primary={result.management}
           secondary={result.reportSuggestion}

@@ -42,6 +42,15 @@ test('rejects patients outside the treatment-response application population', (
   assert.equal(calculateTreatmentResponse({ ...base, multiphaseExam: false }).category, 'notApplicable');
 });
 
+test('uses a localization key only for the not-applicable display category', () => {
+  assert.equal(
+    calculateTreatmentResponse({ ...base, ageYears: 17 }).displayCategory,
+    'liver.tra.result.title.notApplicable',
+  );
+  const applicable = calculateTreatmentResponse(base);
+  assert.equal(applicable.displayCategory, applicable.category);
+});
+
 test('routes untreated observations outside the treatment zone back to diagnosis', () => {
   const result = calculateTreatmentResponse({ ...base, withinTreatmentZone: false });
   assert.equal(result.category, 'notApplicable');
