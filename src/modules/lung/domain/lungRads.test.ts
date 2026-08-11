@@ -125,7 +125,7 @@ test('4X upgrade and S modifier are separate', () => {
 test('volume conversion is reversible and used for classification', () => {
   const volume = volumeFromDiameter(8);
   assert.ok(Math.abs(equivalentDiameterFromVolume(volume) - 8) < 0.1);
-  const result = calc({ useVolume: true, sizeMm: undefined, volumeMm3: volume });
+  const result = calc({ useVolume: true, volumeMm3: volume });
   assert.equal(result.category, '4A');
   assert.equal(result.equivalentDiameterMm, 8);
 });
