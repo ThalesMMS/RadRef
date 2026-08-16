@@ -1,221 +1,224 @@
-# Pendências antes da publicação externa
+# Prerequisites for external release
 
-Este documento controla as autorizações, análises e aprovações que devem ser concluídas antes de distribuir o RadRef fora de ambientes privados de desenvolvimento ou teste. Isso inclui publicação no GitHub, distribuição web e disponibilização nas lojas Apple App Store e Google Play.
+This document tracks the permissions, assessments, and approvals that must be completed before RadRef is distributed outside private development or testing environments. This includes publication on GitHub, web distribution, and release through the Apple App Store or Google Play.
 
-> **Bloqueio de lançamento:** não publicar uma versão externa enquanto houver um item aplicável marcado como `PENDENTE` ou `EM ANÁLISE`.
+> **Release block:** do not publish an external release while any applicable item is marked `PENDING` or `UNDER REVIEW`.
 
-Este checklist não é um parecer jurídico ou regulatório. A decisão de que uma autorização não é necessária deve ser registrada por escrito por profissional habilitado e arquivada com as demais evidências do lançamento. Citar corretamente uma fonte é obrigatório, mas não substitui licença, autorização de marca, permissão para obra derivada ou regularização sanitária.
+This checklist is not legal or regulatory advice. A decision that authorization is unnecessary must be recorded in writing by a qualified professional and retained with the other release evidence. Proper citation is mandatory, but it does not replace a license, trademark authorization, permission to create a derivative work, or medical-device clearance.
 
-## Status
+## Status definitions
 
-- `PENDENTE`: contato, análise ou documento ainda não iniciado ou concluído.
-- `EM ANÁLISE`: solicitação enviada ou avaliação em andamento.
-- `AUTORIZADO`: autorização recebida e compatível com o uso pretendido.
-- `NÃO APLICÁVEL`: dispensado por decisão escrita, com fundamento e responsável identificados.
-- `BLOQUEADO`: autorização negada ou termos incompatíveis; o conteúdo correspondente deve ser removido ou redesenhado antes da publicação.
+- `PENDING`: the contact, assessment, or document has not been started or completed.
+- `UNDER REVIEW`: a request has been submitted or an assessment is in progress.
+- `AUTHORIZED`: authorization has been received and covers the intended use.
+- `NOT APPLICABLE`: a written decision establishes that the item does not apply, with its rationale and responsible person identified.
+- `BLOCKED`: authorization was denied or its terms are incompatible; the corresponding content must be removed or redesigned before release.
 
-## 1. Direitos sobre classificações e conteúdo clínico
+## 1. Rights in classifications and clinical content
 
 ### P-01 — ACR Lung-RADS® v2022
 
-- **Status:** `PENDENTE`.
-- **Titular/contato:** American College of Radiology (ACR), pelo formulário **Request Permission for Lung-RADS** disponível na [página oficial do Lung-RADS](https://www.acr.org/clinical-resources/clinical-tools-and-reference/reporting-and-data-systems/lung-rads).
-- **Solicitar autorização para:** implementação interativa das categorias e recomendações; interface em português e inglês; adaptação/paráfrase; uso dos nomes `ACR` e `Lung-RADS®`; distribuição gratuita ou comercial em código aberto, web, iOS e Android; screenshots e descrição nas lojas.
-- **Informar no pedido:** versão implementada, público profissional pretendido, ausência de PDF/tabelas/figuras originais, forma de atribuição, aviso de uso educacional e possibilidade de alterações futuras.
-- **Evidência exigida:** licença, contrato ou mensagem escrita do ACR definindo escopo, versões, territórios, plataformas, prazo, atribuição e eventuais restrições.
+- **Status:** `PENDING`.
+- **Rights holder/contact:** American College of Radiology (ACR), through the **Request Permission for Lung-RADS** form on the [official Lung-RADS page](https://www.acr.org/clinical-resources/clinical-tools-and-reference/reporting-and-data-systems/lung-rads).
+- **Request authorization for:** interactive implementation of categories and recommendations; Portuguese and English interfaces; adaptation/paraphrase; use of the names `ACR` and `Lung-RADS®`; free or commercial distribution as open-source software, on the web, iOS, and Android; store screenshots and descriptions.
+- **Include in the request:** implemented version, intended professional audience, absence of original PDFs/tables/figures, attribution format, educational-use warning, and the possibility of future changes.
+- **Required evidence:** an ACR license, agreement, or written message defining scope, versions, territories, platforms, term, attribution, and any restrictions.
 
-### P-02 — ACR LI-RADS® CT/MRI v2018 e TRA v2024
+### P-02 — ACR LI-RADS® CT/MRI v2018 and TRA v2024
 
-- **Status:** `PENDENTE`.
-- **Titular/contato:** American College of Radiology, pelo formulário **Request Permission for LI-RADS** e pelo contato `RADS@acr.org` indicados na [página oficial do LI-RADS](https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Reporting-and-Data-Systems/LI-RADS).
-- **Solicitar autorização para:** algoritmos interativos de diagnóstico e resposta ao tratamento; categorias e terminologia LR; tradução PT/EN; adaptação/paráfrase; uso dos nomes `ACR` e `LI-RADS®`; distribuição nas mesmas modalidades previstas para o RadRef.
-- **Destacar no pedido:** uso das versões CT/MRI v2018, Nonradiation TRA v2024 e Radiation TRA v2024; ausência de reprodução dos PDFs, tabelas e figuras; diferenças deliberadas de escopo descritas em `docs/LI-RADS.md`.
-- **Evidência exigida:** resposta ou licença escrita com as condições de uso, tradução, atualização, atribuição e apresentação das marcas.
+- **Status:** `PENDING`.
+- **Rights holder/contact:** American College of Radiology, through the **Request Permission for LI-RADS** form and `RADS@acr.org`, both listed on the [official LI-RADS page](https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Reporting-and-Data-Systems/LI-RADS).
+- **Request authorization for:** interactive diagnosis and treatment-response algorithms; LR categories and terminology; PT/EN translation; adaptation/paraphrase; use of the names `ACR` and `LI-RADS®`; distribution through the same channels planned for RadRef.
+- **Highlight in the request:** use of CT/MRI v2018, Nonradiation TRA v2024, and Radiation TRA v2024; absence of reproduced PDFs, tables, and figures; deliberate scope differences described in `docs/LI-RADS.md`.
+- **Required evidence:** a written response or license specifying conditions for use, translation, updates, attribution, and presentation of the marks.
 
 ### P-03 — AO/OTA Fracture and Dislocation Classification Compendium—2018
 
-- **Status:** `PENDENTE`.
-- **Titulares a consultar:** AO Foundation e Orthopaedic Trauma Association (OTA). O compêndio identifica copyright conjunto das duas organizações.
-- **Ponto de partida:** [página oficial da classificação AO/OTA](https://www.aofoundation.org/trauma/clinical-library-and-tools/journals-and-publications/classification) e [contato da AO Foundation](https://www.aofoundation.org/who-we-are/contact).
-- **Solicitar autorização ou confirmação escrita para:** árvore de códigos AO/OTA; nomenclatura das regiões, tipos, grupos e subgrupos; PCCF; modificadores de luxação; tradução PT/EN; uso nominativo das marcas `AO`, `OTA` e `AO/OTA`; implementação interativa em software aberto e eventual distribuição comercial.
-- **Incluir no pedido:** o módulo é textual, tem cobertura parcial declarada e não contém PDFs, tabelas, pôsteres, desenhos, logotipos ou pranchas da AO/OTA.
-- **Motivo do bloqueio:** os [termos da AO Foundation](https://www.aofoundation.org/disclaimer) limitam reprodução, exploração comercial e criação de obras derivadas de material AO sem permissão escrita. A disponibilidade gratuita ou para uso pessoal não concede automaticamente direito de redistribuição em outro aplicativo.
-- **Evidência exigida:** autorização conjunta ou confirmações suficientes de todos os titulares pertinentes, incluindo regras de atribuição, marca, versões, plataformas e comercialização.
+- **Status:** `PENDING`.
+- **Rights holders to consult:** AO Foundation and Orthopaedic Trauma Association (OTA). The compendium identifies the two organizations as joint copyright holders.
+- **Starting points:** the [official AO/OTA classification page](https://www.aofoundation.org/trauma/clinical-library-and-tools/journals-and-publications/classification) and [AO Foundation contact page](https://www.aofoundation.org/who-we-are/contact).
+- **Request authorization or written confirmation for:** the AO/OTA code tree; region, type, group, and subgroup nomenclature; PCCF; dislocation modifiers; PT/EN translation; nominative use of the `AO`, `OTA`, and `AO/OTA` marks; interactive implementation in open-source software and possible commercial distribution.
+- **Include in the request:** the module is text-based, declares partial coverage, and contains no AO/OTA PDFs, tables, posters, drawings, logos, or plates.
+- **Reason for the block:** the [AO Foundation terms](https://www.aofoundation.org/disclaimer) restrict reproduction, commercial exploitation, and derivative works based on AO material without written permission. Free availability or permission for personal use does not automatically authorize redistribution in another application.
+- **Required evidence:** joint authorization or sufficient confirmation from every relevant rights holder, including attribution, trademark, version, platform, and commercial-use terms.
 
-### P-04 — OTA Open Fracture Classification e UCPF
+### P-04 — OTA Open Fracture Classification and UCPF
 
-- **Status:** `PENDENTE`.
-- **Responsável pela análise:** assessoria jurídica de propriedade intelectual.
-- **Ação:** identificar, em cada artigo original, quem controla os direitos da classificação, do texto e da publicação; consultar OTA, autores, editor e/ou RightsLink conforme o resultado.
-- **Solicitar ou confirmar:** permissão para implementar a estrutura de cinco componentes da OTA-OFC e os códigos da UCPF, inclusive tradução e apresentação interativa.
-- **Evidência exigida:** licença do titular ou parecer escrito concluindo que a implementação autoral atual não exige licença adicional, com indicação do conteúdo que pode permanecer.
+- **Status:** `PENDING`.
+- **Assessment owner:** intellectual-property counsel.
+- **Action:** identify who controls the rights in each original classification, its text, and its publication; consult the OTA, authors, publisher, and/or RightsLink as the analysis requires.
+- **Request or confirm:** permission to implement the OTA-OFC five-component structure and UCPF codes, including translation and interactive presentation.
+- **Required evidence:** a license from the rights holder or a written opinion concluding that the current independently authored implementation requires no additional license and identifying which content may remain.
 
-### P-05 — Escalas de lesão AAST
+### P-05 — AAST injury scales
 
-- **Status:** `PENDENTE`.
-- **Titular indicado pela fonte:** a AAST informa que não detém o copyright das tabelas e orienta solicitar permissão à Wolters Kluwer pelo RightsLink de cada artigo original. Consulte a [orientação oficial da AAST](https://www.aast.org/resources/trauma-tools/injury-scoring-scale.html).
-- **Solicitar autorização para:** representação digital adaptada e resumida das 32 escalas; tradução PT/EN; critérios de cada grau; ferramenta específica para baço, fígado e rim da revisão de 2018; distribuição aberta e eventual uso comercial.
-- **O pedido deve esclarecer:** não há reprodução do layout, códigos ICD, PDFs ou tabelas originais; o conteúdo é condensado e parafraseado, mas preserva graus e critérios clínicos.
-- **Evidência exigida:** licença RightsLink/Wolters Kluwer para todos os artigos aplicáveis ou parecer escrito delimitando quais elementos factuais podem ser mantidos sem licença.
+- **Status:** `PENDING`.
+- **Rights holder identified by the source:** the AAST states that it does not own the copyright in the tables and directs users to request permission from Wolters Kluwer through RightsLink for each original article. See the [official AAST guidance](https://www.aast.org/resources/trauma-tools/injury-scoring-scale.html).
+- **Request authorization for:** an adapted and condensed digital representation of the 32 scales; PT/EN translation; criteria for each grade; the dedicated 2018 spleen, liver, and kidney tool; open distribution and possible commercial use.
+- **Clarify in the request:** no original layout, ICD codes, PDFs, or tables are reproduced; the content is condensed and paraphrased but preserves clinical grades and criteria.
+- **Required evidence:** RightsLink/Wolters Kluwer licenses for all applicable articles or a written opinion defining which factual elements may remain without a license.
 
-### P-06 — Fleischner Society 2017 e Bosniak v2019
+### P-06 — Fleischner Society 2017 and Bosniak v2019
 
-- **Status:** `PENDENTE`.
-- **Titular/editor a consultar:** Radiological Society of North America (RSNA), conforme a licença de cada artigo.
-- **Ação:** confirmar se cada artigo usado está sob licença aberta e quais condições se aplicam. A RSNA informa que acesso marcado apenas como gratuito não autoriza reutilização; conteúdo não aberto exige pedido pelo RightsLink. Consulte [RSNA Permissions and Policies](https://www.rsna.org/journals/permissions-and-policies).
-- **Solicitar autorização quando aplicável para:** adaptação das regras em software, tradução, textos de recomendação, classificação interativa e distribuição nas plataformas pretendidas.
-- **Evidência exigida:** licença aberta arquivada com sua versão e obrigações, licença RightsLink ou parecer jurídico escrito que delimite a implementação permitida.
+- **Status:** `PENDING`.
+- **Rights holder/publisher to consult:** Radiological Society of North America (RSNA), subject to each article's license.
+- **Action:** establish whether each source article has an open license and record its exact terms. The RSNA states that material marked only as free to access does not authorize reuse; non-open material requires a RightsLink request. See [RSNA Permissions and Policies](https://www.rsna.org/journals/permissions-and-policies).
+- **When applicable, request authorization for:** implementation of the rules in software, translation, recommendation text, interactive classification, and distribution through the intended channels.
+- **Required evidence:** the archived open license and its obligations, a RightsLink license, or a written legal opinion defining the permitted implementation.
 
-### P-07 — Modelo Brock/PanCan e recomendações CUA 2023
+### P-07 — Brock/PanCan model and CUA 2023 recommendations
 
-- **Status:** `PENDENTE`.
-- **Responsável pela análise:** assessoria jurídica de propriedade intelectual.
-- **Ação Brock:** confirmar com o editor da publicação original se a implementação dos coeficientes e da fórmula, assim como o nome `Brock/PanCan`, requer autorização para distribuição em software.
-- **Ação CUA:** registrar a licença exata da versão da diretriz utilizada e verificar se ela permite adaptação, tradução e eventual uso comercial.
-- **Evidência exigida:** termos/licenças arquivados ou respostas escritas dos titulares; se a conclusão for dispensa, parecer que diferencie fatos, fórmulas, métodos e redação protegida.
+- **Status:** `PENDING`.
+- **Assessment owner:** intellectual-property counsel.
+- **Brock action:** confirm with the publisher of the original paper whether software distribution of the coefficients and formula, and use of the `Brock/PanCan` name, require authorization.
+- **CUA action:** record the exact license for the guideline version used and determine whether it permits adaptation, translation, and possible commercial use.
+- **Required evidence:** archived terms/licenses or written responses from the rights holders; if the conclusion is that permission is unnecessary, retain an opinion distinguishing facts, formulas, methods, and protected wording.
 
-### P-08 — Marcas e nome do aplicativo
+### P-08 — Trademarks and application name
 
-- **Status:** `PENDENTE`.
-- **Ação:** realizar pesquisa de anterioridade para `RadRef` no INPI e nos territórios de distribuição; verificar nomes semelhantes em software médico e lojas.
-- **Ação adicional:** confirmar que screenshots, ícones, metadados e materiais promocionais não sugerem afiliação, certificação ou endosso por ACR, AO Foundation, OTA, AAST, RSNA, CUA ou outras entidades.
-- **Evidência exigida:** relatório de busca e aprovação jurídica do nome; autorização escrita antes de usar logotipo, selo, identidade visual ou alegação de parceria de terceiros.
+- **Status:** `PENDING`.
+- **Action:** perform a clearance search for `RadRef` at the Brazilian National Institute of Industrial Property (INPI) and in each distribution territory; check for similar names in medical software and app stores.
+- **Additional action:** confirm that screenshots, icons, metadata, and promotional material do not imply affiliation, certification, or endorsement by the ACR, AO Foundation, OTA, AAST, RSNA, CUA, or other organizations.
+- **Required evidence:** search report and legal approval of the name; obtain written authorization before using any third-party logo, seal, visual identity, or partnership claim.
 
-## 2. Regularização sanitária no Brasil
+## 2. Medical-device regulation in Brazil
 
-### P-09 — Enquadramento do RadRef como SaMD
+### P-09 — RadRef SaMD determination
 
-- **Status:** `PENDENTE`.
-- **Responsável:** profissional ou consultoria regulatória com experiência em software médico no Brasil.
-- **Ação:** formalizar a finalidade pretendida, usuários, indicações, entradas, saídas, alegações, riscos e papel do aplicativo na decisão clínica; então emitir análise de enquadramento sob a RDC 657/2022 e a Regra 12 da RDC 751/2022.
-- **Fonte oficial:** [perguntas e respostas da ANVISA sobre a RDC 657/2022](https://www.gov.br/anvisa/pt-br/assuntos/noticias-anvisa/2022/software-como-dispositivo-medico-perguntas-e-respostas) e [visão regulatória de dispositivos médicos](https://www.gov.br/anvisa/en/regulation-of-products/medical-devices).
-- **Evidência exigida:** parecer regulatório assinado concluindo `SaMD` ou `não regulado`, com justificativa, classe de risco quando aplicável e limites de alegações permitidos.
-- **Regra:** o aviso “uso educacional” não deve ser usado como substituto para a análise da função e da finalidade reais do software.
+- **Status:** `PENDING`.
+- **Responsible party:** a regulatory professional or consultancy experienced in medical software in Brazil.
+- **Action:** formalize intended purpose, users, indications, inputs, outputs, claims, risks, and the application's role in clinical decisions; then issue a classification analysis under RDC 657/2022 and Rule 12 of RDC 751/2022.
+- **Official sources:** [ANVISA questions and answers on RDC 657/2022](https://www.gov.br/anvisa/pt-br/assuntos/noticias-anvisa/2022/software-como-dispositivo-medico-perguntas-e-respostas) and the [medical-device regulatory overview](https://www.gov.br/anvisa/en/regulation-of-products/medical-devices).
+- **Required evidence:** a signed regulatory opinion concluding `SaMD` or `not regulated`, with its rationale, risk class when applicable, and permitted claim boundaries.
+- **Rule:** the “educational use” warning must not substitute for assessment of the software's actual function and intended purpose.
 
-### P-10 — Notificação ou registro na ANVISA, se aplicável
+### P-10 — ANVISA notification or registration, if applicable
 
-- **Status:** `PENDENTE`, dependente de P-09.
-- **Se o RadRef for SaMD:** identificar a empresa legal responsável, regularização/AFE aplicável, classe de risco, regime de notificação ou registro, documentação técnica, evidência clínica, gerenciamento de risco, segurança, rotulagem/instruções de uso e obrigações pós-mercado.
-- **Ação:** obter o ato de regularização aplicável antes de oferecer o produto no Brasil e fazer as descrições do app e das lojas coincidirem com a finalidade autorizada.
-- **Evidência exigida:** número de notificação/registro e documentos oficiais correspondentes, ou fundamento formal de dispensa quando aplicável.
+- **Status:** `PENDING`, dependent on P-09.
+- **If RadRef is SaMD:** identify the responsible legal entity, applicable company authorization/AFE, risk class, notification or registration pathway, technical documentation, clinical evidence, risk management, security, labeling/instructions for use, and post-market obligations.
+- **Action:** obtain the applicable regulatory act before offering the product in Brazil and ensure that application and store descriptions match the authorized intended purpose.
+- **Required evidence:** notification/registration number and corresponding official documents, or the formal basis for an exemption where applicable.
 
-### P-11 — Outros países e territórios
+### P-11 — Other countries and territories
 
-- **Status:** `PENDENTE`.
-- **Ação:** limitar inicialmente a disponibilidade ao Brasil ou obter avaliação regulatória específica para cada território antes de habilitá-lo.
-- **Evidência exigida:** matriz de países com classificação regulatória, representante/fabricante legal quando necessário e número de autorização, registro, clearance ou dispensa.
+- **Status:** `PENDING`.
+- **Action:** initially limit availability to Brazil or obtain a territory-specific regulatory assessment before enabling each additional market.
+- **Required evidence:** a country matrix with regulatory classification, legal manufacturer/representative when necessary, and the applicable authorization, registration, clearance, or exemption number.
 
-## 3. Aprovações clínicas e de segurança
+## 3. Clinical and safety approvals
 
-### P-12 — Revisão clínica independente
+### P-12 — Independent clinical review
 
-- **Status:** `PENDENTE`.
-- **Ação:** obter revisão documentada por especialistas independentes para cada módulo:
-  - radiologia torácica: Fleischner, Lung-RADS e Brock;
-  - radiologia abdominal/urorradiologia e urologia: Bosniak e CUA;
-  - radiologia abdominal/hepatologia: LI-RADS diagnóstico e TRA;
-  - radiologia musculoesquelética/ortopedia: AO/OTA, OTA-OFC, PCCF, UCPF e luxações;
-  - radiologia de emergência/cirurgia do trauma: escalas AAST.
-- **Escopo mínimo:** fidelidade às versões citadas, tradução, limites, unidades, desempates, guardrails, texto compartilhável e situações não cobertas.
-- **Evidência exigida:** relatório assinado, conflitos documentados, correções concluídas e aprovação final da versão candidata.
+- **Status:** `PENDING`.
+- **Action:** obtain documented review by independent specialists for each module:
+  - thoracic radiology: Fleischner, Lung-RADS, and Brock;
+  - abdominal radiology/uroradiology and urology: Bosniak and CUA;
+  - abdominal radiology/hepatology: LI-RADS diagnosis and TRA;
+  - musculoskeletal radiology/orthopedics: AO/OTA, OTA-OFC, PCCF, UCPF, and dislocations;
+  - emergency radiology/trauma surgery: AAST scales.
+- **Minimum scope:** fidelity to cited versions, translation, thresholds, units, tie-breaking, guardrails, shareable text, and uncovered situations.
+- **Required evidence:** signed report, documented conflicts, completed corrections, and final approval of the release candidate.
 
-### P-13 — Validação de segurança e gestão de mudanças
+### P-13 — Safety validation and change management
 
-- **Status:** `PENDENTE`.
-- **Ação:** definir responsável clínico, controle de versões das fontes, processo de atualização, registro de risco, critérios de retirada/correção e canal público para comunicar erro clínico.
-- **Evidência exigida:** plano aprovado e versão candidata rastreável até testes, revisão clínica e fontes utilizadas.
+- **Status:** `PENDING`.
+- **Action:** appoint a clinical owner and define source-version control, update procedures, a risk register, withdrawal/correction criteria, and a public channel for reporting clinical errors.
+- **Required evidence:** an approved plan and a release candidate traceable to its tests, clinical review, and source materials.
 
-### P-14 — Uso em pesquisa ou com dados reais
+### P-14 — Research use or real-world data
 
-- **Status:** `NÃO APLICÁVEL` para a versão atual, desde que não sejam coletados dados de pacientes nem conduzida pesquisa com participantes.
-- **Regra de reabertura:** antes de estudo prospectivo, coleta de dados, telemetria clínica ou validação com participantes, obter avaliação do CEP/CONEP ou comitê de ética competente, consentimento quando exigido e aprovação institucional.
+- **Status:** `PENDING` until the determination and its required evidence are recorded.
+- **Action:** document whether the current release collects patient data, conducts research involving human participants, or is intended for prospective validation. If the determination is `NOT APPLICABLE`, record the rationale, responsible person, decision date, and supporting evidence before changing this status or the corresponding table row.
+- **Required evidence:** a signed and dated determination identifying the reviewer, assessed release scope, factual basis, and location of the retained evidence.
+- **Reopening rule:** before any prospective study, data collection, clinical telemetry, or participant-based validation, obtain an assessment from CEP/CONEP or the competent ethics committee, informed consent where required, and institutional approval.
 
-## 4. Privacidade, termos e publicação nas lojas
+## 4. Privacy, terms, and app-store release
 
-### P-15 — Política de privacidade e termos de uso
+### P-15 — Privacy policy and terms of use
 
-- **Status:** `PENDENTE`.
-- **Ação:** publicar política de privacidade em URL pública e não georrestrita, mesmo que a versão atual declare não coletar dados; documentar links externos, compartilhamento local, logs, telemetria, crash reporting e qualquer serviço que venha a ser adicionado.
-- **Ação adicional:** obter revisão jurídica dos termos de uso, limitações de responsabilidade, público profissional, suporte, jurisdição e linguagem de uso educacional.
-- **Evidência exigida:** URLs e versões aprovadas dos documentos, coerentes com o comportamento efetivo do aplicativo.
+- **Status:** `PENDING`.
+- **Action:** publish a privacy policy at a public, non-geofenced URL even if the current version states that it collects no data; document external links, local sharing, logs, telemetry, crash reporting, and any service added in the future.
+- **Additional action:** obtain legal review of the terms of use, limitations of liability, professional audience, support, jurisdiction, and educational-use wording.
+- **Required evidence:** approved URLs and document versions that match the application's actual behavior.
 
 ### P-16 — Apple App Store
 
-- **Status:** `PENDENTE`.
-- **Ação:** publicar por entidade jurídica adequada, preencher declarações de privacidade, apresentar metodologia/evidências de exatidão e anexar documentação regulatória quando aplicável.
-- **Fonte oficial:** a [App Review Guideline 1.4.1](https://developer.apple.com/app-store/review/guidelines/#physical-harm) prevê escrutínio reforçado para apps médicos que apoiem diagnóstico ou tratamento e solicita documentação de clearance regulatório quando existente.
-- **Evidência exigida:** conta/contrato do Apple Developer Program, aprovação do App Review e arquivo de todas as declarações e documentos enviados.
+- **Status:** `PENDING`.
+- **Action:** publish through an appropriate legal entity, complete privacy declarations, present methodology/accuracy evidence, and attach regulatory documentation when applicable.
+- **Official source:** [App Review Guideline 1.4.1](https://developer.apple.com/app-store/review/guidelines/#physical-harm) provides for increased scrutiny of medical apps that support diagnosis or treatment and requests regulatory-clearance documentation when available.
+- **Required evidence:** Apple Developer Program account/agreement, App Review approval, and an archive of every submitted declaration and document.
 
 ### P-17 — Google Play
 
-- **Status:** `PENDENTE`.
-- **Ação:** preencher corretamente a declaração de Health apps, classificar a funcionalidade como Clinical Decision Support ou Medical Device conforme P-09, disponibilizar política de privacidade e fornecer prova regulatória ou disclaimer compatível com o enquadramento.
-- **Fonte oficial:** [Google Play — Health Content and Services](https://support.google.com/googleplay/android-developer/answer/16679511) e [Health apps declaration](https://support.google.com/googleplay/android-developer/answer/14738291).
-- **Evidência exigida:** conta/contrato do Play Console, declaração arquivada, aprovação da revisão e documentos regulatórios apresentados.
+- **Status:** `PENDING`.
+- **Action:** accurately complete the Health apps declaration, classify the functionality as Clinical Decision Support or Medical Device according to P-09, and publish the required privacy policy.
+- **Conditional regulatory path:** if P-09 classifies RadRef as SaMD, provide the applicable regulatory approval, clearance, or certification evidence. A non-medical-device disclaimer may be used only if the formal P-09 assessment concludes that no medical-device authorization is required; retain that conclusion and ensure the disclaimer and store metadata match it.
+- **Official sources:** [Google Play — Health Content and Services](https://support.google.com/googleplay/android-developer/answer/16679511) and [Health apps declaration](https://support.google.com/googleplay/android-developer/answer/14738291).
+- **Required evidence:** Play Console account/agreement, archived declaration, review approval, the P-09 determination, and either the applicable regulatory documents or the approved non-medical-device disclaimer.
 
-### P-18 — Dependências e ativos próprios
+### P-18 — Dependencies and first-party assets
 
-- **Status:** `PENDENTE`.
-- **Ação:** auditar licenças de todas as dependências incluídas no pacote e gerar os avisos de terceiros exigidos.
-- **Ação adicional:** arquivar prova de autoria/licença do ícone, splash, favicon, fontes e demais recursos gráficos; confirmar que nenhum ativo removido permanece no pacote ou no histórico público.
-- **Evidência exigida:** relatório de licenças, arquivo de notices, inventário de ativos e scan final do artefato distribuído.
+- **Status:** `PENDING`.
+- **Action:** audit licenses for every dependency included in the package and generate all required third-party notices.
+- **Additional action:** retain proof of authorship/license for the icon, splash, favicon, fonts, and other graphics; confirm that no removed asset remains in the application package or checked-out source tree.
+- **Required evidence:** license report, notices file, asset inventory, and final scan of the distributed artifact.
 
-### P-19 — Histórico Git e publicação do código
+### P-19 — Git history and code publication
 
-- **Status:** `PENDENTE`.
-- **Ação:** reescrever o histórico antes da primeira publicação pública para eliminar PDFs e pranchas de terceiros já versionados; verificar refs, tags, branches, releases e objetos alcançáveis.
-- **Ação adicional:** executar varredura de segredos, dados pessoais, arquivos licenciados e binários antes do push público.
-- **Evidência exigida:** relatório da limpeza/varredura, revisão do diff final e aprovação explícita do proprietário do repositório.
+- **Status:** `PENDING`.
+- **Action:** rewrite history before the first public release to remove previously versioned third-party PDFs and plates; inspect refs, tags, branches, releases, and reachable objects.
+- **Additional action:** scan for secrets, personal data, licensed files, and binaries before the first public push.
+- **Required evidence:** cleanup/scan report, final diff review, and explicit approval from the repository owner.
 
-## 5. Registro das solicitações
+## 5. Request log
 
-Preencher uma linha para cada contato ou decisão. Os documentos recebidos devem ser armazenados fora do repositório público quando contiverem dados pessoais, valores, cláusulas confidenciais ou assinaturas.
+Complete one row for every contact or determination. Store received documents outside the public repository if they contain personal data, prices, confidential clauses, or signatures.
 
-| ID | Titular/órgão | Responsável | Data do pedido | Protocolo | Status | Evidência/local seguro |
+| ID | Rights holder/authority | Owner | Request date | Reference | Status | Evidence/secure location |
 | --- | --- | --- | --- | --- | --- | --- |
-| P-01 | ACR — Lung-RADS | Não atribuído | — | — | PENDENTE | — |
-| P-02 | ACR — LI-RADS | Não atribuído | — | — | PENDENTE | — |
-| P-03 | AO Foundation/OTA | Não atribuído | — | — | PENDENTE | — |
-| P-04 | OTA-OFC/UCPF | Não atribuído | — | — | PENDENTE | — |
-| P-05 | Wolters Kluwer/RightsLink — AAST | Não atribuído | — | — | PENDENTE | — |
-| P-06 | RSNA — Fleischner/Bosniak | Não atribuído | — | — | PENDENTE | — |
-| P-07 | Brock/PanCan e CUA | Não atribuído | — | — | PENDENTE | — |
-| P-08 | Nome e marcas | Não atribuído | — | — | PENDENTE | — |
-| P-09 | Enquadramento ANVISA | Não atribuído | — | — | PENDENTE | — |
-| P-10 | Regularização ANVISA | Não atribuído | — | — | PENDENTE | — |
-| P-11 | Outros territórios | Não atribuído | — | — | PENDENTE | — |
-| P-12 | Revisão clínica | Não atribuído | — | — | PENDENTE | — |
-| P-13 | Segurança clínica | Não atribuído | — | — | PENDENTE | — |
-| P-14 | Ética em pesquisa | Não atribuído | — | — | NÃO APLICÁVEL | Reavaliar se o escopo mudar |
-| P-15 | Privacidade e termos | Não atribuído | — | — | PENDENTE | — |
-| P-16 | Apple | Não atribuído | — | — | PENDENTE | — |
-| P-17 | Google | Não atribuído | — | — | PENDENTE | — |
-| P-18 | Dependências e ativos | Não atribuído | — | — | PENDENTE | — |
-| P-19 | Histórico Git | Não atribuído | — | — | PENDENTE | — |
+| P-01 | ACR — Lung-RADS | Unassigned | — | — | PENDING | — |
+| P-02 | ACR — LI-RADS | Unassigned | — | — | PENDING | — |
+| P-03 | AO Foundation/OTA | Unassigned | — | — | PENDING | — |
+| P-04 | OTA-OFC/UCPF | Unassigned | — | — | PENDING | — |
+| P-05 | Wolters Kluwer/RightsLink — AAST | Unassigned | — | — | PENDING | — |
+| P-06 | RSNA — Fleischner/Bosniak | Unassigned | — | — | PENDING | — |
+| P-07 | Brock/PanCan and CUA | Unassigned | — | — | PENDING | — |
+| P-08 | Name and trademarks | Unassigned | — | — | PENDING | — |
+| P-09 | ANVISA classification | Unassigned | — | — | PENDING | — |
+| P-10 | ANVISA regulatory pathway | Unassigned | — | — | PENDING | — |
+| P-11 | Other territories | Unassigned | — | — | PENDING | — |
+| P-12 | Clinical review | Unassigned | — | — | PENDING | — |
+| P-13 | Clinical safety | Unassigned | — | — | PENDING | — |
+| P-14 | Research ethics | Unassigned | — | — | PENDING | Record the formal determination before changing status |
+| P-15 | Privacy and terms | Unassigned | — | — | PENDING | — |
+| P-16 | Apple | Unassigned | — | — | PENDING | — |
+| P-17 | Google | Unassigned | — | — | PENDING | — |
+| P-18 | Dependencies and assets | Unassigned | — | — | PENDING | — |
+| P-19 | Git history | Unassigned | — | — | PENDING | — |
 
-## 6. Critério de liberação
+## 6. Release criteria
 
-Uma versão somente pode receber aprovação para publicação externa quando:
+A version may be approved for external release only when:
 
-- [ ] todos os itens aplicáveis estiverem `AUTORIZADO` ou `NÃO APLICÁVEL` com evidência;
-- [ ] as permissões cobrirem versão, idioma, plataforma, território e modelo comercial pretendidos;
-- [ ] a finalidade e as alegações públicas coincidirem com o enquadramento regulatório;
-- [ ] a revisão clínica independente da versão candidata estiver aprovada;
-- [ ] política de privacidade, termos, suporte e procedimento de correção estiverem publicados;
-- [ ] o artefato final e o histórico Git estiverem livres de material não autorizado e segredos;
-- [ ] a documentação das lojas estiver consistente com o aplicativo e com a autorização sanitária;
-- [ ] o proprietário do produto tiver assinado a decisão final de lançamento.
+- [ ] every applicable item is `AUTHORIZED` or `NOT APPLICABLE` with supporting evidence;
+- [ ] permissions cover the intended version, language, platform, territory, and business model;
+- [ ] the public intended purpose and claims match the regulatory determination;
+- [ ] independent clinical review of the release candidate is approved;
+- [ ] the privacy policy, terms, support channel, and correction procedure are published;
+- [ ] the final artifact and Git history contain no unauthorized material or secrets;
+- [ ] store documentation is consistent with the application and its regulatory authorization;
+- [ ] the product owner has signed the final release decision.
 
-## 7. Alterações que reabrem a análise
+## 7. Changes that reopen the assessment
 
-Reavaliar as autorizações antes de qualquer lançamento que inclua:
+Reassess permissions before any release that adds:
 
-- nova versão de uma classificação ou diretriz;
-- novo idioma, país, plataforma ou modelo de monetização;
-- uso de tabelas, imagens, logotipos, layouts ou texto literal de terceiros;
-- alegação de diagnóstico, prognóstico, recomendação terapêutica ou substituição de julgamento profissional;
-- armazenamento, transmissão, analytics ou integração com dados de pacientes;
-- associação institucional, endosso, certificação ou parceria com terceiros;
-- uso do aplicativo em pesquisa com participantes humanos.
+- a new version of a classification or guideline;
+- a new language, country, platform, or monetization model;
+- third-party tables, images, logos, layouts, or verbatim text;
+- a claim of diagnosis, prognosis, treatment recommendation, or replacement of professional judgment;
+- storage, transmission, analytics, or integration involving patient data;
+- institutional association, endorsement, certification, or partnership;
+- use of the application in research involving human participants.
 
-Última revisão deste checklist: **16 de agosto de 2026**.
+Last reviewed: **August 16, 2026**.

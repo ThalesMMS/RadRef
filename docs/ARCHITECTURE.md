@@ -1,107 +1,107 @@
-# Arquitetura do RadRef
+# RadRef architecture
 
-## Objetivos
+## Goals
 
-A arquitetura atende a seis requisitos centrais:
+The architecture addresses six core requirements:
 
-1. isolar regras clínicas da interface;
-2. permitir execução e teste sem servidor ou simulador;
-3. manter toda cópia clínica traduzível fora dos componentes;
-4. incluir novos módulos sem reestruturar os existentes;
-5. representar classificações extensas como dados tipados e auditáveis;
-6. preservar operação local, sem armazenamento de dados de pacientes.
+1. isolate clinical rules from the interface;
+2. support execution and testing without a server or simulator;
+3. keep all translatable clinical copy outside components;
+4. add modules without restructuring existing ones;
+5. represent extensive classifications as typed, auditable data;
+6. preserve local operation without storing patient data.
 
-## Camadas
+## Layers
 
-### 1. Rotas — `app/`
+### 1. Routes — `app/`
 
-O Expo Router transforma arquivos em rotas. Os arquivos são mínimos e reexportam a tela correspondente:
+Expo Router turns files into routes. Route files are minimal and re-export the corresponding screen:
 
 ```tsx
 export { SolidOrganScreen as default } from '../../src/modules/trauma/screens/SolidOrganScreen';
 ```
 
-As rotas são verificadas contra `moduleRegistry.ts` pela suíte de testes.
+The test suite verifies routes against `moduleRegistry.ts`.
 
-### 2. Interface compartilhada — `src/components/`
+### 2. Shared interface — `src/components/`
 
-Os componentes reutilizáveis incluem:
+Reusable components include:
 
-- `Screen`: rolagem, teclado, área segura e cabeçalho nativo; recebe ainda `switcher` (rola junto com a lede) e `result`, fixado abaixo da barra de navegação enquanto o formulário rola por baixo;
-- `Section`: agrupamento de campos e listas, com `infoKey` opcional no cabeçalho;
-- `ChoiceRow`, `SwitchRow` e `InputRow`: entradas consistentes; `ChoiceRow` resolve entre controle segmentado, chips, linha compacta com seletor (`menu`) e lista aberta;
-- `ResultCard`: código, resultado, medidor de severidade, notas e alertas; a variante `hero` recolhe notas e metadados atrás de um disclosure para caber fixada no topo;
-- `Sheet` e `InfoButton`: folha inferior reutilizada pelos seletores e pelo (i) inline que abre definições e critérios;
-- `ToolSwitcher`: alternância entre as ferramentas irmãs de um módulo, lida de `moduleRegistry.ts`;
-- `Banner` e `Disclaimer`: contexto, escopo e segurança;
-- `ModuleCard` e `NavRow`: navegação dirigida pelo registro;
-- `ReferenceList` e `KeyPointList`: conteúdo de referência;
-- `Icon`: SF Symbols no iOS e fallback textual nas demais plataformas;
-- tokens de tema em `src/theme.ts` para claro/escuro, acentos por módulo e a escala de severidade do medidor.
+- `Screen`: scrolling, keyboard handling, safe area, and native header; it also accepts a `switcher`, which scrolls with the lede, and a `result`, which remains fixed below the navigation bar while the form scrolls underneath;
+- `Section`: field and list grouping with an optional header `infoKey`;
+- `ChoiceRow`, `SwitchRow`, and `InputRow`: consistent inputs; `ChoiceRow` chooses among a segmented control, chips, a compact picker row (`menu`), and an expanded list;
+- `ResultCard`: code, result, severity meter, notes, and warnings; the `hero` variant collapses notes and metadata behind a disclosure so it can remain fixed at the top;
+- `Sheet` and `InfoButton`: a reusable bottom sheet for pickers and the inline information button that opens definitions and criteria;
+- `ToolSwitcher`: switches among sibling tools in a module using data from `moduleRegistry.ts`;
+- `Banner` and `Disclaimer`: context, scope, and safety;
+- `ModuleCard` and `NavRow`: registry-driven navigation;
+- `ReferenceList` and `KeyPointList`: reference content;
+- `Icon`: SF Symbols on iOS with a text fallback on other platforms;
+- theme tokens in `src/theme.ts` for light/dark appearance, module accents, and the severity-meter scale.
 
-Os componentes recebem chaves de tradução ou `MessageRef`, nunca texto clínico embutido.
+Components receive translation keys or `MessageRef` values, never embedded clinical text.
 
-### 3. Domínio clínico — `src/modules/*/domain/`
+### 3. Clinical domain — `src/modules/*/domain/`
 
-Cada módulo contém tipos, funções puras e testes. As funções:
+Each module contains types, pure functions, and tests. The functions:
 
-- recebem objetos tipados;
-- validam intervalos, hierarquias e compatibilidade de contexto;
-- aplicam regras determinísticas;
-- retornam `ClinicalResult`, código e `MessageRef`;
-- não importam React, React Native, Expo, navegação ou idioma.
+- receive typed objects;
+- validate ranges, hierarchies, and contextual compatibility;
+- apply deterministic rules;
+- return a `ClinicalResult`, code, and `MessageRef`;
+- do not import React, React Native, Expo, navigation, or language state.
 
-Contratos compartilhados ficam em `src/core/domain.ts`.
+Shared contracts live in `src/core/domain.ts`.
 
-Os cinco módulos usam duas estratégias complementares:
+The five modules use two complementary strategies:
 
-#### Motores de decisão
+#### Decision engines
 
-Usados em Fleischner, Lung-RADS, Brock, Bosniak, realce, manejo, LI-RADS, resposta ao tratamento hepático e órgãos sólidos AAST. A entrada é avaliada por regras explícitas e produz um resultado clínico.
+Used for Fleischner, Lung-RADS, Brock, Bosniak, enhancement, management, LI-RADS, liver treatment response, and AAST solid organs. Explicit rules evaluate the input and produce a clinical result.
 
-#### Registros clínicos hierárquicos
+#### Hierarchical clinical registries
 
-Usados em AO/OTA e nas escalas AAST. A estrutura é representada por arrays e mapas tipados, permitindo:
+Used for AO/OTA and the AAST scales. Typed arrays and maps represent the structure, making it possible to:
 
-- filtrar por região;
-- navegar entre tipo, grupo e subgrupo;
-- montar códigos sem duplicar lógica em cada tela;
-- testar unicidade, cobertura e relações pai-filho;
-- verificar todas as chaves de tradução geradas dinamicamente.
+- filter by region;
+- navigate among type, group, and subgroup;
+- assemble codes without duplicating logic in each screen;
+- test uniqueness, coverage, and parent-child relationships;
+- verify every dynamically generated translation key.
 
-### 4. Telas de módulo — `src/modules/*/screens/`
+### 4. Module screens — `src/modules/*/screens/`
 
-As telas mantêm somente:
+Screens contain only:
 
-- estado local do formulário;
-- parsing localizado;
-- seleção de itens do registro clínico;
-- chamada à função de domínio;
-- composição dos componentes compartilhados.
+- local form state;
+- locale-aware parsing;
+- selection of clinical-registry items;
+- calls to domain functions;
+- composition of shared components.
 
-A regra clínica não é reimplementada em JSX.
+Clinical rules are not reimplemented in JSX.
 
-### 5. Internacionalização — `src/core/i18n/`
+### 5. Internationalization — `src/core/i18n/`
 
-O `I18nProvider`:
+`I18nProvider`:
 
-- detecta português ou inglês pelo dispositivo;
-- usa inglês como fallback;
-- persiste a escolha com AsyncStorage;
-- fornece `t(key, params)` para chaves diretas;
-- fornece `tx(messageRef)` para resultados do domínio.
+- detects Portuguese or English from the device;
+- uses English as the fallback;
+- persists the selection with AsyncStorage;
+- provides `t(key, params)` for direct keys;
+- provides `tx(messageRef)` for domain results.
 
-Os dicionários são planos. A suíte valida:
+The dictionaries are flat. The suite validates:
 
-- paridade exata EN/PT;
-- valores não vazios;
-- chaves estáticas em telas;
-- chaves construídas dinamicamente em AO/OTA, OTA-OFC, PCCF, UCPF e AAST;
-- ausência de texto traduzível literal em componentes.
+- exact EN/PT parity;
+- nonempty values;
+- static keys used by screens;
+- dynamically constructed keys for AO/OTA, OTA-OFC, PCCF, UCPF, and AAST;
+- absence of literal translatable text in components.
 
-### 6. Registro modular — `src/core/moduleRegistry.ts`
+### 6. Module registry — `src/core/moduleRegistry.ts`
 
-A home e as páginas de cada módulo consomem definições declarativas:
+The home screen and module pages consume declarative definitions:
 
 ```ts
 {
@@ -115,7 +115,7 @@ A home e as páginas de cada módulo consomem definições declarativas:
 }
 ```
 
-Módulos registrados:
+Registered modules:
 
 - `lung`;
 - `renal`;
@@ -123,21 +123,21 @@ Módulos registrados:
 - `fracture`;
 - `trauma`.
 
-A adição de um módulo não exige alterar os motores existentes.
+Adding a module does not require changing existing engines.
 
-### 7. Referências — `src/content/references.ts`
+### 7. References — `src/content/references.ts`
 
-Os metadados bibliográficos e links ficam separados das telas. PDFs, tabelas e ilustrações de terceiros não são empacotados como conteúdo do aplicativo. As telas abrem as fontes externas quando o usuário solicita.
+Bibliographic metadata and links are kept separate from screens. Third-party PDFs, tables, and illustrations are not packaged as application content. Screens open external sources at the user's request.
 
-## Estrutura de módulos especializados
+## Specialized module structure
 
-### Fígado
+### Liver
 
 ```text
 src/modules/liver/
 ├── domain/
-│   ├── liRads.ts                  # diagnóstico CT/MRI v2018
-│   ├── treatmentResponse.ts       # resposta ao tratamento v2024
+│   ├── liRads.ts                  # CT/MRI v2018 diagnosis
+│   ├── treatmentResponse.ts       # v2024 treatment response
 │   └── *.test.ts
 └── screens/
     ├── LiverHomeScreen.tsx
@@ -146,18 +146,18 @@ src/modules/liver/
     └── LiverReferencesScreen.tsx
 ```
 
-As duas ferramentas hepáticas mantêm diagnóstico e resposta ao tratamento em fluxos separados. Detalhes de escopo e fontes estão em `docs/LI-RADS.md`.
+The two liver tools keep diagnosis and treatment response in separate workflows. Scope and source details are documented in `docs/LI-RADS.md`.
 
-### Fraturas
+### Fractures
 
 ```text
 src/modules/fracture/
 ├── domain/
-│   ├── adultAoOta.ts       # regiões, padrões e gerador adulto
+│   ├── adultAoOta.ts       # adult regions, patterns, and generator
 │   ├── openFracture.ts     # OTA-OFC
 │   ├── pediatric.ts        # PCCF
 │   ├── periprosthetic.ts   # UCPF
-│   ├── dislocations.ts     # articulação + direção
+│   ├── dislocations.ts     # joint + direction
 │   └── fracture.test.ts
 └── screens/
     ├── FractureHomeScreen.tsx
@@ -169,15 +169,15 @@ src/modules/fracture/
     └── FractureReferencesScreen.tsx
 ```
 
-O registro adulto contém 31 regiões principais. Cada padrão armazena `code`, `labelKey`, `level` e, quando aplicável, `parent`. O gerador valida a trajetória tipo → grupo → subgrupo antes de produzir o código.
+The adult registry contains 31 major regions. Each pattern stores `code`, `labelKey`, `level`, and, where applicable, `parent`. The generator validates the type → group → subgroup path before producing the code.
 
 ### Trauma
 
 ```text
 src/modules/trauma/
 ├── domain/
-│   ├── aastScales.ts       # 32 escalas, regiões, graus e notas
-│   ├── solidOrgan.ts       # critérios de imagem 2018
+│   ├── aastScales.ts       # 32 scales, regions, grades, and notes
+│   ├── solidOrgan.ts       # 2018 imaging criteria
 │   └── trauma.test.ts
 └── screens/
     ├── TraumaHomeScreen.tsx
@@ -187,69 +187,69 @@ src/modules/trauma/
     └── TraumaReferencesScreen.tsx
 ```
 
-`aastScales.ts` é um registro descritivo. `solidOrgan.ts` é uma ferramenta de decisão por critério selecionado para baço, fígado e rim.
+`aastScales.ts` is a descriptive registry. `solidOrgan.ts` is a selected-criterion decision tool for the spleen, liver, and kidney.
 
-## Fluxo de dados
+## Data flow
 
 ```text
-entrada ou seleção do usuário
-             ↓
-parser/registro clínico tipado
-             ↓
-função de domínio pura
-             ↓
+user input or selection
+          ↓
+typed parser/clinical registry
+          ↓
+pure domain function
+          ↓
 ClinicalResult / MessageRef
-             ↓
+          ↓
 I18nProvider
-             ↓
-ResultCard, listas e notas
+          ↓
+ResultCard, lists, and notes
 ```
 
-## Estratégia de testes
+## Testing strategy
 
-Os testes usam o runner nativo do Node com remoção experimental de tipos TypeScript, sem Jest ou Babel.
+Tests use the native Node runner with experimental TypeScript type stripping, without Jest or Babel.
 
-Cobertura principal:
+Primary coverage:
 
-- limiares e arredondamento;
-- combinações de morfologia e contexto;
-- guardrails de aplicabilidade;
-- vetores de regressão do Brock;
-- conversão diâmetro/volume e crescimento;
-- separação classificação/manejo;
-- hierarquia AO/OTA e qualificadores diafisários;
-- composição dos códigos OTA-OFC, PCCF, UCPF e luxação;
-- presença das 32 escalas AAST e agrupamento regional;
-- critérios tomográficos e AIS dos órgãos sólidos 2018;
-- registro modular e existência das rotas;
-- paridade e cobertura EN/PT.
+- thresholds and rounding;
+- morphology and context combinations;
+- applicability guardrails;
+- Brock regression vectors;
+- diameter/volume conversion and growth;
+- separation of classification and management;
+- AO/OTA hierarchy and shaft qualifiers;
+- composition of OTA-OFC, PCCF, UCPF, and dislocation codes;
+- presence and regional grouping of all 32 AAST scales;
+- CT criteria and AIS values for the 2018 solid-organ scales;
+- module registry and route existence;
+- EN/PT parity and coverage.
 
-## TypeScript estrito
+## Strict TypeScript
 
-As configurações ativam:
+The configurations enable:
 
 - `strict`;
 - `noUncheckedIndexedAccess`;
 - `exactOptionalPropertyTypes`;
-- rotas tipadas do Expo Router.
+- typed Expo Router routes.
 
-`tsconfig.domain.json` valida o domínio sem carregar tipos de React Native. A checagem completa de interface usa `npm run typecheck` após a instalação das dependências.
+`tsconfig.domain.json` validates the domain without loading React Native types. The full interface check runs through `npm run typecheck` after dependencies are installed.
 
-## Dependências e operação local
+## Dependencies and local operation
 
-O RadRef usa Expo managed workflow. A preferência de idioma é o único estado persistente. As referências externas usam `Linking`; classificações e cálculos permanecem locais.
+RadRef uses the Expo managed workflow. Language preference is the only persisted state. External references use `Linking`; classifications and calculations remain local.
 
-## Evolução de uma fonte clínica
+## Evolving a clinical source
 
-Uma atualização deve seguir:
+A source update must follow this sequence:
 
-1. registrar versão e fonte primária;
-2. comparar a nova versão com o registro atual;
-3. criar testes para alterações e limites;
-4. modificar domínio/registro clínico;
-5. atualizar os dois dicionários;
-6. revisar telas somente quando novos campos forem necessários;
-7. executar validação completa;
-8. documentar mudanças, cobertura e conteúdo não migrado.
+1. record the version and primary source;
+2. compare the new version with the current registry;
+3. create tests for changes and boundaries;
+4. modify the domain/clinical registry;
+5. update both dictionaries;
+6. change screens only when new fields are required;
+7. run the complete validation set;
+8. document changes, coverage, and content not migrated.
 
-Essa ordem reduz risco de divergência entre interface, tradução e regra clínica.
+This order reduces the risk of divergence among interface, translation, and clinical rules.
