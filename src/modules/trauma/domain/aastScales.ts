@@ -79,7 +79,7 @@ export const aastScales: readonly AastScale[] = [
       g('III', 'trauma.scale.cervicalVascular.grade.III'),
       g('IV', 'trauma.scale.cervicalVascular.grade.IV'),
     ],
-    noteKeys: [vesselAdjustment, 'trauma.aast.note.archivedBlankHighestGrade'],
+    noteKeys: [vesselAdjustment, 'trauma.aast.note.sourceBlankHighestGrade'],
   },
   {
     id: 'chestWall',
@@ -92,7 +92,7 @@ export const aastScales: readonly AastScale[] = [
       g('III', 'trauma.scale.chestWall.grade.III'),
       g('IV', 'trauma.scale.chestWall.grade.IV'),
     ],
-    noteKeys: ['trauma.scale.chestWall.note.scope', 'trauma.aast.note.archivedBlankHighestGrade'],
+    noteKeys: ['trauma.scale.chestWall.note.scope', 'trauma.aast.note.sourceBlankHighestGrade'],
   },
   {
     id: 'heart',

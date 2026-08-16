@@ -17,8 +17,6 @@ import {
   type DislocationDirection,
   type DislocationJoint,
 } from '../domain';
-import { dislocationIllustration } from '../illustrations';
-import { FractureIllustration } from './FractureIllustration';
 
 const jointOptions = (Object.entries(dislocationJointKeys) as readonly [DislocationJoint, string][])
   .map(([value, labelKey]) => ({ value, labelKey })) satisfies readonly ChoiceOption<DislocationJoint>[];
@@ -57,10 +55,6 @@ export function DislocationsScreen() {
         <ChoiceRow labelKey="fracture.dislocation.jointLabel" options={jointOptions} value={joint} onChange={setJoint} variant="menu" />
         <ChoiceRow labelKey="fracture.dislocation.directionLabel" options={directionOptions} value={direction} onChange={setDirection} variant="chips" />
       </Section>
-      <FractureIllustration
-        illustration={dislocationIllustration(joint)}
-        selectedCode={`${joint}[${direction}]`}
-      />
       <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
       <Disclaimer />
     </Screen>

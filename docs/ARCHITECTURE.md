@@ -53,11 +53,11 @@ Cada módulo contém tipos, funções puras e testes. As funções:
 
 Contratos compartilhados ficam em `src/core/domain.ts`.
 
-Os quatro módulos usam duas estratégias complementares:
+Os cinco módulos usam duas estratégias complementares:
 
 #### Motores de decisão
 
-Usados em Fleischner, Lung-RADS, Brock, Bosniak, realce, manejo e órgãos sólidos AAST. A entrada é avaliada por regras explícitas e produz um resultado clínico.
+Usados em Fleischner, Lung-RADS, Brock, Bosniak, realce, manejo, LI-RADS, resposta ao tratamento hepático e órgãos sólidos AAST. A entrada é avaliada por regras explícitas e produz um resultado clínico.
 
 #### Registros clínicos hierárquicos
 
@@ -119,6 +119,7 @@ Módulos registrados:
 
 - `lung`;
 - `renal`;
+- `liver`;
 - `fracture`;
 - `trauma`.
 
@@ -126,9 +127,26 @@ A adição de um módulo não exige alterar os motores existentes.
 
 ### 7. Referências — `src/content/references.ts`
 
-Os metadados bibliográficos e links ficam separados das telas. PDFs e tabelas protegidas não são empacotados como conteúdo do aplicativo. As telas abrem as fontes externas quando o usuário solicita.
+Os metadados bibliográficos e links ficam separados das telas. PDFs, tabelas e ilustrações de terceiros não são empacotados como conteúdo do aplicativo. As telas abrem as fontes externas quando o usuário solicita.
 
-## Estrutura dos módulos novos
+## Estrutura de módulos especializados
+
+### Fígado
+
+```text
+src/modules/liver/
+├── domain/
+│   ├── liRads.ts                  # diagnóstico CT/MRI v2018
+│   ├── treatmentResponse.ts       # resposta ao tratamento v2024
+│   └── *.test.ts
+└── screens/
+    ├── LiverHomeScreen.tsx
+    ├── LiRadsScreen.tsx
+    ├── TreatmentResponseScreen.tsx
+    └── LiverReferencesScreen.tsx
+```
+
+As duas ferramentas hepáticas mantêm diagnóstico e resposta ao tratamento em fluxos separados. Detalhes de escopo e fontes estão em `docs/LI-RADS.md`.
 
 ### Fraturas
 

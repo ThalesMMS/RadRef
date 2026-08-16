@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: RadRef
-message: "Se este software for utilizado em ensino ou pesquisa, cite o repositório e as publicações clínicas listadas em docs/CLINICAL-SOURCES.md."
+message: "Se este software for utilizado em ensino ou pesquisa, cite esta versão do RadRef e as publicações clínicas pertinentes ao módulo utilizado."
 type: software
 authors:
   - family-names: Santos
@@ -8,6 +8,8 @@ authors:
 version: 1.1.0
 date-released: 2026-07-25
 license: MIT
+repository-code: "https://github.com/ThalesMMS/RadRef"
+url: "https://github.com/ThalesMMS/RadRef"
 keywords:
   - radiology
   - React Native

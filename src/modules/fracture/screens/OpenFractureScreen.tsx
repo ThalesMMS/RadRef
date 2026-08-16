@@ -11,8 +11,6 @@ import {
   type ChoiceOption,
 } from '../../../components';
 import { classifyOpenFracture, type OtaOfcGrade } from '../domain';
-import { openFractureIllustration } from '../illustrations';
-import { FractureIllustration } from './FractureIllustration';
 
 type GradeValue = '1' | '2' | '3';
 type ComponentName = 'skin' | 'muscle' | 'arterial' | 'contamination' | 'boneLoss';
@@ -69,10 +67,6 @@ export function OpenFractureScreen() {
       )}
     >
       <Banner titleKey="fracture.open.scopeTitle" textKey="fracture.open.scopeText" />
-      <FractureIllustration
-        illustration={openFractureIllustration}
-        selectedCode="OTA-OFC"
-      />
       <Section headerKey="fracture.open.componentsTitle" infoKey="fracture.open.componentsDescription">
         <ChoiceRow labelKey="fracture.open.component.skin" options={options('skin')} value={skin} onChange={setSkin} variant="menu" />
         <ChoiceRow labelKey="fracture.open.component.muscle" options={options('muscle')} value={muscle} onChange={setMuscle} variant="menu" />

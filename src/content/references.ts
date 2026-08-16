@@ -86,7 +86,7 @@ export const traumaReferences: readonly ReferenceItem[] = [
     id: 'aast-injury-scales',
     titleKey: 'trauma.references.scales.title',
     subtitleKey: 'trauma.references.scales.subtitle',
-    url: 'https://www.aast.org/resources-detail/injury-scoring-scale',
+    url: 'https://www.aast.org/resources/trauma-tools/injury-scoring-scale.html',
   },
   {
     id: 'aast-solid-organs-2018',

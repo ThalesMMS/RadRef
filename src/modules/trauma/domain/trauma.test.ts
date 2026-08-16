@@ -10,7 +10,7 @@ import {
   solidOrganCriteria,
 } from './index.ts';
 
-test('AAST browser contains all 32 archived injury scales', () => {
+test('AAST browser contains all 32 historical injury scales', () => {
   assert.equal(aastScales.length, 32);
   assert.equal(new Set(aastScales.map((scale) => scale.id)).size, 32);
   for (const scale of aastScales) {

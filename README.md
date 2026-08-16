@@ -1,19 +1,20 @@
 # RadRef
 
-Aplicativo modular de referência em radiologia, escrito em **React Native + TypeScript + Expo**. O projeto foi inicialmente reconstruído a partir dos aplicativos SwiftUI `Lung-Nodule-dev` e `Bosniak-Renal-Cyst-dev` e, na versão 1.1, passou a incluir também ferramentas de **Fraturas** e **Trauma**.
+Aplicativo modular de referência em radiologia, escrito em **React Native + TypeScript + Expo**. As regras clínicas são executadas localmente, sem backend ou armazenamento de dados de pacientes.
 
-A versão 1.1 contém quatro módulos locais:
+A versão atual contém cinco módulos:
 
 - **Nódulos pulmonares**: Fleischner Society 2017, ACR Lung-RADS v2022 e modelo Brock/PanCan completo.
 - **Lesões císticas renais**: Bosniak v2019, calculadora auxiliar de realce em TC/RM e referência de manejo CUA 2023.
-- **Fraturas**: navegador e geradores de código baseados no *AO/OTA Fracture and Dislocation Classification Compendium—2018*, incluindo fraturas adultas, OTA-OFC, PCCF pediátrica, UCPF e luxações.
-- **Trauma**: navegador das 32 escalas de lesão AAST fornecidas, além de ferramenta específica para os critérios tomográficos de baço, fígado e rim da revisão de 2018.
+- **Fígado**: LI-RADS CT/MRI v2018 e avaliação de resposta ao tratamento v2024 para terapias locorregionais.
+- **Fraturas**: navegador textual e geradores de código baseados no *AO/OTA Fracture and Dislocation Classification Compendium—2018*, incluindo fraturas adultas, OTA-OFC, PCCF pediátrica, UCPF e luxações.
+- **Trauma**: navegador de 32 escalas de lesão AAST, além de ferramenta específica para os critérios tomográficos de baço, fígado e rim da revisão de 2018.
 
 > **Uso educacional e de referência.** O RadRef não substitui revisão das imagens, julgamento clínico, discussão multidisciplinar, política institucional ou consulta às publicações originais. Não use o aplicativo como única base para diagnóstico, graduação, vigilância, biópsia, intervenção ou tratamento.
 
 ## Stack técnico
 
-- Expo SDK 57 (`expo ~57.0.7`) e React Native 0.86.
+- Expo SDK 57 (`expo ~57.0.13`) e React Native 0.86.2.
 - React 19.2.3 e TypeScript 6.0.3.
 - Expo Router com rotas tipadas.
 - Persistência local da preferência de idioma com AsyncStorage.
@@ -24,7 +25,7 @@ A versão 1.1 contém quatro módulos locais:
 
 O repositório contém rotas, telas, componentes, regras clínicas, traduções em inglês e português, recursos gráficos, testes e documentação. Não há conta de usuário, banco de dados clínico, cadastro de pacientes ou dependência de conexão para cálculos e classificações.
 
-A instalação integral das dependências e o boot do runtime Expo não foram repetidos no ambiente de construção porque o acesso ao registro npm ficou indisponível/intermitente. A validação independente do domínio, das rotas e da internacionalização foi executada localmente. Consulte [Validação](#validação) e [`docs/VALIDATION.md`](docs/VALIDATION.md).
+O checkout é validado com instalação reprodutível, testes de domínio, TypeScript estrito, auditoria de internacionalização, Expo Doctor e exportação estática para web. A validação não substitui revisão clínica independente nem avaliação regulatória.
 
 ## Requisitos
 
@@ -37,7 +38,7 @@ A instalação integral das dependências e o boot do runtime Expo não foram re
 
 ```bash
 cd RadRef
-npm install
+npm ci
 npm start
 ```
 
@@ -66,7 +67,7 @@ npm run validate
 
 O comando executa:
 
-1. **69 testes TypeScript** de regras, cálculos, hierarquias, limites, rotas e dicionários.
+1. **97 testes TypeScript** de regras, cálculos, hierarquias, limites, rotas e dicionários.
 2. Type-check estrito do domínio, sem depender do runtime React Native.
 3. Auditoria de internacionalização e de texto literal traduzível em componentes.
 
@@ -75,6 +76,7 @@ Também estão disponíveis:
 ```bash
 npm test
 npm run test:watch
+npm run typecheck
 npm run typecheck:domain
 npm run audit:i18n
 ```
@@ -83,7 +85,7 @@ npm run audit:i18n
 
 ### Tela inicial e navegação
 
-- Registro central dos quatro módulos e de suas ferramentas.
+- Registro central dos cinco módulos e de suas ferramentas.
 - Navegação por arquivos com Expo Router.
 - Tema claro/escuro seguindo o sistema.
 - Cabeçalhos nativos, listas agrupadas e SF Symbols no iOS.
@@ -110,6 +112,16 @@ npm run audit:i18n
 - Calculadora de realce para TC e RM, com opção de realce visual inequívoco.
 - Manejo de referência **CUA 2023** por classe, tamanho, sintomas, comorbidade/expectativa de vida e alvo sólido para biópsia.
 
+### Fígado — LI-RADS
+
+- **LI-RADS CT/MRI v2018** para observações não tratadas na população adulta de alto risco definida pela fonte.
+- Categorias LR-NC, LR-1 a LR-5, LR-M e LR-TIV, com aplicação das principais características e guardrails de contexto.
+- **Treatment Response Assessment v2024** com fluxos separados para terapias por radiação e sem radiação.
+- Registro de segmento de Couinaud, categoria e tamanho pré-tratamento e componente realçante mensurável.
+- Características auxiliares de RM aplicadas somente nos contextos previstos.
+
+Detalhes: [`docs/LI-RADS.md`](docs/LI-RADS.md).
+
 ### Fraturas — AO/OTA 2018
 
 - Navegador hierárquico de fraturas adultas com **31 regiões principais** do compêndio.
@@ -122,17 +134,17 @@ npm run audit:i18n
 - Codificação de **luxações** por articulação e direção, conforme os modificadores universais do compêndio.
 - Tela de referências e alertas de escopo.
 
-O navegador adulto prioriza cobertura prática das regiões, tipos, grupos e subgrupos mais relevantes. Ele não tenta reproduzir todas as figuras, qualificações específicas, modificadores universais ou combinações raras do compêndio. O documento original permanece a referência definitiva.
+O navegador adulto prioriza cobertura prática das regiões, tipos, grupos e subgrupos mais relevantes. A interface é textual e não redistribui PDFs, tabelas ou ilustrações do compêndio. Ela não tenta reproduzir todas as qualificações específicas, modificadores universais ou combinações raras; a publicação original permanece a referência definitiva.
 
 ### Trauma — AAST
 
-- Navegador das **32 escalas de lesão AAST** presentes no material fornecido.
+- Navegador textual de **32 escalas de lesão AAST** modeladas a partir das publicações citadas no aplicativo.
 - Organização por pescoço, tórax, abdome, geniturinário, pelve/reprodutivo e extremidades.
-- Critérios resumidos e parafraseados por grau, com notas específicas de multiplicidade, bilateralidade, circunferência vascular e limitações da fonte arquivada.
+- Critérios resumidos e parafraseados por grau, com notas específicas de multiplicidade, bilateralidade, circunferência vascular e limitações das fontes históricas.
 - Ferramenta tomográfica dedicada para **baço, fígado e rim — revisão de 2018**, com classificação pelo critério selecionado, mapeamento AIS e lembretes de protocolo multifásico.
 - Separação explícita entre graduação anatômica e decisão de tratamento.
 
-As escalas AAST mais antigas misturam critérios operatórios, anatômicos e radiológicos. O aplicativo preserva a versão identificada e não infere conteúdo ausente ou ilegível na fonte.
+As escalas AAST mais antigas misturam critérios operatórios, anatômicos e radiológicos. O aplicativo preserva a versão identificada, usa redação própria e não transforma a graduação em recomendação terapêutica.
 
 ## Internacionalização
 
@@ -143,7 +155,7 @@ src/core/i18n/locales/en.json
 src/core/i18n/locales/pt.json
 ```
 
-Os arquivos possuem paridade exata de **1.424 chaves**. O idioma inicial segue o dispositivo quando possível, e a escolha do usuário é persistida com AsyncStorage.
+Os arquivos possuem paridade exata de **1.429 chaves**. O idioma inicial segue o dispositivo quando possível, e a escolha do usuário é persistida com AsyncStorage.
 
 A suíte de testes verifica também chaves construídas dinamicamente pelos navegadores AO/OTA, PCCF, UCPF, OTA-OFC e AAST.
 
@@ -152,8 +164,8 @@ A suíte de testes verifica também chaves construídas dinamicamente pelos nave
 ```text
 RadRef/
 ├── app/                         # Rotas Expo Router
-├── assets/                      # Ícone, splash e favicon
-├── docs/                        # Arquitetura, fontes, auditoria e validação
+├── assets/                      # Ícone, splash e favicon próprios
+├── docs/                        # Arquitetura e notas do LI-RADS
 ├── scripts/                     # Testes e auditoria i18n
 └── src/
     ├── components/              # Interface reutilizável
@@ -166,6 +178,7 @@ RadRef/
     ├── modules/
     │   ├── lung/                # Nódulos pulmonares
     │   ├── renal/               # Lesões císticas renais
+    │   ├── liver/               # LI-RADS e resposta ao tratamento
     │   ├── fracture/            # AO/OTA, OTA-OFC, PCCF, UCPF e luxações
     │   └── trauma/              # Escalas AAST e órgãos sólidos 2018
     ├── screens/                 # Home, About e Not Found
@@ -192,13 +205,15 @@ Detalhes: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 - Brock/PanCan: **2013**.
 - Bosniak Classification of Cystic Renal Masses: **2019**.
 - Canadian Urological Association: **2023**.
+- ACR LI-RADS CT/MRI: **2018**.
+- ACR LI-RADS Treatment Response Assessment: **2024**.
 - AO/OTA Fracture and Dislocation Classification Compendium: **2018**.
 - AAST spleen, liver and kidney Organ Injury Scale: revisão **2018**.
-- Demais escalas AAST: versões históricas identificadas no material arquivado fornecido.
+- Demais escalas AAST: versões históricas identificadas nas fontes primárias consultadas.
 
-Referências e notas de uso: [`docs/CLINICAL-SOURCES.md`](docs/CLINICAL-SOURCES.md).
+As telas de referências de cada módulo apresentam as citações e abrem as fontes oficiais no navegador do sistema.
 
-## Decisões de migração e expansão
+## Decisões de modelagem
 
 A reconstrução não é uma tradução mecânica de Swift para JavaScript. As regras pulmonares e renais foram reconstruídas a partir do comportamento dos projetos Swift; os módulos de Fraturas e Trauma foram modelados como estruturas de dados clínicas independentes, com conteúdo resumido/parafraseado e sem redistribuição de figuras ou tabelas protegidas.
 
@@ -208,10 +223,8 @@ Principais decisões:
 - não forçar categorias em combinações não padronizadas;
 - preservar códigos oficiais, mas não reproduzir integralmente páginas, desenhos ou tabelas das publicações;
 - marcar explicitamente cobertura parcial no navegador AO/OTA adulto;
-- não inventar graus ausentes na cópia arquivada das escalas AAST;
+- não inventar graus ausentes nas fontes históricas consultadas das escalas AAST;
 - tratar a ferramenta de órgãos sólidos como graduação por imagem, não como algoritmo terapêutico.
-
-Auditoria completa: [`docs/MIGRATION-AUDIT.md`](docs/MIGRATION-AUDIT.md).
 
 ## Privacidade e operação offline
 
@@ -220,9 +233,17 @@ Auditoria completa: [`docs/MIGRATION-AUDIT.md`](docs/MIGRATION-AUDIT.md).
 - Nenhum dado clínico é transmitido.
 - Apenas a abertura voluntária de links bibliográficos requer internet.
 
+## Como citar
+
+Ao utilizar o RadRef em ensino, pesquisa ou publicação, cite o software com a versão utilizada. Para a versão atual:
+
+> SANTOS, Thales Matheus Mendonça. **RadRef** (versão 1.1.0) [software]. 2026. Disponível em: https://github.com/ThalesMMS/RadRef.
+
+Os metadados estruturados para gerenciadores de referências e para o recurso **Cite this repository** do GitHub estão em [`CITATION.cff`](CITATION.cff). As publicações clínicas pertinentes ao módulo utilizado também devem ser citadas; elas estão identificadas nas telas de referências do aplicativo.
+
 ## Direitos sobre as fontes
 
-O código do RadRef é distribuído sob MIT. As publicações, tabelas e figuras clínicas permanecem sob os direitos de seus respectivos autores, sociedades e editoras. O aplicativo usa descrições resumidas/parafraseadas e links para as fontes; uso comercial ou reprodução integral do material de referência pode exigir autorização específica.
+O código do RadRef é distribuído sob MIT. Essa licença não se estende a marcas, classificações ou publicações de terceiros. O aplicativo usa descrições autorais, identifica as fontes e abre links externos; PDFs, tabelas e ilustrações de terceiros não são redistribuídos no repositório ou no pacote do aplicativo.
 
 ## Licença
 

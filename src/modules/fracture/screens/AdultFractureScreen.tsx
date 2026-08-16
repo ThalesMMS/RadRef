@@ -20,8 +20,6 @@ import {
   type AdultFractureRegion,
   type ShaftThird,
 } from '../domain';
-import { adultIllustration } from '../illustrations';
-import { FractureIllustration } from './FractureIllustration';
 
 type OptionalCode = 'none' | string;
 
@@ -148,10 +146,6 @@ export function AdultFractureScreen() {
           variant="menu"
         />
       </Section>
-      <FractureIllustration
-        illustration={adultIllustration(regionId)}
-        selectedCode={typeCode}
-      />
       <Section headerKey="fracture.adult.morphologyTitle" infoKey="fracture.adult.morphologyDescription">
         <ChoiceRow
           labelKey="fracture.adult.typeLabel"
