@@ -1,0 +1,25 @@
+import type { IconName } from '../components/Icon';
+
+export const toolIcons: Readonly<Record<string, IconName>> = {
+  fleischner: 'calendar.badge.clock',
+  lungRads: 'chart.bar.doc.horizontal',
+  brock: 'percent',
+  lungReferences: 'books.vertical.fill',
+  bosniak: 'list.number',
+  enhancement: 'circle.lefthalf.filled',
+  management: 'arrow.triangle.branch',
+  adrenalWashout: 'percent',
+  renalReferences: 'books.vertical.fill',
+  liRads: 'list.number',
+  treatmentResponse: 'arrow.triangle.branch',
+  liverReferences: 'books.vertical.fill',
+  adultAoOta: 'list.number',
+  openFracture: 'bandage.fill',
+  pediatricFracture: 'figure.child',
+  periprosthetic: 'wrench.and.screwdriver.fill',
+  dislocations: 'arrow.left.and.right',
+  fractureReferences: 'books.vertical.fill',
+  solidOrgan: 'cross.case.fill',
+  aastScales: 'list.number',
+  traumaReferences: 'books.vertical.fill',
+};

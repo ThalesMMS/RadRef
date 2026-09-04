@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
   ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
+import { useI18n } from '../../../core/i18n';
 import {
   classifyPeriprostheticFracture,
   ucpfTypeKeys,
@@ -26,6 +27,7 @@ const typeOptions: readonly ChoiceOption<UcpfType>[] = ([
 ] as const).map((value) => ({ value, labelKey: ucpfTypeKeys[value] }));
 
 export function PeriprostheticScreen() {
+  const { t, tx } = useI18n();
   const [joint, setJoint] = useState<UcpfJoint>('IV');
   const [type, setType] = useState<UcpfType>('B1');
   const result = useMemo(() => classifyPeriprostheticFracture({ joint, type }), [joint, type]);
@@ -34,6 +36,12 @@ export function PeriprostheticScreen() {
     setJoint('IV');
     setType('B1');
   };
+
+  const reportText = `${t('fracture.tools.periprosthetic.title')}\n`
+    + `${tx(result.title)} (${result.code})\n`
+    + `${tx(result.recommendation)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -56,7 +64,7 @@ export function PeriprostheticScreen() {
         <ChoiceRow labelKey="fracture.periprosthetic.jointLabel" options={jointOptions} value={joint} onChange={setJoint} variant="chips" />
         <ChoiceRow labelKey="fracture.periprosthetic.typeLabel" options={typeOptions} value={type} onChange={setType} variant="menu" />
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
+      <ReportActions reportText={reportText} shareTitle={t('fracture.tools.periprosthetic.title')} accent="fracture" onReset={reset} />
       <Disclaimer />
     </Screen>
   );

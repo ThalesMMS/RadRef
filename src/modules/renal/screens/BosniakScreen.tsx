@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Share } from 'react-native';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -172,12 +171,12 @@ export function BosniakScreen() {
     value: tx(result.management.followUp),
   }];
 
-  const shareReport = () => {
-    void Share.share({
-      title: t('renal.bosniak.shareTitle'),
-      message: `${tx(result.reportSuggestion)}\n\n${t('renal.bosniak.shareManagementLabel')}: ${tx(result.management.primary)}\n\n${t('disclaimer.short')}`,
-    }).catch(() => undefined);
-  };
+  const reportText = `${t('renal.tools.bosniak.title')}\n`
+    + `Bosniak ${result.categoryLabel}: ${tx(result.title)}\n`
+    + `${tx(result.riskSummary)}\n\n`
+    + `${tx(result.reportSuggestion)}\n\n`
+    + `${t('renal.bosniak.shareManagementLabel')}: ${tx(result.management.primary)}\n\n`
+    + `${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -292,8 +291,7 @@ export function BosniakScreen() {
         notes={managementNotes}
         metadata={managementMetadata}
       />
-      <Button labelKey="common.shareReport" onPress={shareReport} accent="renal" icon="square.and.arrow.up" />
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
+      <ReportActions reportText={reportText} shareTitle={t('renal.bosniak.shareTitle')} accent="renal" onReset={reset} />
       <Banner textKey="renal.bosniak.reportReminder" tone="warning" />
       <Disclaimer />
     </Screen>

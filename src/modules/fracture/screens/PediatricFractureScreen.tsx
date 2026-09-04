@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
   ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
+import { useI18n } from '../../../core/i18n';
 import {
   allowedPediatricPatterns,
   allowedSubsegments,
@@ -52,6 +53,7 @@ const qualificationOptions: readonly ChoiceOption<PediatricQualification>[] = [
 ];
 
 export function PediatricFractureScreen() {
+  const { t, tx } = useI18n();
   const [bone, setBone] = useState<PediatricBone>('humerus');
   const [segment, setSegment] = useState<PediatricSegment>('proximal');
   const [subsegment, setSubsegment] = useState<PediatricSubsegment>('E');
@@ -102,6 +104,12 @@ export function PediatricFractureScreen() {
     setQualification('none');
   };
 
+  const reportText = `${t('fracture.tools.pediatric.title')}\n`
+    + `${tx(result.title)} (${result.code})\n`
+    + `${tx(result.recommendation)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
+
   return (
     <Screen
       titleKey="fracture.tools.pediatric.title"
@@ -130,7 +138,7 @@ export function PediatricFractureScreen() {
         <ChoiceRow labelKey="fracture.pediatric.severityLabel" options={severityOptions} value={severity} onChange={setSeverity} variant="menu" />
         <ChoiceRow labelKey="fracture.pediatric.qualificationLabel" options={qualificationOptions} value={qualification} onChange={setQualification} variant="chips" />
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
+      <ReportActions reportText={reportText} shareTitle={t('fracture.tools.pediatric.title')} accent="fracture" onReset={reset} />
       <Disclaimer />
     </Screen>
   );

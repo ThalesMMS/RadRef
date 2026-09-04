@@ -6,6 +6,7 @@ import {
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -43,6 +44,16 @@ const ancillaryOptions: readonly ChoiceOption<AncillaryDirection>[] = [
   { value: 'both', labelKey: 'liver.liRads.ancillary.both' },
 ];
 
+type SpecialCategory = 'none' | 'tumorInVein' | 'definitelyBenign' | 'probablyBenign' | 'lrMFeatures';
+
+const specialCategoryOptions: readonly ChoiceOption<SpecialCategory>[] = [
+  { value: 'none', labelKey: 'liver.liRads.special.none' },
+  { value: 'tumorInVein', labelKey: 'liver.liRads.form.tumorInVein', descriptionKey: 'liver.liRads.form.tumorInVeinInfo' },
+  { value: 'definitelyBenign', labelKey: 'liver.liRads.form.definitelyBenign' },
+  { value: 'probablyBenign', labelKey: 'liver.liRads.form.probablyBenign' },
+  { value: 'lrMFeatures', labelKey: 'liver.liRads.form.lrMFeatures', descriptionKey: 'liver.liRads.form.lrMFeaturesInfo' },
+];
+
 export function LiRadsScreen() {
   const { t, tx } = useI18n();
   const { colors } = useTheme();
@@ -52,10 +63,7 @@ export function LiRadsScreen() {
   const [adequateExam, setAdequateExam] = useState(true);
   const [pathProven, setPathProven] = useState(false);
   const [treatedObservation, setTreatedObservation] = useState(false);
-  const [tumorInVein, setTumorInVein] = useState(false);
-  const [definitelyBenign, setDefinitelyBenign] = useState(true);
-  const [probablyBenign, setProbablyBenign] = useState(false);
-  const [lrMFeatures, setLrMFeatures] = useState(false);
+  const [specialCategory, setSpecialCategory] = useState<SpecialCategory>('none');
   const [size, setSize] = useState('15');
   const [aphe, setAphe] = useState<LiRadsAphe>('none');
   const [enhancingCapsule, setEnhancingCapsule] = useState(false);
@@ -76,10 +84,10 @@ export function LiRadsScreen() {
       adequateExam,
       pathProven,
       treatedObservation,
-      definitelyBenign,
-      probablyBenign,
-      tumorInVein,
-      lrMFeatures,
+      definitelyBenign: specialCategory === 'definitelyBenign',
+      probablyBenign: specialCategory === 'probablyBenign',
+      tumorInVein: specialCategory === 'tumorInVein',
+      lrMFeatures: specialCategory === 'lrMFeatures',
       ...(sizeMm === undefined ? {} : { sizeMm }),
       aphe,
       enhancingCapsule,
@@ -88,22 +96,19 @@ export function LiRadsScreen() {
       ancillaryDirection,
     });
   }, [
-    age,
-    riskBasis,
-    excludedCirrhosisEtiology,
     adequateExam,
-    pathProven,
-    treatedObservation,
-    definitelyBenign,
-    probablyBenign,
-    tumorInVein,
-    lrMFeatures,
-    size,
+    age,
+    ancillaryDirection,
     aphe,
     enhancingCapsule,
+    excludedCirrhosisEtiology,
     nonperipheralWashout,
+    pathProven,
+    riskBasis,
+    size,
+    specialCategory,
     thresholdGrowth,
-    ancillaryDirection,
+    treatedObservation,
   ]);
 
   const growth = useMemo(() => assessThresholdGrowth(
@@ -119,10 +124,7 @@ export function LiRadsScreen() {
     setAdequateExam(true);
     setPathProven(false);
     setTreatedObservation(false);
-    setTumorInVein(false);
-    setDefinitelyBenign(true);
-    setProbablyBenign(false);
-    setLrMFeatures(false);
+    setSpecialCategory('none');
     setSize('15');
     setAphe('none');
     setEnhancingCapsule(false);
@@ -137,6 +139,12 @@ export function LiRadsScreen() {
   const metadata = result.baseCategory === undefined
     ? []
     : [{ labelKey: 'liver.liRads.metadata.baseCategory', value: result.baseCategory }];
+
+  const reportText = `${t('liver.tools.liRads.title')}\n`
+    + `LI-RADS (v2018): ${result.displayCategory} - ${tx(result.title)}\n`
+    + `${tx(result.recommendation)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -187,20 +195,13 @@ export function LiRadsScreen() {
         />
       </Section>
 
-      <Section headerKey="liver.liRads.section.special">
-        <SwitchRow
-          labelKey="liver.liRads.form.tumorInVein"
-          infoKey="liver.liRads.form.tumorInVeinInfo"
-          value={tumorInVein}
-          onValueChange={setTumorInVein}
-        />
-        <SwitchRow labelKey="liver.liRads.form.definitelyBenign" value={definitelyBenign} onValueChange={setDefinitelyBenign} />
-        <SwitchRow labelKey="liver.liRads.form.probablyBenign" value={probablyBenign} onValueChange={setProbablyBenign} />
-        <SwitchRow
-          labelKey="liver.liRads.form.lrMFeatures"
-          infoKey="liver.liRads.form.lrMFeaturesInfo"
-          value={lrMFeatures}
-          onValueChange={setLrMFeatures}
+      <Section headerKey="liver.liRads.section.special" infoKey="liver.liRads.section.specialInfo">
+        <ChoiceRow
+          labelKey="liver.liRads.section.specialChoice"
+          options={specialCategoryOptions}
+          value={specialCategory}
+          onChange={setSpecialCategory}
+          variant="menu"
         />
       </Section>
 
@@ -244,7 +245,7 @@ export function LiRadsScreen() {
         </View>
       </Section>
 
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="trauma" />
+      <ReportActions reportText={reportText} shareTitle={t('liver.tools.liRads.title')} accent="liver" onReset={reset} />
       <Disclaimer />
     </Screen>
   );

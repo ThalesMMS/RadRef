@@ -7,6 +7,7 @@ import {
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -230,6 +231,12 @@ export function LungRadsScreen() {
     }]),
   ];
 
+  const reportText = `${t('lung.tools.lungRads.title')}\n`
+    + `Lung-RADS ${result.category}: ${tx(result.title)}\n`
+    + `${tx(result.management)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
+
   return (
     <Screen
       titleKey="lung.tools.lungRads.title"
@@ -331,7 +338,7 @@ export function LungRadsScreen() {
         </View>
       </Section>
 
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
+      <ReportActions reportText={reportText} shareTitle={t('lung.tools.lungRads.title')} accent="lung" onReset={reset} />
       <Banner textKey="lung.lungRads.noRiskPercentages" tone="warning" />
       <Disclaimer />
     </Screen>

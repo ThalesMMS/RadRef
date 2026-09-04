@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -12,6 +12,7 @@ import {
   ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
+import { useI18n } from '../../../core/i18n';
 import { msg } from '../../../core/domain';
 import { parseLocalizedNumber } from '../../../core/numbers';
 import { calculateBosniakManagement, type BosniakCategory } from '../domain';
@@ -27,6 +28,7 @@ const categoryOptions: readonly ChoiceOption<BosniakCategory>[] = [
 ];
 
 export function ManagementScreen() {
+  const { t, tx } = useI18n();
   const [category, setCategory] = useState<BosniakCategory>('IIF');
   const [lesionSize, setLesionSize] = useState('30');
   const [symptomatic, setSymptomatic] = useState(false);
@@ -61,6 +63,13 @@ export function ManagementScreen() {
         : category === 'IV'
           ? 'critical'
           : 'neutral';
+
+  const reportText = `${t('renal.tools.management.title')}\n`
+    + `${t('renal.management.resultTitle')}: ${category}\n`
+    + `${tx(result.primary)}\n`
+    + (result.followUp ? `${t('renal.management.followUpLabel')}: ${tx(result.followUp)}\n` : '')
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${[...result.notes, result.evidence].map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -109,7 +118,7 @@ export function ManagementScreen() {
           />
         ) : null}
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
+      <ReportActions reportText={reportText} shareTitle={t('renal.tools.management.title')} accent="renal" onReset={reset} />
       <Banner textKey="renal.management.sharedDecisionReminder" tone="warning" />
       <Disclaimer />
     </Screen>

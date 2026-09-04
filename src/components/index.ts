@@ -10,6 +10,7 @@ export * from './LanguageSwitcher';
 export * from './ModuleCard';
 export * from './NavRow';
 export * from './ReferenceList';
+export * from './ReportActions';
 export * from './ResultCard';
 export * from './Screen';
 export * from './Section';

@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -12,6 +12,7 @@ import {
   ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
+import { useI18n } from '../../../core/i18n';
 import { parseLocalizedNumber } from '../../../core/numbers';
 import { calculateEnhancement, type EnhancementModality } from '../domain';
 
@@ -21,6 +22,7 @@ const modalityOptions: readonly ChoiceOption<EnhancementModality>[] = [
 ];
 
 export function EnhancementScreen() {
+  const { t, tx } = useI18n();
   const [modality, setModality] = useState<EnhancementModality>('ct');
   const [visuallyUnequivocal, setVisuallyUnequivocal] = useState(false);
   const [preContrast, setPreContrast] = useState('20');
@@ -43,6 +45,11 @@ export function EnhancementScreen() {
       ...(post === undefined ? {} : { postContrast: post }),
     });
   }, [modality, postContrast, preContrast, visuallyUnequivocal]);
+
+  const reportText = `${t('renal.tools.enhancement.title')}\n`
+    + `${result.metric}: ${tx(result.title)}\n`
+    + `${tx(result.interpretation)}\n`
+    + `\n${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -91,7 +98,7 @@ export function EnhancementScreen() {
           />
         ) : null}
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="renal" />
+      <ReportActions reportText={reportText} shareTitle={t('renal.tools.enhancement.title')} accent="renal" onReset={reset} />
       <Banner textKey="renal.enhancement.thresholdReminder" tone="warning" />
       <Disclaimer />
     </Screen>

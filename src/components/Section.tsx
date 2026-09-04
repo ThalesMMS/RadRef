@@ -7,6 +7,7 @@ import { InfoButton } from './InfoButton';
 type SectionProps = PropsWithChildren<Readonly<{
   headerKey?: string;
   footerKey?: string;
+  footerText?: string;
   /** Left inset of row separators; 60 aligns with text next to a 32pt icon tile. */
   separatorInset?: number;
   /** Render header/footer around free-standing children (no grouped card). */
@@ -19,6 +20,7 @@ type SectionProps = PropsWithChildren<Readonly<{
 export function Section({
   headerKey,
   footerKey,
+  footerText,
   separatorInset = spacing.md,
   plain = false,
   infoKey,
@@ -33,7 +35,9 @@ export function Section({
       {infoKey === undefined ? null : <InfoButton titleKey={headerKey} textKey={infoKey} size={14} />}
     </View>
   ) : null;
-  const footer = footerKey ? (
+  const footer = footerText ? (
+    <Text style={[styles.footer, { color: colors.textSecondary }]}>{footerText}</Text>
+  ) : footerKey ? (
     <Text style={[styles.footer, { color: colors.textSecondary }]}>{t(footerKey)}</Text>
   ) : null;
 

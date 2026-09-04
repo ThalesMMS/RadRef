@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -32,7 +32,7 @@ const riskOptions: readonly ChoiceOption<PatientRisk>[] = [
 ];
 
 export function FleischnerScreen() {
-  const { t } = useI18n();
+  const { t, tx } = useI18n();
   const [noduleType, setNoduleType] = useState<FleischnerNoduleType>('solid');
   const [size, setSize] = useState('6');
   const [solidComponent, setSolidComponent] = useState('0');
@@ -69,6 +69,12 @@ export function FleischnerScreen() {
       value: t('units.mmValue', { value: result.roundedSolidComponentMm }),
     }]),
   ];
+
+  const reportText = `${t('lung.tools.fleischner.title')}\n`
+    + `${tx(result.title)} (${result.code})\n`
+    + `${tx(result.recommendation)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -125,7 +131,7 @@ export function FleischnerScreen() {
           onValueChange={setMultiple}
         />
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
+      <ReportActions reportText={reportText} shareTitle={t('lung.tools.fleischner.title')} accent="lung" onReset={reset} />
       <Banner textKey="lung.fleischner.measurementReminder" tone="warning" />
       <Disclaimer />
     </Screen>

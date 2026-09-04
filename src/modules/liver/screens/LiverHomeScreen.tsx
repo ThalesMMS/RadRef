@@ -1,5 +1,6 @@
 import { Banner, Disclaimer, KeyPointList, NavRow, Screen, Section, type IconName } from '../../../components';
 import { moduleById } from '../../../core/moduleRegistry';
+import { useFavorites } from '../../../core/useFavorites';
 
 const moduleDefinition = moduleById('liver');
 
@@ -10,6 +11,8 @@ const toolIcons: Readonly<Record<string, IconName>> = {
 };
 
 export function LiverHomeScreen() {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   return (
     <Screen titleKey="module.liver.title" subtitleKey="module.liver.guidelines" large>
       <Banner titleKey="liver.scope.title" textKey="liver.scope.text" />
@@ -25,13 +28,15 @@ export function LiverHomeScreen() {
             subtitleKey={tool.descriptionKey}
             route={tool.route}
             icon={toolIcons[tool.id] ?? 'list.number'}
-            accent="trauma"
+            accent="liver"
+            favorite={isFavorite(tool.route)}
+            onToggleFavorite={() => toggleFavorite(tool.route)}
           />
         ))}
       </Section>
       <Section headerKey="liver.home.keyPointsTitle">
         <KeyPointList
-          accent="trauma"
+          accent="liver"
           itemKeys={[
             'liver.home.keyPoint.highRisk',
             'liver.home.keyPoint.majorFeatures',

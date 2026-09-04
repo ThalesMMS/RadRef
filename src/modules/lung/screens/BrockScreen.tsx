@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -29,7 +29,7 @@ const typeOptions: readonly ChoiceOption<BrockNoduleType>[] = [
 ];
 
 export function BrockScreen() {
-  const { t } = useI18n();
+  const { t, tx } = useI18n();
   const params = useLocalSearchParams();
   const [age, setAge] = useState('65');
   const [sex, setSex] = useState<BrockSex>('male');
@@ -86,11 +86,16 @@ export function BrockScreen() {
   const badge = result.probabilityPercent === undefined
     ? undefined
     : t('units.percentValue', { value: result.probabilityPercent.toFixed(1) });
-
   const metadata = result.stratum ? [{
     labelKey: 'lung.brock.riskBandLabel',
     value: t(`lung.brock.stratum.${result.stratum}`),
   }] : [];
+
+  const reportText = `${t('lung.tools.brock.title')}\n`
+    + `${tx(result.title)}${badge ? `: ${badge}` : ''}${result.stratum ? ` (${t(`lung.brock.stratum.${result.stratum}`)})` : ''}\n`
+    + `${tx(result.interpretation)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -130,7 +135,7 @@ export function BrockScreen() {
         <SwitchRow labelKey="lung.brock.upperLobe" value={upperLobe} onValueChange={setUpperLobe} />
         <SwitchRow labelKey="lung.brock.spiculation" value={spiculation} onValueChange={setSpiculation} />
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="lung" />
+      <ReportActions reportText={reportText} shareTitle={t('lung.tools.brock.title')} accent="lung" onReset={reset} />
       <Banner textKey="lung.brock.notStandaloneManagement" tone="warning" />
       <Disclaimer />
     </Screen>

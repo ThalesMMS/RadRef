@@ -1,4 +1,4 @@
-export type ModuleAccent = 'lung' | 'renal' | 'fracture' | 'trauma';
+export type ModuleAccent = 'lung' | 'renal' | 'fracture' | 'trauma' | 'liver';
 
 /** `reference` tools are source lists; they stay out of the in-module tool switcher. */
 export type ToolKind = 'tool' | 'reference';
@@ -95,6 +95,13 @@ export const radiologyModules: readonly RadiologyModule[] = [
         metaKey: 'renal.tools.management.meta',
       },
       {
+        id: 'adrenalWashout',
+        titleKey: 'renal.tools.adrenalWashout.title',
+        descriptionKey: 'renal.tools.adrenalWashout.description',
+        route: '/renal/adrenal-washout',
+        metaKey: 'renal.tools.adrenalWashout.meta',
+      },
+      {
         id: 'renalReferences',
         titleKey: 'common.references',
         descriptionKey: 'renal.tools.references.description',
@@ -111,7 +118,7 @@ export const radiologyModules: readonly RadiologyModule[] = [
     shortLabelKey: 'module.liver.shortLabel',
     route: '/liver',
     guidelineKey: 'module.liver.guidelines',
-    accent: 'trauma',
+    accent: 'liver',
     tools: [
       {
         id: 'liRads',
@@ -236,3 +243,26 @@ export function moduleById(id: RadiologyModule['id']): RadiologyModule {
 export function switchableTools(id: RadiologyModule['id']): readonly ToolDefinition[] {
   return moduleById(id).tools.filter((tool) => tool.kind !== 'reference');
 }
+
+export type RegisteredToolItem = Readonly<{
+  tool: ToolDefinition;
+  module: RadiologyModule;
+}>;
+
+export function allRegisteredTools(): readonly RegisteredToolItem[] {
+  return radiologyModules.flatMap((mod) =>
+    mod.tools.map((t) => ({ tool: t, module: mod }))
+  );
+}
+
+export function toolByRoute(route: string): RegisteredToolItem | undefined {
+  for (const mod of radiologyModules) {
+    for (const t of mod.tools) {
+      if (t.route === route) {
+        return { tool: t, module: mod };
+      }
+    }
+  }
+  return undefined;
+}
+

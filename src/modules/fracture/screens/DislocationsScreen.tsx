@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
   ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
+import { useI18n } from '../../../core/i18n';
 import {
   classifyDislocation,
   dislocationDirectionKeys,
@@ -25,6 +26,7 @@ const directionOptions = (Object.entries(dislocationDirectionKeys) as readonly [
   .map(([value, labelKey]) => ({ value, labelKey })) satisfies readonly ChoiceOption<DislocationDirection>[];
 
 export function DislocationsScreen() {
+  const { t, tx } = useI18n();
   const [joint, setJoint] = useState<DislocationJoint>('10A');
   const [direction, setDirection] = useState<DislocationDirection>('5a');
   const result = useMemo(() => classifyDislocation({ joint, direction }), [direction, joint]);
@@ -33,6 +35,12 @@ export function DislocationsScreen() {
     setJoint('10A');
     setDirection('5a');
   };
+
+  const reportText = `${t('fracture.tools.dislocations.title')}\n`
+    + `${tx(result.title)} (${result.code})\n`
+    + `${tx(result.recommendation)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
 
   return (
     <Screen
@@ -55,7 +63,7 @@ export function DislocationsScreen() {
         <ChoiceRow labelKey="fracture.dislocation.jointLabel" options={jointOptions} value={joint} onChange={setJoint} variant="menu" />
         <ChoiceRow labelKey="fracture.dislocation.directionLabel" options={directionOptions} value={direction} onChange={setDirection} variant="chips" />
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
+      <ReportActions reportText={reportText} shareTitle={t('fracture.tools.dislocations.title')} accent="fracture" onReset={reset} />
       <Disclaimer />
     </Screen>
   );

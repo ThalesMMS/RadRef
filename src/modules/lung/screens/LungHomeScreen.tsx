@@ -1,5 +1,6 @@
 import { Banner, Disclaimer, KeyPointList, NavRow, Screen, Section, type IconName } from '../../../components';
 import { moduleById } from '../../../core/moduleRegistry';
+import { useFavorites } from '../../../core/useFavorites';
 
 const moduleDefinition = moduleById('lung');
 
@@ -11,6 +12,8 @@ const toolIcons: Readonly<Record<string, IconName>> = {
 };
 
 export function LungHomeScreen() {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   return (
     <Screen titleKey="module.lung.title" subtitleKey="module.lung.guidelines" large>
       <Banner titleKey="lung.scope.title" textKey="lung.scope.text" />
@@ -27,6 +30,8 @@ export function LungHomeScreen() {
             route={tool.route}
             icon={toolIcons[tool.id] ?? 'chart.bar.doc.horizontal'}
             accent="lung"
+            favorite={isFavorite(tool.route)}
+            onToggleFavorite={() => toggleFavorite(tool.route)}
           />
         ))}
       </Section>

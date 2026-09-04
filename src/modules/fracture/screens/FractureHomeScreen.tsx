@@ -1,5 +1,6 @@
 import { Banner, Disclaimer, KeyPointList, NavRow, Screen, Section, type IconName } from '../../../components';
 import { moduleById } from '../../../core/moduleRegistry';
+import { useFavorites } from '../../../core/useFavorites';
 
 const moduleDefinition = moduleById('fracture');
 
@@ -13,6 +14,8 @@ const toolIcons: Readonly<Record<string, IconName>> = {
 };
 
 export function FractureHomeScreen() {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   return (
     <Screen titleKey="module.fracture.title" subtitleKey="module.fracture.guidelines" large>
       <Banner titleKey="fracture.scope.title" textKey="fracture.scope.text" />
@@ -29,6 +32,8 @@ export function FractureHomeScreen() {
             route={tool.route}
             icon={toolIcons[tool.id] ?? 'list.number'}
             accent="fracture"
+            favorite={isFavorite(tool.route)}
+            onToggleFavorite={() => toggleFavorite(tool.route)}
           />
         ))}
       </Section>

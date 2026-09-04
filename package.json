@@ -15,12 +15,14 @@
     "typecheck:domain": "tsc --noEmit -p tsconfig.domain.json",
     "ios:release": "node scripts/run-ios-release.mjs",
     "audit:i18n": "node scripts/audit-i18n.mjs",
-    "validate": "npm run test && npm run typecheck:domain && npm run audit:i18n",
+    "validate": "npm run test && npm run typecheck && npm run typecheck:domain && npm run audit:i18n",
     "doctor": "npx expo-doctor"
   },
   "dependencies": {
+    "@expo/vector-icons": "^15.0.2",
     "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~57.0.13",
+    "expo-clipboard": "~57.0.1",
     "expo-constants": "~57.0.7",
     "expo-font": "~57.0.1",
     "expo-linking": "~57.0.6",

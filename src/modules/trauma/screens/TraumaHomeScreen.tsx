@@ -1,5 +1,6 @@
 import { Banner, Disclaimer, KeyPointList, NavRow, Screen, Section, type IconName } from '../../../components';
 import { moduleById } from '../../../core/moduleRegistry';
+import { useFavorites } from '../../../core/useFavorites';
 
 const moduleDefinition = moduleById('trauma');
 
@@ -10,6 +11,8 @@ const toolIcons: Readonly<Record<string, IconName>> = {
 };
 
 export function TraumaHomeScreen() {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   return (
     <Screen titleKey="module.trauma.title" subtitleKey="module.trauma.guidelines" large>
       <Banner titleKey="trauma.scope.title" textKey="trauma.scope.text" />
@@ -26,6 +29,8 @@ export function TraumaHomeScreen() {
             route={tool.route}
             icon={toolIcons[tool.id] ?? 'cross.case.fill'}
             accent="trauma"
+            favorite={isFavorite(tool.route)}
+            onToggleFavorite={() => toggleFavorite(tool.route)}
           />
         ))}
       </Section>

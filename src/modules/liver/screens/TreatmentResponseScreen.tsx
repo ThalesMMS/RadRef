@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Share } from 'react-native';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
   InputRow,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
@@ -133,11 +132,11 @@ export function TreatmentResponseScreen() {
     setImageNumber('');
   };
 
-  const shareReport = () => {
+  const reportText = useMemo(() => {
     const lesion = parsedLesionNumber === undefined ? '—' : String(Math.trunc(parsedLesionNumber));
     const preSize = parsedPretreatmentSize === undefined ? '—' : parsedPretreatmentSize.toFixed(1);
     const currentSize = parsedEnhancingComponentSize === undefined ? '—' : parsedEnhancingComponentSize.toFixed(1);
-    const message = [
+    return [
       t('liver.tra.share.lesion', { lesion, segment: t(optionLabelKey(segmentOptions, segment)) }),
       t('liver.tra.share.treatment', { treatment: t(optionLabelKey(treatmentOptions, treatmentType)) }),
       t('liver.tra.share.pretreatment', {
@@ -153,8 +152,20 @@ export function TreatmentResponseScreen() {
       '',
       t('disclaimer.short'),
     ].join('\n');
-    void Share.share({ title: t('liver.tra.share.title'), message }).catch(() => undefined);
-  };
+  }, [
+    displayCategory,
+    imageNumber,
+    parsedEnhancingComponentSize,
+    parsedLesionNumber,
+    parsedPretreatmentSize,
+    pretreatmentCategory,
+    result.reportSuggestion,
+    segment,
+    seriesNumber,
+    t,
+    treatmentType,
+    tx,
+  ]);
 
   const metadata = [
     ...(result.algorithm === undefined ? [] : [{
@@ -302,8 +313,7 @@ export function TreatmentResponseScreen() {
         <InputRow labelKey="liver.tra.form.imageNumber" value={imageNumber} onChangeText={setImageNumber} integer />
       </Section>
 
-      <Button labelKey="common.shareReport" onPress={shareReport} variant="tinted" accent="trauma" icon="square.and.arrow.up" />
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="trauma" />
+      <ReportActions reportText={reportText} shareTitle={t('liver.tra.share.title')} accent="liver" onReset={reset} />
       <Disclaimer />
     </Screen>
   );

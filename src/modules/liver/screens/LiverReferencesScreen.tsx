@@ -33,7 +33,7 @@ export function LiverReferencesScreen() {
       <Banner textKey="liver.references.externalNotice" />
       <Section headerKey="liver.references.pointsTitle">
         <KeyPointList
-          accent="trauma"
+          accent="liver"
           itemKeys={[
             'liver.references.point.population',
             'liver.references.point.diagonal',

@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react';
 import {
   Banner,
-  Button,
   ChoiceRow,
   Disclaimer,
+  ReportActions,
   ResultCard,
   Screen,
   Section,
   ToolSwitcher,
   type ChoiceOption,
 } from '../../../components';
+import { useI18n } from '../../../core/i18n';
 import {
   adultFractureAreas,
   adultPatternsAtLevel,
@@ -39,6 +40,7 @@ function regionOptions(area: AdultFractureArea): readonly ChoiceOption<AdultFrac
 }
 
 export function AdultFractureScreen() {
+  const { t, tx } = useI18n();
   const [area, setArea] = useState<AdultFractureArea>('upperLimb');
   const [regionId, setRegionId] = useState<AdultFractureRegion['id']>('humerusProximal');
   const [typeCode, setTypeCode] = useState('11A');
@@ -112,6 +114,12 @@ export function AdultFractureScreen() {
     ...subgroups.map((pattern) => ({ value: pattern.code, labelKey: pattern.labelKey })),
   ];
 
+  const reportText = `${t('fracture.tools.adult.title')}\n`
+    + `${tx(result.title)} (${result.code})\n`
+    + `${tx(result.recommendation)}\n`
+    + (result.notes.length > 0 ? `\n${t('result.notes')}:\n${result.notes.map((n) => `• ${tx(n)}`).join('\n')}\n` : '')
+    + `\n${t('disclaimer.short')}`;
+
   return (
     <Screen
       titleKey="fracture.tools.adult.title"
@@ -182,7 +190,7 @@ export function AdultFractureScreen() {
           />
         ) : null}
       </Section>
-      <Button labelKey="common.resetForm" onPress={reset} variant="plain" accent="fracture" />
+      <ReportActions reportText={reportText} shareTitle={t('fracture.tools.adult.title')} accent="fracture" onReset={reset} />
       <Banner textKey="fracture.adult.coverageWarning" tone="warning" />
       <Disclaimer />
     </Screen>
