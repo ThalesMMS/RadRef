@@ -78,26 +78,44 @@ function isExplicitlyNoncontrast(acquisition: ImagingAcquisition): boolean {
   return acquisition === 'ctNoncontrast' || acquisition === 'mriNoncontrast';
 }
 
-function compatible(pattern: SpecialContentPattern, acquisition: ImagingAcquisition): boolean {
-  const modality = acquisitionModality(acquisition);
-  switch (pattern) {
-    case 'none':
-    case 'simpleFluid':
-      return modality !== 'ultrasound';
-    case 'ctMinus9To20':
-    case 'ctAtLeast70':
-      return acquisition === 'ctNoncontrast';
-    case 'ctOver20Nonenhancing':
-      return acquisition === 'ctRenalMassProtocol';
-    case 'ctPortal21To30':
-      return acquisition === 'ctPortalVenous';
-    case 'ctTooSmallLowAttenuation':
-      return modality === 'ct';
-    case 'mriT2CSFLike':
-    case 'mriT1MarkedHomogeneous':
-    case 'mriT1Heterogeneous':
-      return modality === 'mri';
+// Simple fluid is −9 to 20 HU at CT and CSF-like T2 signal at MRI. Where the examination cannot fully
+// characterize the mass, the same finding is expressed by the specific Bosniak II pattern instead.
+const contentPatternsByAcquisition: Readonly<Record<ImagingAcquisition, readonly SpecialContentPattern[]>> = {
+  ctRenalMassProtocol: ['none', 'simpleFluid', 'ctOver20Nonenhancing', 'ctTooSmallLowAttenuation'],
+  ctNoncontrast: ['none', 'ctMinus9To20', 'ctAtLeast70', 'ctTooSmallLowAttenuation'],
+  ctPortalVenous: ['none', 'simpleFluid', 'ctPortal21To30', 'ctTooSmallLowAttenuation'],
+  ctOther: ['none', 'simpleFluid', 'ctTooSmallLowAttenuation'],
+  mriRenalMassProtocol: ['none', 'simpleFluid', 'mriT1MarkedHomogeneous', 'mriT1Heterogeneous'],
+  mriNoncontrast: ['none', 'mriT2CSFLike', 'mriT1MarkedHomogeneous', 'mriT1Heterogeneous'],
+  mriOther: ['none', 'mriT2CSFLike', 'mriT1MarkedHomogeneous', 'mriT1Heterogeneous'],
+  ultrasound: [],
+};
+
+const simpleFluidPatterns: readonly SpecialContentPattern[] = ['simpleFluid', 'ctMinus9To20', 'mriT2CSFLike'];
+
+/** Special content patterns that apply to the acquisition, in display order. */
+export function contentPatternsForAcquisition(acquisition: ImagingAcquisition): readonly SpecialContentPattern[] {
+  return contentPatternsByAcquisition[acquisition];
+}
+
+/**
+ * Keeps a content pattern valid when the acquisition changes: simple fluid carries over to the
+ * acquisition's own simple-fluid pattern, other unavailable patterns fall back to none.
+ */
+export function adaptContentPattern(
+  pattern: SpecialContentPattern,
+  acquisition: ImagingAcquisition,
+): SpecialContentPattern {
+  const available = contentPatternsForAcquisition(acquisition);
+  if (available.length === 0 || available.includes(pattern)) return pattern;
+  if (simpleFluidPatterns.includes(pattern)) {
+    return simpleFluidPatterns.find((candidate) => available.includes(candidate)) ?? 'none';
   }
+  return 'none';
+}
+
+function compatible(pattern: SpecialContentPattern, acquisition: ImagingAcquisition): boolean {
+  return contentPatternsForAcquisition(acquisition).includes(pattern);
 }
 
 function categoryLabel(category: BosniakCategory): string {
@@ -183,12 +201,17 @@ function isSpecialClassII(pattern: SpecialContentPattern): boolean {
 
 function permittedClassIISepta(input: BosniakInput): boolean {
   if (!input.septaSmooth || input.maxSeptalThicknessMm > 2) return false;
-  if (input.septaEnhance) return input.septaCount >= 1 && input.septaCount <= 3;
+  // Only the MRI column allows any number of nonenhancing septa; CT Bosniak II needs few (1–3).
+  if (input.septaEnhance || acquisitionModality(input.acquisition) === 'ct') {
+    return input.septaCount >= 1 && input.septaCount <= 3;
+  }
   return input.septaCount >= 1;
 }
 
 function isClassI(input: BosniakInput): boolean {
-  return isCompleteProtocol(input.acquisition) &&
+  // Simple fluid is defined at contrast-enhanced CT too; the portal venous Bosniak II range starts at 21 HU.
+  const acquisitionAllowsSimpleCyst = isCompleteProtocol(input.acquisition) || input.acquisition === 'ctPortalVenous';
+  return acquisitionAllowsSimpleCyst &&
     input.specialContentPattern === 'simpleFluid' &&
     input.wellDefined &&
     input.homogeneous &&
@@ -221,9 +244,9 @@ function classIIReasons(input: BosniakInput): string[] {
     keys.push(specialKey);
   }
   if (input.septaCount > 0) {
-    keys.push(input.septaEnhance
-      ? 'renal.bosniak.reason.classIIEnhancingSepta'
-      : 'renal.bosniak.reason.classIINonenhancingSepta');
+    if (input.septaEnhance) keys.push('renal.bosniak.reason.classIIEnhancingSepta');
+    else if (acquisitionModality(input.acquisition) === 'ct') keys.push('renal.bosniak.reason.classIIFewNonenhancingSeptaCt');
+    else keys.push('renal.bosniak.reason.classIINonenhancingSepta');
   }
   if (input.calcification !== 'none') keys.push('renal.bosniak.reason.classIICalcification');
   if (keys.length === 0) keys.push('renal.bosniak.reason.classIIDefault');
@@ -346,6 +369,17 @@ export function calculateBosniak(input: BosniakInput): BosniakResult {
       'renal.bosniak.report.heterogeneousCt',
     );
   }
+  // Without contrast, occult enhancing tissue (eg, papillary carcinoma) cannot be excluded in a
+  // heterogeneous mass, so the IIF heterogeneous-T1 criterion needs a renal mass protocol study.
+  if (input.acquisition === 'mriNoncontrast' && (!input.homogeneous || input.specialContentPattern === 'mriT1Heterogeneous')) {
+    return buildResult(
+      'incomplete',
+      input,
+      ['renal.bosniak.reason.heterogeneousNoncontrastMri'],
+      [...warnings, 'renal.bosniak.warning.completeContrastStudy'],
+      'renal.bosniak.report.heterogeneousNoncontrastMri',
+    );
+  }
   if (input.specialContentPattern === 'mriT1Heterogeneous') {
     return buildResult('IIF', input, ['renal.bosniak.reason.classIIFHeterogeneousT1'], warnings);
   }
@@ -379,6 +413,16 @@ export function calculateBosniak(input: BosniakInput): BosniakResult {
 
   if (input.wallThicknessMm > 2 && !input.wallEnhances) warnings.push('renal.bosniak.warning.nonenhancingWall');
   if (input.septaCount > 0 && input.maxSeptalThicknessMm > 2 && !input.septaEnhance) warnings.push('renal.bosniak.warning.nonenhancingSepta');
+  // Table 2 footnote: many nonenhancing septa make a CT mass heterogeneous; MRI comes before a class.
+  if (acquisitionModality(input.acquisition) === 'ct' && input.septaCount >= 4 && !input.septaEnhance) {
+    return buildResult(
+      'incomplete',
+      input,
+      ['renal.bosniak.reason.manyNonenhancingSeptaCt'],
+      [...warnings, 'renal.bosniak.warning.mriHiddenEnhancement'],
+      'renal.bosniak.report.heterogeneousCt',
+    );
+  }
   return buildResult(
     'incomplete',
     input,

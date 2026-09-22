@@ -139,7 +139,12 @@ type MenuProps<T extends string> = ControlProps<T> & Readonly<{
   infoKey?: string;
 }>;
 
-/** `Label ⓘ …… Value ⇅` — one line in the form, the full option list in a sheet. */
+/**
+ * `Label ⓘ …… Value ⇅` — one line in the form, the full option list in a sheet.
+ * The (i) is a button of its own, so it cannot live inside the row's pressable (nested
+ * buttons on web). The pressable fills the row from underneath instead: label and value
+ * let touches through to it and are hidden from assistive tech, which hears the pressable.
+ */
 function Menu<T extends string>({ labelKey, infoKey, options, labels, value, onChange, theme }: MenuProps<T>) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
@@ -148,24 +153,27 @@ function Menu<T extends string>({ labelKey, infoKey, options, labels, value, onC
 
   return (
     <>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t(labelKey)}
-        accessibilityValue={{ text: selectedLabel }}
-        onPress={() => setOpen(true)}
-        style={({ pressed }) => [styles.menuRow, pressed && { backgroundColor: theme.colors.highlight }]}
-      >
+      <View style={styles.menuRow}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t(labelKey)}
+          accessibilityValue={{ text: selectedLabel }}
+          onPress={() => setOpen(true)}
+          style={({ pressed }) => [StyleSheet.absoluteFill, pressed && { backgroundColor: theme.colors.highlight }]}
+        />
         <View style={styles.menuLabelWrap}>
-          <Text style={[styles.menuLabel, { color: theme.colors.text }]}>{t(labelKey)}</Text>
+          <View aria-hidden style={styles.menuLabelCopy}>
+            <Text style={[styles.menuLabel, { color: theme.colors.text }]}>{t(labelKey)}</Text>
+          </View>
           {infoKey === undefined ? null : <InfoButton titleKey={labelKey} textKey={infoKey} size={14} />}
         </View>
-        <View style={styles.menuValueWrap}>
+        <View aria-hidden style={styles.menuValueWrap}>
           <Text numberOfLines={1} style={[styles.menuValue, { color: theme.colors.tint }]}>
             {selectedLabel}
           </Text>
           <Icon name="chevron.up.chevron.down" size={12} color={theme.colors.tint} weight="semibold" />
         </View>
-      </Pressable>
+      </View>
       <Sheet visible={open} onClose={() => setOpen(false)} title={t(labelKey)}>
         <View style={[styles.sheetGroup, { backgroundColor: theme.colors.fill }]}>
           {options.map((option, index) => {
@@ -299,18 +307,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: 11,
   },
+  // pointerEvents lives in StyleSheet.create: react-native-web deprecates the prop and ignores it in inline styles.
   menuLabelWrap: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    pointerEvents: 'box-none',
   },
-  menuLabel: { ...font.body, flexShrink: 1 },
+  // A View rather than the Text itself: Android ignores pointerEvents on Text.
+  menuLabelCopy: { flexShrink: 1, pointerEvents: 'none' },
+  menuLabel: { ...font.body },
   menuValueWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
     maxWidth: '52%',
+    pointerEvents: 'none',
   },
   menuValue: { ...font.body, flexShrink: 1, textAlign: 'right' },
   sheetGroup: {

@@ -16,7 +16,10 @@ import { msg } from '../../../core/domain';
 import { useI18n } from '../../../core/i18n';
 import { parseLocalizedNumber } from '../../../core/numbers';
 import {
+  acquisitionModality,
+  adaptContentPattern,
   calculateBosniak,
+  contentPatternsForAcquisition,
   type CalcificationPattern,
   type ImagingAcquisition,
   type ProtrusionMargin,
@@ -34,18 +37,39 @@ const acquisitionOptions: readonly ChoiceOption<ImagingAcquisition>[] = [
   { value: 'ultrasound', labelKey: 'renal.bosniak.acquisition.ultrasound' },
 ];
 
-const contentOptions: readonly ChoiceOption<SpecialContentPattern>[] = [
+const ctContentOptions: readonly ChoiceOption<SpecialContentPattern>[] = [
   { value: 'none', labelKey: 'renal.bosniak.content.none' },
-  { value: 'simpleFluid', labelKey: 'renal.bosniak.content.simpleFluid' },
+  { value: 'simpleFluid', labelKey: 'renal.bosniak.content.simpleFluidCt' },
   { value: 'ctMinus9To20', labelKey: 'renal.bosniak.content.ctMinus9To20' },
   { value: 'ctAtLeast70', labelKey: 'renal.bosniak.content.ctAtLeast70' },
   { value: 'ctOver20Nonenhancing', labelKey: 'renal.bosniak.content.ctOver20Nonenhancing' },
   { value: 'ctPortal21To30', labelKey: 'renal.bosniak.content.ctPortal21To30' },
   { value: 'ctTooSmallLowAttenuation', labelKey: 'renal.bosniak.content.ctTooSmallLowAttenuation' },
+];
+
+// Contrast-enhanced MRI: content is still read on T2 and on the precontrast T1 series.
+const contrastMriContentOptions: readonly ChoiceOption<SpecialContentPattern>[] = [
+  { value: 'none', labelKey: 'renal.bosniak.content.none' },
+  { value: 'simpleFluid', labelKey: 'renal.bosniak.content.simpleFluidMri' },
+  { value: 'mriT2CSFLike', labelKey: 'renal.bosniak.content.mriT2CSFLike' },
+  { value: 'mriT1MarkedHomogeneous', labelKey: 'renal.bosniak.content.mriT1MarkedHomogeneousPrecontrast' },
+  { value: 'mriT1Heterogeneous', labelKey: 'renal.bosniak.content.mriT1HeterogeneousPrecontrast' },
+];
+
+const noncontrastMriContentOptions: readonly ChoiceOption<SpecialContentPattern>[] = [
+  { value: 'none', labelKey: 'renal.bosniak.content.none' },
   { value: 'mriT2CSFLike', labelKey: 'renal.bosniak.content.mriT2CSFLike' },
   { value: 'mriT1MarkedHomogeneous', labelKey: 'renal.bosniak.content.mriT1MarkedHomogeneous' },
   { value: 'mriT1Heterogeneous', labelKey: 'renal.bosniak.content.mriT1Heterogeneous' },
 ];
+
+function contentOptionsFor(acquisition: ImagingAcquisition): readonly ChoiceOption<SpecialContentPattern>[] {
+  const available = contentPatternsForAcquisition(acquisition);
+  const labelled = acquisitionModality(acquisition) === 'ct'
+    ? ctContentOptions
+    : acquisition === 'mriNoncontrast' ? noncontrastMriContentOptions : contrastMriContentOptions;
+  return labelled.filter((option) => available.includes(option.value));
+}
 
 const calcificationOptions: readonly ChoiceOption<CalcificationPattern>[] = [
   { value: 'none', labelKey: 'renal.bosniak.calcification.none' },
@@ -84,6 +108,13 @@ export function BosniakScreen() {
   const [symptomatic, setSymptomatic] = useState(false);
   const [comorbidity, setComorbidity] = useState(false);
   const [targetableSolidComponent, setTargetableSolidComponent] = useState(false);
+
+  const contentOptions = contentOptionsFor(acquisition);
+
+  const selectAcquisition = (nextAcquisition: ImagingAcquisition) => {
+    setAcquisition(nextAcquisition);
+    setContentPattern((current) => adaptContentPattern(current, nextAcquisition));
+  };
 
   const reset = () => {
     setAcquisition('ctRenalMassProtocol');
@@ -203,7 +234,7 @@ export function BosniakScreen() {
           labelKey="renal.bosniak.acquisition"
           options={acquisitionOptions}
           value={acquisition}
-          onChange={setAcquisition}
+          onChange={selectAcquisition}
           variant="menu"
         />
         <SwitchRow
@@ -232,13 +263,16 @@ export function BosniakScreen() {
       <Section headerKey="renal.bosniak.contentSection">
         <SwitchRow labelKey="renal.bosniak.wellDefined" value={wellDefined} onValueChange={setWellDefined} />
         <SwitchRow labelKey="renal.bosniak.homogeneous" value={homogeneous} onValueChange={setHomogeneous} />
-        <ChoiceRow
-          labelKey="renal.bosniak.contentPattern"
-          options={contentOptions}
-          value={contentPattern}
-          onChange={setContentPattern}
-          variant="menu"
-        />
+        {contentOptions.length > 0 ? (
+          <ChoiceRow
+            labelKey="renal.bosniak.contentPattern"
+            infoKey="renal.bosniak.contentPatternDescription"
+            options={contentOptions}
+            value={contentPattern}
+            onChange={setContentPattern}
+            variant="menu"
+          />
+        ) : null}
       </Section>
 
       <Section headerKey="renal.bosniak.wallSection">

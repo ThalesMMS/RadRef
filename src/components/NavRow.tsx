@@ -20,7 +20,13 @@ type NavRowProps = Readonly<{
   onToggleFavorite?: () => void;
 }>;
 
-/** Tappable list row: tinted icon tile, title over subtitle, trailing chevron. */
+/**
+ * Tappable list row: tinted icon tile, title over subtitle, trailing chevron.
+ * The favorite star is a button of its own, so it cannot live inside the row's pressable
+ * (nested buttons on web, out of VoiceOver's reach on iOS). The pressable fills the row
+ * from underneath instead: the rest of the row lets touches through to it and is hidden
+ * from assistive tech, which hears the pressable.
+ */
 export function NavRow({
   titleKey,
   subtitleKey,
@@ -44,29 +50,29 @@ export function NavRow({
   };
 
   return (
-    <Pressable
-      accessibilityRole={external ? 'link' : 'button'}
-      accessibilityLabel={t(titleKey)}
-      onPress={handlePress}
-      testID={testID}
-      style={({ pressed }) => [styles.row, pressed && { backgroundColor: colors.highlight }]}
-    >
-      {icon ? <IconTile name={icon} color={tint} /> : null}
-      <View style={styles.copy}>
-        <Text style={[styles.title, { color: colors.text }]}>{t(titleKey)}</Text>
-        {subtitleKey ? (
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t(subtitleKey)}</Text>
-        ) : null}
+    <View style={styles.row}>
+      <Pressable
+        accessibilityRole={external ? 'link' : 'button'}
+        accessibilityLabel={t(titleKey)}
+        onPress={handlePress}
+        testID={testID}
+        style={({ pressed }) => [StyleSheet.absoluteFill, pressed && { backgroundColor: colors.highlight }]}
+      />
+      <View aria-hidden style={styles.content}>
+        {icon ? <IconTile name={icon} color={tint} /> : null}
+        <View style={styles.copy}>
+          <Text style={[styles.title, { color: colors.text }]}>{t(titleKey)}</Text>
+          {subtitleKey ? (
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t(subtitleKey)}</Text>
+          ) : null}
+        </View>
       </View>
       {onToggleFavorite ? (
         <Pressable
           hitSlop={10}
           accessibilityRole="button"
           accessibilityLabel={favorite ? t('home.unfavorite') : t('home.favorite')}
-          onPress={(e) => {
-            e?.stopPropagation?.();
-            onToggleFavorite();
-          }}
+          onPress={onToggleFavorite}
           style={styles.starButton}
         >
           <Icon
@@ -76,8 +82,10 @@ export function NavRow({
           />
         </Pressable>
       ) : null}
-      <Icon name={external ? 'arrow.up.right' : 'chevron.right'} size={13} color={colors.textTertiary} weight="bold" />
-    </Pressable>
+      <View aria-hidden style={styles.chevron}>
+        <Icon name={external ? 'arrow.up.right' : 'chevron.right'} size={13} color={colors.textTertiary} weight="bold" />
+      </View>
+    </View>
   );
 }
 
@@ -107,12 +115,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: 11,
   },
+  // pointerEvents lives in StyleSheet.create: react-native-web deprecates the prop and ignores it in inline styles.
+  content: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    pointerEvents: 'none',
+  },
   copy: { flex: 1, gap: 2 },
   starButton: {
     padding: spacing.xs,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // A View around the Icon: it renders as Text on Android, which ignores pointerEvents.
+  chevron: { pointerEvents: 'none' },
   title: { ...font.body },
   subtitle: { ...font.footnote },
   value: { ...font.body, fontVariant: ['tabular-nums'] },

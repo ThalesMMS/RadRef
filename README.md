@@ -106,8 +106,8 @@ npm run audit:i18n
 
 ### Cystic renal lesions
 
-- **Bosniak v2019** for CT and MRI, including applicability, acquisition, content, wall, septa, calcification, and enhancing protrusions.
-- Guardrails for masses that are not predominantly cystic, alternative etiologies, hereditary syndromes, ultrasound-only assessment, noncontrast examinations, potentially limiting calcification, and heterogeneous nonenhancing masses on CT.
+- **Bosniak v2019** for CT and MRI, including applicability, acquisition, content patterns offered per acquisition (T2 and precontrast T1 criteria on contrast-enhanced MRI), wall, septa, calcification, and enhancing protrusions.
+- Guardrails for masses that are not predominantly cystic, alternative etiologies, hereditary syndromes, ultrasound-only assessment, noncontrast examinations, potentially limiting calcification, heterogeneous nonenhancing masses on CT, and heterogeneous masses on noncontrast MRI.
 - Suggested structured report sentence with sharing through the operating system's share sheet.
 - Classification kept separate from management recommendations.
 - CT and MRI enhancement calculator with an unequivocal visual-enhancement option.
