@@ -11,6 +11,7 @@ import {
   ucpfTypeKeys,
 } from '../../modules/fracture/domain/index.ts';
 import { liverEn, liverPt } from '../../modules/liver/i18n.ts';
+import { lymphEn, lymphPt } from '../../modules/lymph/i18n.ts';
 import {
   liverTreatmentResponseEn,
   liverTreatmentResponsePt,
@@ -24,8 +25,8 @@ import {
 const root = process.cwd();
 const enBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/en.json'), 'utf8')) as Record<string, string>;
 const ptBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/pt.json'), 'utf8')) as Record<string, string>;
-const en: Record<string, string> = { ...enBase, ...liverEn, ...liverTreatmentResponseEn };
-const pt: Record<string, string> = { ...ptBase, ...liverPt, ...liverTreatmentResponsePt };
+const en: Record<string, string> = { ...enBase, ...liverEn, ...liverTreatmentResponseEn, ...lymphEn };
+const pt: Record<string, string> = { ...ptBase, ...liverPt, ...liverTreatmentResponsePt, ...lymphPt };
 
 function walk(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -42,7 +43,7 @@ function sourceKeys(): Set<string> {
     /\b(?:t|msg|invalid)\("([^"]+)"/g,
     /(?:titleKey|subtitleKey|descriptionKey|labelKey|helperKey|placeholderKey|textKey|metaKey)="([^"]+)"/g,
     /(?:titleKey|subtitleKey|descriptionKey|labelKey|helperKey|placeholderKey|textKey|metaKey):\s*'([^']+)'/g,
-    /['"]((?:fracture|trauma|liver)\.[^'"`$]+)['"]/g,
+    /['"]((?:fracture|trauma|liver|lymph)\.[^'"`$]+)['"]/g,
   ];
   for (const file of files) {
     const source = readFileSync(file, 'utf8');

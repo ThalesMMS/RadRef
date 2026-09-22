@@ -13,6 +13,7 @@ const moduleIcons: Readonly<Record<RadiologyModule['id'], IconName>> = {
   liver: 'cross.case.fill',
   fracture: 'bandage.fill',
   trauma: 'cross.case.fill',
+  lymph: 'chart.bar.doc.horizontal',
 };
 
 type ModuleCardProps = Readonly<{ module: RadiologyModule }>;

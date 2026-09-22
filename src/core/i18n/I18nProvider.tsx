@@ -10,6 +10,7 @@ import {
   type PropsWithChildren,
 } from 'react';
 import { liverEn, liverPt } from '../../modules/liver/i18n';
+import { lymphEn, lymphPt } from '../../modules/lymph/i18n';
 import {
   liverTreatmentResponseEn,
   liverTreatmentResponsePt,
@@ -30,8 +31,8 @@ type I18nContextValue = Readonly<{
 }>;
 
 const dictionaries: Readonly<Record<LanguageCode, Dictionary>> = {
-  en: { ...en, ...liverEn, ...liverTreatmentResponseEn },
-  pt: { ...pt, ...liverPt, ...liverTreatmentResponsePt },
+  en: { ...en, ...liverEn, ...liverTreatmentResponseEn, ...lymphEn },
+  pt: { ...pt, ...liverPt, ...liverTreatmentResponsePt, ...lymphPt },
 };
 const storageKey = 'radref:language';
 
