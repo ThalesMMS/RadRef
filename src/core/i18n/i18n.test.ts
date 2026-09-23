@@ -1,3 +1,4 @@
+import { ultrasoundEn, ultrasoundPt } from '../../modules/ultrasound/i18n.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -24,8 +25,8 @@ import {
 const root = process.cwd();
 const enBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/en.json'), 'utf8')) as Record<string, string>;
 const ptBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/pt.json'), 'utf8')) as Record<string, string>;
-const en: Record<string, string> = { ...enBase, ...liverEn, ...liverTreatmentResponseEn };
-const pt: Record<string, string> = { ...ptBase, ...liverPt, ...liverTreatmentResponsePt };
+const en: Record<string, string> = { ...enBase, ...liverEn, ...liverTreatmentResponseEn, ...ultrasoundEn };
+const pt: Record<string, string> = { ...ptBase, ...liverPt, ...liverTreatmentResponsePt, ...ultrasoundPt };
 
 function walk(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
