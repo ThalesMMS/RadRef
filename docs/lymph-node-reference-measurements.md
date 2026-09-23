@@ -23,7 +23,7 @@ There are 29 entries: 10 cervical, 11 thoracic and 8 abdominal. Values are short
 | Portacaval | 10 mm | Upper CT reference [5] |
 | Upper para-aortic | 9 mm | Upper CT reference [5] |
 | Lower para-aortic | 11 mm | Upper CT reference [5] |
-| Mesenteric | Usually <5 mm | Observational finding, not a universal upper limit [6] |
+| Mesenteric | Mean 4.8 mm (observed range 3–9 mm) | Observational finding, not a universal upper limit [6] |
 
 The hilar divisions are the original anatomical subdivisions, not a mapping to modern IASLC station numbers. The mesenteric study found a mean largest node of 4.8 mm (range 3–9 mm); the app does not equate ≥5 mm with malignancy or adenitis. The retropharyngeal criteria must not be extrapolated to all incidental nodes. This is not a paediatric reference table, nor a substitute for thyroid-cancer protocols.
 
@@ -44,9 +44,7 @@ Sources checked on 2026-09-22. Published values and their original populations a
 
 ## Validation
 
-- 14 new Node tests cover exact values, evidence categories, source integrity, translation and interpolation parity, dynamic keys, search normalisation, registry integration and all five route exports.
-- Isolated strict TypeScript checking of the reference data, dictionary and registry passed with TypeScript 5.8.3, including `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`.
-- Syntax/transpilation and direct-UI-literal checks passed for the changed TS/TSX files.
-- Full `npm run validate`, Expo bundling and iOS/Android visual testing were **not run**: this environment could read/write GitHub through the connector but could not clone the repository or install its dependencies. The project uses TypeScript 6; the isolated check does not replace the project toolchain.
+- `npm run validate` passed after merging the ultrasound module: 140 Node tests, project TypeScript checks and the i18n audit.
+- Expo bundling and iOS/Android visual testing were not run.
 
-Run the repository's normal `npm run validate`, then check `/lymph`, its three regional pages, both languages, dark/light mode, favourites, search and external links on a supported device before merging.
+Check `/lymph`, its three regional pages, both languages, dark/light mode, favourites, search and external links on a supported device before merging.

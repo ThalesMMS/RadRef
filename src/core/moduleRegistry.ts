@@ -1,3 +1,5 @@
+import { examKey, examRoute, ultrasoundExams } from '../modules/ultrasound/catalog.ts';
+
 export type ModuleAccent = 'lung' | 'renal' | 'fracture' | 'trauma' | 'liver';
 
 /** `reference` tools are source lists; they stay out of the in-module tool switcher. */
@@ -13,7 +15,7 @@ export type ToolDefinition = Readonly<{
 }>;
 
 export type RadiologyModule = Readonly<{
-  id: 'lung' | 'renal' | 'liver' | 'fracture' | 'trauma' | 'lymph';
+  id: 'lung' | 'renal' | 'liver' | 'fracture' | 'trauma' | 'lymph' | 'ultrasound';
   titleKey: string;
   descriptionKey: string;
   shortLabelKey: string;
@@ -267,6 +269,30 @@ export const radiologyModules: readonly RadiologyModule[] = [
       },
     ],
   },
+  {
+    id: 'ultrasound',
+    titleKey: 'module.ultrasound.title',
+    descriptionKey: 'module.ultrasound.description',
+    shortLabelKey: 'module.ultrasound.shortLabel',
+    route: '/ultrasound',
+    guidelineKey: 'module.ultrasound.guidelines',
+    accent: 'renal',
+    tools: [
+      ...ultrasoundExams.map((exam) => ({
+        id: `ultrasound-${exam.id}`,
+        titleKey: examKey(exam.id, 'title'),
+        descriptionKey: examKey(exam.id, 'description'),
+        route: examRoute(exam.id),
+      })),
+      {
+        id: 'ultrasoundReferences',
+        titleKey: 'ultrasound.references.title',
+        descriptionKey: 'ultrasound.references.description',
+        route: '/ultrasound/references',
+        kind: 'reference',
+      },
+    ],
+  },
 ];
 
 export function moduleById(id: RadiologyModule['id']): RadiologyModule {
@@ -301,4 +327,3 @@ export function toolByRoute(route: string): RegisteredToolItem | undefined {
   }
   return undefined;
 }
-

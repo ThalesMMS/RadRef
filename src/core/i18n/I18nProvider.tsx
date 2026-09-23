@@ -15,6 +15,7 @@ import {
   liverTreatmentResponseEn,
   liverTreatmentResponsePt,
 } from '../../modules/liver/treatmentResponseI18n';
+import { ultrasoundEn, ultrasoundPt } from '../../modules/ultrasound/i18n';
 import type { MessageParams, MessageRef } from '../domain';
 import en from './locales/en.json';
 import pt from './locales/pt.json';
@@ -31,8 +32,8 @@ type I18nContextValue = Readonly<{
 }>;
 
 const dictionaries: Readonly<Record<LanguageCode, Dictionary>> = {
-  en: { ...en, ...liverEn, ...liverTreatmentResponseEn, ...lymphEn },
-  pt: { ...pt, ...liverPt, ...liverTreatmentResponsePt, ...lymphPt },
+  en: { ...en, ...liverEn, ...liverTreatmentResponseEn, ...lymphEn, ...ultrasoundEn },
+  pt: { ...pt, ...liverPt, ...liverTreatmentResponsePt, ...lymphPt, ...ultrasoundPt },
 };
 const storageKey = 'radref:language';
 

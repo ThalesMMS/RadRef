@@ -23,7 +23,11 @@ test('three regions contain 29 distinct, source-linked entries', () => {
     assert.ok(item.sourceIds.length > 0);
     assert.equal(sourcesFor(item.sourceIds).length, item.sourceIds.length);
     assert.ok(en[item.labelKey] && en[item.noteKey]);
-    if (item.measurement.kind !== 'qualitative') {
+    if (item.measurement.kind === 'typicalCT') {
+      const { minMm, meanMm, maxMm } = item.measurement;
+      assert.ok([minMm, meanMm, maxMm].every((value) => Number.isFinite(value) && value > 0));
+      assert.ok(minMm <= meanMm && meanMm <= maxMm);
+    } else if (item.measurement.kind !== 'qualitative') {
       assert.ok(Number.isFinite(item.measurement.shortAxisMm));
       assert.ok(item.measurement.shortAxisMm > 0);
     }
@@ -52,7 +56,7 @@ test('Tang lateral retropharyngeal MRI criterion is 5 mm, not a general normal l
   const item = byId('retropharyngealLateral');
   assert.deepEqual(item.measurement, { kind: 'suspicion', shortAxisMm: 5 });
   assert.deepEqual(item.sourceIds, ['tang2014']);
-  assert.match(en[item.noteKey], /MRI in nasopharyngeal carcinoma/);
+  assert.match(en[item.noteKey] ?? '', /MRI in nasopharyngeal carcinoma/);
 });
 
 test('median retropharyngeal criterion is qualitative, never a fabricated zero-mm limit', () => {
@@ -83,9 +87,13 @@ test('hilar values preserve anatomical provenance instead of being relabelled CT
 
 test('mesenteric usual size is not promoted to a universal upper limit', () => {
   const item = byId('mesenteric');
-  assert.deepEqual(item.measurement, { kind: 'typicalCT', shortAxisMm: 5 });
+  assert.deepEqual(item.measurement, { kind: 'typicalCT', meanMm: 4.8, minMm: 3, maxMm: 9 });
   assert.deepEqual(item.sourceIds, ['lucey2005']);
-  assert.match(en[item.noteKey], /not a universal upper limit/);
+  assert.match(en[item.noteKey] ?? '', /not a universal upper limit/);
+  assert.equal(en['lymph.measure.typicalCT'], 'Mean {{mean}} mm (observed range {{min}}–{{max}} mm)');
+  assert.equal(pt['lymph.measure.typicalCT'], 'Média de {{mean}} mm (intervalo observado de {{min}}–{{max}} mm)');
+  assert.equal(item.measurement.meanMm.toLocaleString('en-US'), '4.8');
+  assert.equal(item.measurement.meanMm.toLocaleString('pt-BR'), '4,8');
 });
 
 test('all eight publications have unique IDs and HTTPS DOI links', () => {

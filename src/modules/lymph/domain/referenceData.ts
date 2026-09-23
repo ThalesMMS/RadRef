@@ -15,7 +15,8 @@ export const lymphSources = [
 
 export type LymphSourceId = typeof lymphSources[number]['id'];
 export type LymphMeasurement = Readonly<
-  | { kind: 'upperCT' | 'suspicion' | 'typicalCT' | 'upperAnatomy'; shortAxisMm: number }
+  | { kind: 'upperCT' | 'suspicion' | 'upperAnatomy'; shortAxisMm: number }
+  | { kind: 'typicalCT'; meanMm: number; minMm: number; maxMm: number }
   | { kind: 'qualitative' }
 >;
 export type LymphChain = Readonly<{
@@ -81,7 +82,7 @@ export const lymphChains: readonly LymphChain[] = [
   abdominal('portacaval', 10),
   abdominal('upperParaaortic', 9),
   abdominal('lowerParaaortic', 11),
-  chain('mesenteric', 'abdominal', { kind: 'typicalCT', shortAxisMm: 5 },
+  chain('mesenteric', 'abdominal', { kind: 'typicalCT', meanMm: 4.8, minMm: 3, maxMm: 9 },
     'lymph.note.mesenteric', ['lucey2005']),
 ];
 

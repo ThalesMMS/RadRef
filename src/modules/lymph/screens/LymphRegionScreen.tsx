@@ -9,7 +9,7 @@ import { chainsForRegion, normalizeLymphSearch, sourcesFor, type LymphRegion } f
 const moduleDefinition = moduleById('lymph');
 
 export function LymphRegionScreen({ region }: Readonly<{ region: LymphRegion }>) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { colors } = useTheme();
   const [query, setQuery] = useState('');
   const normalizedQuery = normalizeLymphSearch(query);
@@ -45,9 +45,15 @@ export function LymphRegionScreen({ region }: Readonly<{ region: LymphRegion }>)
               {t(`lymph.kind.${item.measurement.kind}`)}
             </Text>
             <Text style={[styles.value, { color: tint }]}>
-              {t(`lymph.measure.${item.measurement.kind}`, {
-                mm: item.measurement.kind === 'qualitative' ? '' : item.measurement.shortAxisMm,
-              })}
+              {item.measurement.kind === 'typicalCT'
+                ? t('lymph.measure.typicalCT', {
+                  mean: item.measurement.meanMm.toLocaleString(language === 'pt' ? 'pt-BR' : 'en-US'),
+                  min: item.measurement.minMm,
+                  max: item.measurement.maxMm,
+                })
+                : t(`lymph.measure.${item.measurement.kind}`, {
+                  mm: item.measurement.kind === 'qualitative' ? '' : item.measurement.shortAxisMm,
+                })}
             </Text>
             <Text style={[styles.note, { color: colors.textSecondary }]}>{t(item.noteKey)}</Text>
           </View>

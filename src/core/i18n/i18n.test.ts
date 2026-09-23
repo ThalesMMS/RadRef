@@ -16,6 +16,7 @@ import {
   liverTreatmentResponseEn,
   liverTreatmentResponsePt,
 } from '../../modules/liver/treatmentResponseI18n.ts';
+import { ultrasoundEn, ultrasoundPt } from '../../modules/ultrasound/i18n.ts';
 import {
   aastRegions,
   aastScales,
@@ -25,8 +26,8 @@ import {
 const root = process.cwd();
 const enBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/en.json'), 'utf8')) as Record<string, string>;
 const ptBase = JSON.parse(readFileSync(join(root, 'src/core/i18n/locales/pt.json'), 'utf8')) as Record<string, string>;
-const en: Record<string, string> = { ...enBase, ...liverEn, ...liverTreatmentResponseEn, ...lymphEn };
-const pt: Record<string, string> = { ...ptBase, ...liverPt, ...liverTreatmentResponsePt, ...lymphPt };
+const en: Record<string, string> = { ...enBase, ...liverEn, ...liverTreatmentResponseEn, ...lymphEn, ...ultrasoundEn };
+const pt: Record<string, string> = { ...ptBase, ...liverPt, ...liverTreatmentResponsePt, ...lymphPt, ...ultrasoundPt };
 
 function walk(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
