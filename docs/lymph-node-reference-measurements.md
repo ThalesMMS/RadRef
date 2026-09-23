@@ -44,7 +44,7 @@ Sources checked on 2026-09-22. Published values and their original populations a
 
 ## Validation
 
-- `npm run validate` passed after merging the ultrasound module: 140 Node tests, project TypeScript checks and the i18n audit.
+- The repository's full `npm run validate` passed on this PR branch: 140 Node tests, project TypeScript checks and the i18n audit.
 - Expo bundling and iOS/Android visual testing were not run.
 
 Check `/lymph`, its three regional pages, both languages, dark/light mode, favourites, search and external links on a supported device before merging.
