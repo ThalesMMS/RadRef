@@ -15,7 +15,7 @@ export type ToolDefinition = Readonly<{
 }>;
 
 export type RadiologyModule = Readonly<{
-  id: 'lung' | 'renal' | 'liver' | 'fracture' | 'trauma' | 'ultrasound';
+  id: 'lung' | 'renal' | 'liver' | 'fracture' | 'trauma' | 'lymph' | 'ultrasound';
   titleKey: string;
   descriptionKey: string;
   shortLabelKey: string;
@@ -234,6 +234,42 @@ export const radiologyModules: readonly RadiologyModule[] = [
     ],
   },
   {
+    id: 'lymph',
+    titleKey: 'module.lymph.title',
+    descriptionKey: 'module.lymph.description',
+    shortLabelKey: 'module.lymph.shortLabel',
+    route: '/lymph',
+    guidelineKey: 'module.lymph.guidelines',
+    accent: 'renal',
+    tools: [
+      {
+        id: 'cervicalNodes',
+        titleKey: 'lymph.tools.cervical.title',
+        descriptionKey: 'lymph.tools.cervical.description',
+        route: '/lymph/cervical',
+      },
+      {
+        id: 'thoracicNodes',
+        titleKey: 'lymph.tools.thoracic.title',
+        descriptionKey: 'lymph.tools.thoracic.description',
+        route: '/lymph/thoracic',
+      },
+      {
+        id: 'abdominalNodes',
+        titleKey: 'lymph.tools.abdominal.title',
+        descriptionKey: 'lymph.tools.abdominal.description',
+        route: '/lymph/abdominal',
+      },
+      {
+        id: 'lymphReferences',
+        titleKey: 'common.references',
+        descriptionKey: 'lymph.references.subtitle',
+        route: '/lymph/references',
+        kind: 'reference',
+      },
+    ],
+  },
+  {
     id: 'ultrasound',
     titleKey: 'module.ultrasound.title',
     descriptionKey: 'module.ultrasound.description',
@@ -291,4 +327,3 @@ export function toolByRoute(route: string): RegisteredToolItem | undefined {
   }
   return undefined;
 }
-

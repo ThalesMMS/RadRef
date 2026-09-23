@@ -67,7 +67,7 @@ test('English and Portuguese have exact key and interpolation parity', () => {
     const pt = ultrasoundPt[key];
     assert.ok(en?.trim(), key);
     assert.ok(pt?.trim(), key);
-    assert.deepEqual(en.match(/{{[^}]+}}/g), pt.match(/{{[^}]+}}/g), key);
+    assert.deepEqual((en ?? '').match(/{{[^}]+}}/g), (pt ?? '').match(/{{[^}]+}}/g), key);
   }
 });
 

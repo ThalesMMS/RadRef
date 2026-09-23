@@ -22,4 +22,8 @@ export const toolIcons: Readonly<Record<string, IconName>> = {
   solidOrgan: 'cross.case.fill',
   aastScales: 'list.number',
   traumaReferences: 'books.vertical.fill',
+  cervicalNodes: 'list.number',
+  thoracicNodes: 'lungs.fill',
+  abdominalNodes: 'list.number',
+  lymphReferences: 'books.vertical.fill',
 };

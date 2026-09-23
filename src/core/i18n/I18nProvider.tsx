@@ -1,4 +1,3 @@
-import { ultrasoundEn, ultrasoundPt } from '../../modules/ultrasound/i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getLocales } from 'expo-localization';
 import {
@@ -11,10 +10,12 @@ import {
   type PropsWithChildren,
 } from 'react';
 import { liverEn, liverPt } from '../../modules/liver/i18n';
+import { lymphEn, lymphPt } from '../../modules/lymph/i18n';
 import {
   liverTreatmentResponseEn,
   liverTreatmentResponsePt,
 } from '../../modules/liver/treatmentResponseI18n';
+import { ultrasoundEn, ultrasoundPt } from '../../modules/ultrasound/i18n';
 import type { MessageParams, MessageRef } from '../domain';
 import en from './locales/en.json';
 import pt from './locales/pt.json';
@@ -31,8 +32,8 @@ type I18nContextValue = Readonly<{
 }>;
 
 const dictionaries: Readonly<Record<LanguageCode, Dictionary>> = {
-  en: { ...en, ...liverEn, ...liverTreatmentResponseEn, ...ultrasoundEn },
-  pt: { ...pt, ...liverPt, ...liverTreatmentResponsePt, ...ultrasoundPt },
+  en: { ...en, ...liverEn, ...liverTreatmentResponseEn, ...lymphEn, ...ultrasoundEn },
+  pt: { ...pt, ...liverPt, ...liverTreatmentResponsePt, ...lymphPt, ...ultrasoundPt },
 };
 const storageKey = 'radref:language';
 
